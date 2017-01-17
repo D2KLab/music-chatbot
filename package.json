@@ -1,0 +1,35 @@
+{
+	"name": "botkit-studio-starter",
+	"version": "0.0.1",
+	"description": "A starter kit for building a custom bot with Botkit Studio",
+	"main": "bot.js",
+	"scripts": {
+		"start": "node bot.js"
+	},
+	"dependencies": {
+		"body-parser": "^1.15.2",
+		"botkit": "^0.4.6",
+		"dashbot": "^0.8.2",
+		"debug": "^2.6.0",
+		"express": "^4.14.0",
+		"querystring": "^0.2.0",
+		"request": "^2.79.0",
+		"wordfilter": "^0.2.6"
+	},
+	"devDependencies": {},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/howdyai/botkit-studio-starter.git"
+	},
+	"bugs": {
+		"url": "https://github.com/howdyai/botkit-studio-starter/issues"
+	},
+	"homepage": "https://github.com/howdyai/botkit-studio-starter",
+	"keywords": [
+		"bots",
+		"chatbots",
+		"slack"
+	],
+	"author": "ben@howdy.ai",
+	"license": "ISC"
+}
