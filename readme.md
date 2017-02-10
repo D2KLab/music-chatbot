@@ -46,7 +46,12 @@ Type that URL into the Request URL field to enable Interactive Messages.
 ### Enable and subscribe to Slack events
 Now you can head over to **Event Subscriptions** and flip that toggle to enable Slack events! Here, you’ll paste in the same _Request URL_ you used for Interactive Messages.
 
-**Enable Events** and enter your _Request URL_ to continue. Then, subscribe to the events your apps requires below. For the purposes of this example, we’re going to subscribe to some Bot Events that allows this Botkit bot to hear messages wherever they’re posted.
+**Enable Events** and enter your _Request URL_ to continue. Then, subscribe to the events your apps requires below. For the purposes of this example, we’re going to subscribe to some **Bot Events** that allows this Botkit bot to hear messages wherever they’re posted:
+
+* `message.im`
+* `message.mpim`
+* `message.channels`
+* `message.groups`
 
 ### Subscribe to events in Slack
 
