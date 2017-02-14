@@ -1,7 +1,7 @@
 # Botkit Starter Kit for Slack Apps
 
 This repo contains everything you need to get started building a Slack App with Botkit and Botkit Studio!
-ala
+
 [Botkit Studio](https://studio.botkit.ai/) is a set of tools that adds capabilities to the open source Botkit library by offering hosted GUI interfaces for script management and action trigger definition. Botkit Studio is built by [Howdy.](https://howdy.ai), the company that created and maintains the open source Botkit library.
 
 **Note: Botkit Studio is in private beta right now.** [Click here](https://howdyai.typeform.com/to/JNTm22) to join the waitlist for access or [email us](mailto:info@howdy.ai).
