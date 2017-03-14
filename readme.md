@@ -15,13 +15,13 @@ After you’ve chosen a name and which team your app will live on, note the _Cli
 Once you’ve collected those keys, set up your default username in the **Bot Users** section and save your changes to continue.
 
 ### Remix this Botkit Slack App Starter Kit
-Gomix is a fantastic tool for experimenting with bots without worrying about complex local development configurations. We’ve made it simple by creating a [Slack App Starter Kit](https://gomix.com/#!/project/botkit-slack) you can remix.
+Glitch is a fantastic tool for experimenting with bots without worrying about complex local development configurations. We’ve made it simple by creating a [Slack App Starter Kit](https://glitch.com/edit/#!/project/botkit-slack) you can remix.
 
-### Add your keys to Gomix and run
+### Add your keys to Glitch and run
 
-Gomix safely stores your keys in an .env folder. Paste your clientId, clientSecret, and studio_token (if you're using Botkit Studio) values in here. Don’t worry...if anyone remixes your project, your keys won’t be shared.
+Glitch safely stores your keys in an .env folder. Paste your clientId, clientSecret, and studio_token (if you're using Botkit Studio) values in here. Don’t worry...if anyone remixes your project, your keys won’t be shared.
 
-Once you’ve included your app credentials, click **Show Live** to get your bot server running. This will open Gomix’s instant hosting and deployment magic. You’ll need to have this server running for Slack to confirm your app’s endpoints and finish your configuration.
+Once you’ve included your app credentials, click **Show Live** to get your bot server running. This will open Glitch’s instant hosting and deployment magic. You’ll need to have this server running for Slack to confirm your app’s endpoints and finish your configuration.
 
 ## Get your app talking to Slack
 You’re almost there! Now you just need to get your environment variables set so your app can communicate with Slack and vice versa.
@@ -29,7 +29,7 @@ You’re almost there! Now you just need to get your environment variables set s
 ### Configure permissions
 Return to your Slack app settings and navigate to **OAuth & Permissions**. There, paste in your _Redirect URL_, which is your own, remixed Gomix URL plus “/oauth”, like this example:
 
-`https://botkit-slack.gomix.me/oauth`
+`https://botkit-slack.glitch.com/oauth`
 
 Copy that URL from your browser window and paste into your settings. Save your changes and confirm your _Redirect URL_ to continue.
 
@@ -37,9 +37,9 @@ Copy that URL from your browser window and paste into your settings. Save your c
 Create a username and enable the Online notifier in the Bot Users section.
 
 ### Enable Interactive Messages
-You’ll want to enable Interactive Messages for your app, so go ahead and do that too. That will be your Gomix URL, followed by “/slack/receive”, like this:
+You’ll want to enable Interactive Messages for your app, so go ahead and do that too. That will be your Glitch URL, followed by “/slack/receive”, like this:
 
-`https://botkit-slack.gomix.me/slack/receive`
+`https://botkit-slack.glitch.com/slack/receive`
 
 Type that URL into the Request URL field to enable Interactive Messages.
 
