@@ -10,6 +10,16 @@ Our goal with Botkit is to make bot building easy, fun, and accessible to anyone
 
 If you are looking to create a bot on other platforms using Glitch, check out the [Botkit project page](https://glitch.com/botkit).
 
+### What's Included
+* [Botkit core](https://github.com/howdyai/botkit/blob/master/docs/readme.md#developing-with-botkit) - a complete programming system for building conversational software
+* [Botkit Studio API](https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#function-index) - additional APIs that extend Botkit with powerful tools and APIs
+* [Pre-configured Express.js webserver](https://expressjs.com/) including:
+   * A customizable "Install my Bot" homepage
+   * Login and oauth endpoints that allow teams to install your bot
+   * Webhook endpoints for communicating with platforms
+* Sample skill modules that demonstrate various features of Botkit
+* A customizable onboarding experience for new teams powered by Botkit Studio
+
 ### Getting Started
 
 There are a myriad of methods you can use to set up an application on Slack, here are some of your options:
@@ -21,7 +31,7 @@ While Botkit Studio is *not required* to build a bot using Botkit, we highly rec
 
 #### Install Botkit
 
-[Remix this project on Glitch](https://glitch.com/edit/#!/import/github/howdyai/botkit-starter-slack)
+[Remix this project on Glitch](https://glitch.com/~botkit-slack)
 
 [Deploy to Heroku](https://heroku.com/deploy?template=https://github.com/howdyai/botkit-starter-slack/master)
 

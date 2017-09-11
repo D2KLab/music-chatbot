@@ -97,13 +97,8 @@ require(__dirname + '/components/user_registration.js')(controller);
 // Send an onboarding message when a new team joins
 require(__dirname + '/components/onboarding.js')(controller);
 
-// no longer necessary since slack now supports the always on event bots
-// // Set up a system to manage connections to Slack's RTM api
-// // This will eventually be removed when Slack fixes support for bot presence
-// var rtm_manager = require(__dirname + '/components/rtm_manager.js')(controller);
-//
-// // Reconnect all pre-registered bots
-// rtm_manager.reconnect();
+// Load in some helpers that make running Botkit on Glitch.com better
+require(__dirname + '/components/plugin_glitch.js')(controller);
 
 // Enable Dashbot.io plugin
 require(__dirname + '/components/plugin_dashbot.js')(controller);
@@ -124,7 +119,7 @@ require("fs").readdirSync(normalizedPath).forEach(function(file) {
 // controller.studio.before, controller.studio.after and controller.studio.validate
 if (process.env.studio_token) {
     controller.on('direct_message,direct_mention,mention', function(bot, message) {
-        controller.studio.runTrigger(bot, message.text, message.user, message.channel).then(function(convo) {
+        controller.studio.runTrigger(bot, message.text, message.user, message.channel, message).then(function(convo) {
             if (!convo) {
                 // no trigger was matched
                 // If you want your bot to respond to every message,
