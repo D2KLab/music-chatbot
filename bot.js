@@ -51,6 +51,8 @@ This bot demonstrates many of the core features of Botkit:
     -> http://howdy.ai/botkit
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* Claudio SCALZO and Luca LOMBARDO */
+
 var env = require('node-env-file');
 env(__dirname + '/.env');
 
