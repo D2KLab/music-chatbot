@@ -66,11 +66,22 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
 
 slackController.hears(['works-of-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  // Take artist from Dialogflow
   var artist = message.entities.any;
+  
+  // Prepare the query
   var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
-  var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name 'Ludwig van Beethoven' } ORDER BY ?title LIMIT 10"
+  var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
   var encodedQuery = baseURI + encodeURIComponent(query);
-  bot.reply(message, artist);
+  
+  // HTTP request
+  var req = new XMLHttpRequest(); // a new request
+  req.open("GET", encodedQuery, false);
+  req.send(null);
+  console.log(req.responseText);
+  
+  //bot.reply(message, artist);
 });
 
 /* note this uses example middlewares defined above */
