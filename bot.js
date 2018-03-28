@@ -65,6 +65,11 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
 
+slackController.hears(['works-of-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  var artist = message.entities.any;
+  bot.reply(message, artist);
+});
+
 /* note this uses example middlewares defined above */
 slackController.hears(['weather'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log("***************");
@@ -78,13 +83,4 @@ slackController.hears(['weather'], 'direct_message, direct_mention, mention', di
 
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   bot.reply(message, "Hi there! I'm a weather expert");
-});
-
-slackController.hears(['works-of-artists'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  console.log("***************");
-  console.log(message.entities);
-  console.log("----")
-  console.log(message.fulfillment.displayText)
-  console.log(message.nlpResponse)
-  bot.reply(message, "WORK OF ARTISTS");
 });
