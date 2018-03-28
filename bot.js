@@ -70,30 +70,19 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   // Take artist from Dialogflow
   var artist = message.entities.any;
   
-  // Prepare the query
-  // var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
+  // PREPARE THE QUERY
+  // var base = "http://data.doremus.org/sparql?default-graph-uri=&query="
   // var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
+  // var encodedQuery = base + encodeURI(query)
   var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22Ludwig+van+Beethoven%22%0D%0A%7D%0D%0AORDER+BY+%3Ftitle%0D%0ALIMIT+10%0D%0A%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
   
-  // HTTP request
-  /*
+  // HTTP GET REQUEST
   const request = require('request');
-    request(query, { json: true }, (err, res, body) => {
-    if (err) { return console.log(err); }
-      console.log(body.url);
-      console.log(body.explanation);
+  request(query, /*{ json: true },*/ (err, res, body) => {
+  if (err) { return console.log(err); }
+    console.log(body);
   });
-  */
-  var XMLHttpRequest = require('xhr2');
-  var xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-        console.log(xhr.responseText);
-    }
-}
-xhr.open('GET', query, true);
-xhr.send(null);
-  
+
   //bot.reply(message, artist);
 });
 
