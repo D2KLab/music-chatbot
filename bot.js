@@ -67,6 +67,9 @@ slackBot.startRTM();
 
 slackController.hears(['works-of-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   var artist = message.entities.any;
+  var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
+  var query = "select * where { ?s ?p ?o } limit 10"
+  console.log(baseURI + encodeURIComponent(query));
   bot.reply(message, artist);
 });
 
