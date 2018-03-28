@@ -74,28 +74,27 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
   var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
   var encodedQuery = baseURI + encodeURIComponent(query);
+  console.log(encodedQuery)
   
   // HTTP request
-  
+  var querystring = require("querystring");
   const postData = querystring.stringify({
-    'msg': 'Hello World!'
+    'msg': baseURI + encodeURIComponent(query)
   });
+  console.log(postData)
 
   const options = {
-    hostname: 'www.google.com',
+    hostname: 'data.doremus.org',
     port: 80,
-    path: '/upload',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': Buffer.byteLength(postData)
-    }
+    path: '/sparql?default-graph-uri=&query=',
+    method: 'GET'
   };
-
+  
+  var http = require("http");
   const req = http.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);
     console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    res.setEncoding('utf8');
+    /*res.setEncoding('utf8');
     res.on('data', (chunk) => {
       console.log(`BODY: ${chunk}`);
     });
@@ -110,7 +109,8 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
 
   // write data to request body
   req.write(postData);
-  req.end();
+  req.end();*/
+  });
   
   //bot.reply(message, artist);
 });
