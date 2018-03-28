@@ -68,8 +68,8 @@ slackBot.startRTM();
 slackController.hears(['works-of-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   var artist = message.entities.any;
   var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
-  var query = "select * where { ?s ?p ?o } limit 10"
-  console.log(baseURI + encodeURIComponent(query));
+  var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name 'Ludwig van Beethoven' } ORDER BY ?title LIMIT 10"
+  var encodedQuery = baseURI + encodeURIComponent(query);
   bot.reply(message, artist);
 });
 
