@@ -78,9 +78,14 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   
   // HTTP GET REQUEST
   const request = require('request');
-  request(query, /*{ json: true },*/ (err, res, body) => {
-  if (err) { return console.log(err); }
-    console.log(body);
+  request(query, (err, res, body) => {
+    if (err) { return console.log(err); }
+    var json = JSON.parse(body)
+    // console.log(json["results"]["bindings"][0]["title"]["value"])
+    json["results"]["bindings"].forEach(function(row) {
+      bot.reply(message, row["title"]["value"]);
+      console.log(row["title"]["value"]);
+    });
   });
 
   //bot.reply(message, artist);
