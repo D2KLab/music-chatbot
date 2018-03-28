@@ -73,54 +73,19 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   // Prepare the query
   var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
   //var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
-  
-  var query = "SELECT DISTINCT ?title \
-WHERE { \
-  ?expression a efrbroo:F22_Self-Contained_Expression ; \
-    rdfs:label ?title . \
-  ?expCreation efrbroo:R17_created ?expression ; \
-    ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
-  ?composer foaf:name \"" + artist + "\" \
-} \
-ORDER BY ?title \
-LIMIT 10"
-  var encodedQuery = baseURI + encodeURIComponent(query);
-  console.log(encodedQuery)
+  var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22Ludwig+van+Beethoven%22%0D%0A%7D%0D%0AORDER+BY+%3Ftitle%0D%0ALIMIT+10%0D%0A%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
   
   // HTTP request
-  var querystring = require("querystring");
-  const postData = querystring.stringify({
-    'msg': baseURI + encodeURIComponent(query)
-  });
-  // console.log(postData)
-
-  const options = {
-    hostname: 'data.doremus.org',
-    port: 80,
-    path: '/sparql?default-graph-uri=&query=',
-    method: 'GET'
-  };
-  
   var http = require("http");
-  const req = http.request(options, (res) => {
-    console.log(`STATUS: ${res.statusCode}`);
-    console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
-    /*res.setEncoding('utf8');
-    res.on('data', (chunk) => {
-      console.log(`BODY: ${chunk}`);
+  http.get(query, resp => {
+    let data = ''
+    resp.on('data', (chunk) => {
+      data += chunk;
     });
-    res.on('end', () => {
-      console.log('No more data in response.');
-    });
-  });
-
-  req.on('error', (e) => {
-    console.error(`problem with request: ${e.message}`);
-  });
-
-  // write data to request body
-  req.write(postData);
-  req.end();*/
+    console.log(JSON.parse(data).explanation);
+  })
+  .on("error", (err) => {
+    console.log("Error: " + err.message);
   });
   
   //bot.reply(message, artist);
