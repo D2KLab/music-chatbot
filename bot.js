@@ -72,7 +72,18 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   
   // Prepare the query
   var baseURI = "http://data.doremus.org/sparql?default-graph-uri=&query="
-  var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
+  //var query = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
+  
+  var query = "SELECT DISTINCT ?title \
+WHERE { \
+  ?expression a efrbroo:F22_Self-Contained_Expression ; \
+    rdfs:label ?title . \
+  ?expCreation efrbroo:R17_created ?expression ; \
+    ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+  ?composer foaf:name \"" + artist + "\" \
+} \
+ORDER BY ?title \
+LIMIT 10"
   var encodedQuery = baseURI + encodeURIComponent(query);
   console.log(encodedQuery)
   
@@ -81,7 +92,7 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   const postData = querystring.stringify({
     'msg': baseURI + encodeURIComponent(query)
   });
-  console.log(postData)
+  // console.log(postData)
 
   const options = {
     hostname: 'data.doremus.org',
