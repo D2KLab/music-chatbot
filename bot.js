@@ -98,12 +98,14 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
     var json = JSON.parse(body)
     
     // RESPONSE
+    bot.reply(message, "Sure! This is the list:")
+    var resp;
     json["results"]["bindings"].forEach(function(row) {
-      bot.reply(message, row["title"]["value"]);
+      resp += " > " + row["title"]["value"] + "\n";
       console.log(row["title"]["value"]);
     });
+    bot.reply(message, resp);
   });
-
 });
 
 /* note this uses example middlewares defined above */
