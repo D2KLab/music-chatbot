@@ -98,11 +98,9 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
     var json = JSON.parse(body)
     
     // RESPONSE
-    bot.reply(message, "Sure! This is the list:")
-    var resp;
+    var resp = "Sure! This is the list:\n";
     json["results"]["bindings"].forEach(function(row) {
-      resp += " > " + row["title"]["value"] + "\n";
-      console.log(row["title"]["value"]);
+      resp += ("  >  " + row["title"]["value"] + "\n");
     });
     bot.reply(message, resp);
   });
