@@ -54,6 +54,53 @@ var bot_options = {
 
 var slackController = Botkit.slackbot(bot_options);
 
+// Set up an Express-powered webserver to expose oauth and webhook endpoints
+var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
+
+if (process.env.clientId && process.env.clientSecret) {
+  webserver.get('/', function(req, res){
+    res.render('index', {
+      domain: req.get('host'),
+      protocol: req.protocol,
+      glitch_domain:  process.env.PROJECT_DOMAIN,
+      layout: 'layouts/default'
+    });
+  })
+  // Set up a simple storage backend for keeping a record of customers
+  // who sign up for the app via the oauth
+  require(__dirname + '/components/user_registration.js')(slackController);
+
+  // Send an onboarding message when a new team joins
+  require(__dirname + '/components/onboarding.js')(slackController);
+
+  // Load in some helpers that make running Botkit on Glitch.com better
+  require(__dirname + '/components/plugin_glitch.js')(slackController);
+
+  // enable advanced botkit studio metrics
+  require('botkit-studio-metrics')(slackController);
+
+  var normalizedPath = require("path").join(__dirname, "skills");
+  require("fs").readdirSync(normalizedPath).forEach(function(file) {
+    require("./skills/" + file)(slackController);
+  }); 
+} else {
+  // Load in some helpers that make running Botkit on Glitch.com better
+  require(__dirname + '/components/plugin_glitch.js')(slackController);
+
+  webserver.get('/', function(req, res){
+    res.render('installation', {
+      studio_enabled: slackController.config.studio_token ? true : false,
+      domain: req.get('host'),
+      protocol: req.protocol,
+      glitch_domain:  process.env.PROJECT_DOMAIN,
+      layout: 'layouts/default'
+    });
+  })
+
+  var where_its_at = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me/';
+  console.log('WARNING: This application is not fully configured to work with Slack. Please see instructions at ' + where_its_at);
+}
+
 var slackBot = slackController.spawn({
     token: process.env.token,
 });
