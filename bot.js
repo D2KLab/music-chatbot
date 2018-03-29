@@ -52,9 +52,10 @@ var bot_options = {
     studio_command_uri: process.env.studio_command_uri
 };
 
+
 var slackController = Botkit.slackbot(bot_options);
 
-/*
+
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
 
@@ -101,7 +102,7 @@ if (process.env.clientId && process.env.clientSecret) {
   var where_its_at = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me/';
   console.log('WARNING: This application is not fully configured to work with Slack. Please see instructions at ' + where_its_at);
 }
-*/
+
 
 var slackBot = slackController.spawn({
     token: process.env.token,
@@ -144,6 +145,7 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
     if (err) { return console.log(err); }
     
     // JSON PARSING
+    console.log(body)
     var json = JSON.parse(body)
     
     // RESPONSE
