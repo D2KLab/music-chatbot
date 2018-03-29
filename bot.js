@@ -153,7 +153,7 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   });
 });
 
-/* note this uses example middlewares defined above */
+/*
 slackController.hears(['weather'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log("***************");
   console.log(message.entities);
@@ -163,7 +163,8 @@ slackController.hears(['weather'], 'direct_message, direct_mention, mention', di
   if (message.fulfillment.displayText)
     bot.reply(message, message.fulfillment.displayText);
 });
+*/
 
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  bot.reply(message, "Hi there! I'm a weather expert");
+  bot.reply(message, "Hi there! I'm a classical music expert");
 });
