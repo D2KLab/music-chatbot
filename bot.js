@@ -139,7 +139,7 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   const request = require('request');
   request(jsonQuery, (err, res, body) => {
     
-    if (err) { return console.log(err); }
+    #if (err) { return console.log(err); }
     
     // JSON PARSING
     var json = JSON.parse(body)
