@@ -72,7 +72,7 @@ var webserver = require(__dirname + '/components/express_webserver.js')(slackCon
 var sendClearContext = function(sessionID) {
     var request = http.request({
       host: 'https://api.dialogflow.com',
-      port: 9200,
+      port: 443,
       path: 'v1/contexts/shop?sessionId=12345',
       method: 'DELETE',
       headers: {                                    

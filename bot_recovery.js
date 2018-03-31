@@ -86,38 +86,6 @@ if (process.env.MONGO_URI) {
 var controller = Botkit.slackbot(bot_options);
 
 
-/* DIALOGFLOW ADDITIONS */
-/*
-/* checks*/
-if (!process.env.token) {
-    console.log('Error: Specify token in environment');
-    process.exit(1);
-}
-
-if (!process.env.dialogflow) {
-    console.log('Error: Specify dialogflow in environment');
-    process.exit(1);
-}
-
-/* spawn */
-var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
-    token: process.env.dialogflow,
-});
-
-var slackBot = controller.spawn({
-    token: process.env.token,
-});
-
-controller.middleware.receive.use(dialogflowMiddleware.receive);
-slackBot.startRTM();
-
-/* action */
-controller.hears(['weather'], 'Paris', dialogflowMiddleware.hears, function(bot, message) {
-    bot.reply(message, 'The weather is fine!');
-});
-
-/********************************************** END OF DIALOGFLOW ADDITIONS */
-
 
 controller.startTicking();
 
