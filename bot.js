@@ -66,6 +66,17 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
+var request = http.request({
+    host: 'localhost',
+    port: 9200,
+    path: 'test/col/_query',
+    method: 'DELETE',
+    headers: {                                    <--- add this
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(payload)
+    }
+});
+
 var mispellingSolver = FuzzySet();
 
 var lineReader = require('readline').createInterface({
@@ -113,6 +124,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(mispelled);
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
+        // we must clear the context
       } else {
         bot.reply(message, message['fulfillment']['speech']);
       }
