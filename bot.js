@@ -122,7 +122,9 @@ slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention
   bot.reply(message, "Hi there! I'm a classical music expert");
 });
 
-
+slackController.setupWebserver(process.env.PORT ,function(err,express_webserver) {
+  slackController.createWebhookEndpoints(express_webserver)
+});
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
 // var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
