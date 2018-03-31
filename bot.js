@@ -42,6 +42,7 @@ if (!process.env.dialogflow) {
 }
 
 var Botkit = require('botkit');
+var FuzzySet = require('fuzzyset.js')
 
 var bot_options = {
     clientId: process.env.clientId,
@@ -64,6 +65,8 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
+
+var allArtistsNames = FuzzySet();
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
