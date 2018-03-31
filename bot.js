@@ -70,9 +70,12 @@ var sampleNames = ["Mozart", "Liszt", "Beethoven"]
 
 var mispellingSolver = FuzzySet(sampleNames);
 
+var sendWait = function(bot, message) {
+  return new Promise(function(bot, message 
+}
+
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  bot.reply(message, "Just a moment...")
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     // required parameters resolved
     var artist = message.entities["doremus-artist"];
