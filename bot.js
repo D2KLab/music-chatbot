@@ -66,11 +66,10 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
-var sampleNames = ["Mozart", "Liszt", "Beethoven"]
-var mispellingSolver = FuzzySet(sampleNames);
+var mispellingSolver = FuzzySet();
 
 var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('file.in')
+  input: require('fs').createReadStream('names.txt')
 });
 
 lineReader.on('line', function (line) {
