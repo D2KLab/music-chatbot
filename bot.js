@@ -43,6 +43,7 @@ if (!process.env.dialogflow) {
 
 var Botkit = require('botkit');
 var FuzzySet = require('fuzzyset.js')
+var http = require('http');
 
 var bot_options = {
     clientId: process.env.clientId,
@@ -66,16 +67,18 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
-var request = http.request({
-    host: 'localhost',
-    port: 9200,
-    path: 'test/col/_query',
-    method: 'DELETE',
-    headers: {                                    <--- add this
-      'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(payload)
-    }
-});
+var getClearContextRequest = function(sessionID) {
+    return http.request({
+      host: 'https://api.dialogflow.com',
+      port: 9200,
+      path: 'v1/contexts/shop?sessionId=12345',
+      method: 'DELETE',
+      headers: {                                    
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + process.env.dialogflow
+      }
+    });
+}
 
 var mispellingSolver = FuzzySet();
 
