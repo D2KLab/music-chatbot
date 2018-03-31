@@ -67,8 +67,15 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM()
 
 var sampleNames = ["Mozart", "Liszt", "Beethoven"]
-
 var mispellingSolver = FuzzySet(sampleNames);
+
+var lineReader = require('readline').createInterface({
+  input: require('fs').createReadStream('file.in')
+});
+
+lineReader.on('line', function (line) {
+  mispellingSolver.add(line);
+});
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
