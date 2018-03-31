@@ -94,9 +94,15 @@ lineReader.on('line', function (line) {
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    // required parameters resolved
+    
+    // GET PARAMETERS
     var artist = message.entities["doremus-artist"];
     var number = message.entities["number"];
+    
+    // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
+    if (isNaN(parseInt(number))) {
+      number = 10
+    }
 
     // JSON VERSION
     var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
