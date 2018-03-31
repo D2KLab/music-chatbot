@@ -70,8 +70,8 @@ slackBot.startRTM()
 var sendClearContext = function(sessionID) {
     var request = http.request({
       host: 'https://api.dialogflow.com',
-      port: 443,
-      path: 'v1/contexts/shop?sessionId=12345',
+      //port: 443,
+      path: 'v1/contexts/shop?sessionId=' + sessionID,
       method: 'DELETE',
       headers: {                                    
         'Content-Type': 'application/json',
@@ -145,4 +145,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   bot.reply(message, "Hi there! I'm a classical music expert :D");
+});
+
+slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  bot.reply(message, message['fulfillment']['speech']);
 });
