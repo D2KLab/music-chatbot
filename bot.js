@@ -68,7 +68,7 @@ slackBot.startRTM()
 
 var sampleNames = ["Mozart", "Liszt", "Beethoven"]
 
-var allArtistsNames = FuzzySet(sampleNames);
+var mispellingSolver = FuzzySet(sampleNames);
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
@@ -100,10 +100,16 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       bot.reply(message, resp);
     });
   } else {
-    // missing required parameters
-    // check for mispelling and the most similar (over threshold)
+    // missing artist name
+    // check for mispelling and ask for the most similar (over threshold)
     // otherwise forward the question sent by DialogFlow
-    bot.reply(message, message['fulfillment']['speech']);
+    var mispelled = message.entities["any"];
+    if (mispelled != '') {
+      var result = mispellingSolver.get(mispelled);
+      bot.reply(message, "I'm sorry. You can try with '" + result[0][1] + "'");
+    } else {
+      bot.reply(message, message['fulfillment']['speech']);
+    }
   }
 });
 
