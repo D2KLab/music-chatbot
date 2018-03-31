@@ -67,8 +67,10 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
-var getClearContextRequest = function(sessionID) {
-    return http.request({
+var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
+
+var sendClearContext = function(sessionID) {
+    var request = http.request({
       host: 'https://api.dialogflow.com',
       port: 9200,
       path: 'v1/contexts/shop?sessionId=12345',
@@ -78,6 +80,7 @@ var getClearContextRequest = function(sessionID) {
         'Authorization': 'Bearer ' + process.env.dialogflow
       }
     });
+    request.end()
 }
 
 var mispellingSolver = FuzzySet();
@@ -128,6 +131,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
         // we must clear the context
+        sendClearContext(message['nlpResponse']['sessionId']);
       } else {
         bot.reply(message, message['fulfillment']['speech']);
       }
