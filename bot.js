@@ -91,7 +91,6 @@ var sendClearContext = function(sessionID) {
 }
 
 var mispellingSolver = FuzzySet();
-var againMispelled = false;
 
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('names.txt')
@@ -137,14 +136,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // check for mispelling and ask for the most similar (over threshold)
     // otherwise forward the question sent by DialogFlow
     var mispelled = message.entities["any"];
-    if (mispelled != '' && againMispelled == false) {
+    if (mispelled != '') {
       var result = mispellingSolver.get(mispelled);
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
         // we must clear the context
         // sendClearContext(message['nlpResponse']['sessionId']);
-        againMispelled = true;
         console.log(message['nlpResponse']['result']['contexts']);
+        th
         
       } else {
         bot.reply(message, message['fulfillment']['speech']);
