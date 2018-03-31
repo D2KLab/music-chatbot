@@ -72,7 +72,7 @@ var sendClearContext = function(sessionID) {
   console.log("---" + sessionID)
   var options = {
     method: 'DELETE',
-    url: 'https://api.dialogflow.com/v1/contexts/shop?sessionId=' + sessionID,
+    uri: 'https://api.dialogflow.com/v1/contexts/sessionId=' + sessionID,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + process.env.dialogflow
@@ -81,7 +81,7 @@ var sendClearContext = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body)
+      console.log(response);
     }
   }
   
