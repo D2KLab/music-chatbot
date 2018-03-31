@@ -70,7 +70,7 @@ var allArtistsNames = FuzzySet();
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  console.log(message.entities)
+  bot.reply(message, "Just a moment...")
   // TAKE ARTIST AND NUMBER FROM DIALOGFLOW
   var artist = message.entities["doremus-artist"];
   var number = message.entities["number"];
@@ -90,7 +90,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var json = JSON.parse(body)
     
     // RESPONSE
-    var resp = "Sure! This is the list:\n";
+    var resp = "This is the list:\n";
     json["results"]["bindings"].forEach(function(row) {
       resp += ("  >  " + row["title"]["value"] + "\n");
     });
