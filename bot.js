@@ -70,6 +70,7 @@ var allArtistsNames = FuzzySet();
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  console.log(message.entities)
   // TAKE ARTIST AND NUMBER FROM DIALOGFLOW
   var artist = message.entities["doremus-artist"];
   var number = message.entities["number"];
