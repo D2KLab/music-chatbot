@@ -81,6 +81,7 @@ var sendClearContext = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
+      console.log(body);
       console.log(response);
     }
   }
@@ -140,7 +141,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
         // we must clear the context
-        sendClearContext(message['nlpResponse']['sessionId']);
+        // sendClearContext(message['nlpResponse']['sessionId']);
+        console.log(message['nlpResponse']['result']['contexts']);
         
       } else {
         bot.reply(message, message['fulfillment']['speech']);
