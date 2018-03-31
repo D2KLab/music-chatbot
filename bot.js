@@ -69,10 +69,10 @@ slackBot.startRTM()
 
 var sendClearContext = function(sessionID) {
   var request = require('request');
-
+  console.log("---" + sessionID)
   var options = {
     method: 'DELETE',
-    url: 'https://api.dialogflow.com/v1/contexts/shop?sessionId=' + sessionID,
+    url: 'https://api.dialogflow.com/v1/contexts/shop?sessionId=12345',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + process.env.dialogflow
@@ -81,7 +81,7 @@ var sendClearContext = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(response)
+      console.log(body)
     }
   }
   
