@@ -63,9 +63,8 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 });
 
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
-// slackBot.startRTM();
-var rtmManager = require('./components/rtm_manager.js')(
-rtmManager.start(slackBot)
+
+slackBot.startRTM()
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
