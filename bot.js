@@ -140,7 +140,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
         // we must clear the context
-        // sendClearContext(message['nlpResponse']['sessionId']);
+        sendClearContext(message['nlpResponse']['sessionId']);
         
       } else {
         bot.reply(message, message['fulfillment']['speech']);
