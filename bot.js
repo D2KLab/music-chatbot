@@ -46,8 +46,6 @@ var Botkit = require('botkit');
 var bot_options = {
     clientId: process.env.clientId,
     clientSecret: process.env.clientSecret,
-    //redirectUri: 'https://doraemon-bot.glitch.me/oauth',
-    //json_file_store: __dirname + '/.data/db/',
     debug: true,
     scopes: ['bot'],
 };
@@ -55,10 +53,6 @@ var bot_options = {
 
 var slackController = Botkit.slackbot(bot_options);
 
-slackController.startTicking();
-
-var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
-//slackController.setupWebserver(webserver);
 
 var slackBot = slackController.spawn({
     token: process.env.token,
@@ -113,68 +107,7 @@ slackController.hears(['works-of-artist'], 'direct_message, direct_mention, ment
   });
 });
 
-/*
-slackController.hears(['weather'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  console.log("***************");
-  console.log(message.entities);
-  console.log("----")
-  console.log(message.fulfillment.displayText)
-  console.log(message.nlpResponse)
-  if (message.fulfillment.displayText)
-    bot.reply(message, message.fulfillment.displayText);
-});
-*/
 
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   bot.reply(message, "Hi there! I'm a classical music expert");
 });
-
-
-// Set up an Express-powered webserver to expose oauth and webhook endpoints
-// var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
-
-/*
-if (process.env.clientId && process.env.clientSecret) {
-  webserver.get('/', function(req, res){
-    res.render('index', {
-      domain: req.get('host'),
-      protocol: req.protocol,
-      glitch_domain:  process.env.PROJECT_DOMAIN,
-      layout: 'layouts/default'
-    });
-  })
-  // Set up a simple storage backend for keeping a record of customers
-  // who sign up for the app via the oauth
-  require(__dirname + '/components/user_registration.js')(slackController);
-
-  // Send an onboarding message when a new team joins
-  require(__dirname + '/components/onboarding.js')(slackController);
-
-  // Load in some helpers that make running Botkit on Glitch.com better
-  require(__dirname + '/components/plugin_glitch.js')(slackController);
-
-  // enable advanced botkit studio metrics
-  require('botkit-studio-metrics')(slackController);
-
-  var normalizedPath = require("path").join(__dirname, "skills");
-  require("fs").readdirSync(normalizedPath).forEach(function(file) {
-    require("./skills/" + file)(slackController);
-  }); 
-} else {
-  // Load in some helpers that make running Botkit on Glitch.com better
-  require(__dirname + '/components/plugin_glitch.js')(slackController);
-
-  webserver.get('/', function(req, res){
-    res.render('installation', {
-      studio_enabled: slackController.config.studio_token ? true : false,
-      domain: req.get('host'),
-      protocol: req.protocol,
-      glitch_domain:  process.env.PROJECT_DOMAIN,
-      layout: 'layouts/default'
-    });
-  })
-
-  var where_its_at = 'https://' + process.env.PROJECT_DOMAIN + '.glitch.me/';
-  console.log('WARNING: This application is not fully configured to work with Slack. Please see instructions at ' + where_its_at);
-}
-*/
