@@ -67,8 +67,12 @@ slackBot.startRTM()
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  // TAKE ARTIST FROM DIALOGFLOW
-  var artist = message.entities["music-artist"];
+  // TAKE ARTIST AND NUMBER FROM DIALOGFLOW
+  var artist = message.entities["doremus-artist"];
+  var number = message.entities["number"];
+  
+  console.log(artist)
+  console.log(number)
   /*if(isNaN(parseFloat(artist))) {
     bot.reply(message, message.nlpResponse);
   }*/
@@ -90,7 +94,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   */
   
   // JSON VERSION
-  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle+WHERE+%7B+%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B+rdfs%3Alabel+%3Ftitle+.+%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B+ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.+%3Fcomposer+foaf%3Aname+%22" + artist.replace(" ", "+") + "%22+%7D+LIMIT+10%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
+  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fname+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname%0D%0A++FILTER+regex%28%3Fname%2C+%22" + artist + "%24%22%29%0D%0A%7D%0D%0AORDER+BY+%3Ftitle%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
   const request = require('request');
   request(jsonQuery, (err, res, body) => {
     
