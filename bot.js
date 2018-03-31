@@ -112,7 +112,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var mispelled = message.entities["any"];
     if (mispelled != '') {
       var result = mispellingSolver.get(mispelled);
-      bot.reply(message, "I'm sorry. You can try with '" + result[0][1] + "'.");
+      if (result != null) {
+        bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
+      } else {
+        bot.reply(message, message['fulfillment']['speech']);
+      }
     } else {
       bot.reply(message, message['fulfillment']['speech']);
     }
