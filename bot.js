@@ -48,8 +48,6 @@ var bot_options = {
     clientSecret: process.env.clientSecret,
     debug: true,
     scopes: ['bot'],
-    studio_token: process.env.studio_token,
-    studio_command_uri: process.env.studio_command_uri
 };
 
 
@@ -127,7 +125,7 @@ slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention
 
 
 // Set up an Express-powered webserver to expose oauth and webhook endpoints
-var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
+// var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
 
 /*
 if (process.env.clientId && process.env.clientSecret) {
