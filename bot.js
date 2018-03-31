@@ -66,16 +66,15 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
-var allArtistsNames = FuzzySet();
+var sampleNames = ["Mozart", "Liszt", "Beethoven"]
+
+var allArtistsNames = FuzzySet(sampleNames);
 
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   bot.reply(message, "Just a moment...")
-  console.log("------")
-  console.log(message)
-  console.log("------")
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    // TAKE ARTIST AND NUMBER FROM DIALOGFLOW
+    // required parameters resolved
     var artist = message.entities["doremus-artist"];
     var number = message.entities["number"];
 
@@ -101,6 +100,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       bot.reply(message, resp);
     });
   } else {
+    // missing required parameters
+    // check for mispelling and the most similar (over threshold)
+    // otherwise forward the question sent by DialogFlow
     bot.reply(message, message['fulfillment']['speech']);
   }
 });
