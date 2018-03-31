@@ -101,7 +101,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       bot.reply(message, resp);
     });
   } else {
-    bot.reply(message, "Che minchia hai detto?");
+    bot.reply(message, message['fulfillment']['speech']);
   }
 });
 
