@@ -68,17 +68,25 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM()
 
 var sendClearContext = function(sessionID) {
-    var request = http.request({
-      host: 'https://api.dialogflow.com',
-      //port: 443,
-      path: 'v1/contexts/shop?sessionId=' + sessionID,
-      method: 'DELETE',
-      headers: {                                    
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + process.env.dialogflow
-      }
-    });
-    request.end()
+  var request = require('request');
+
+  var options = {
+    method: 'DELETE',
+    url: 'https://api.dialogflow.com/v1/contexts/shop?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+  
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(response)
+    }
+  }
+  
+  request(options, callback)
+  
 }
 
 var mispellingSolver = FuzzySet();
