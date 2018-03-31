@@ -67,8 +67,6 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 slackBot.startRTM()
 
-var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
-
 var sendClearContext = function(sessionID) {
     var request = http.request({
       host: 'https://api.dialogflow.com',
