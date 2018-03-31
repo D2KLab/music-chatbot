@@ -63,13 +63,15 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 });
 
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
-slackBot.startRTM();
+// slackBot.startRTM();
+var rtmManager = require('./components/rtm_manager.js')(
+rtmManager.start(slackBot)
 
-slackController.hears(['works-of-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   // TAKE ARTIST FROM DIALOGFLOW
-  var artist = message.entities.any;
-  
+  var artist = message.entities.music-artist;
+  console.log(artist)
   // PREPARE THE QUERY
   // var base = "http://data.doremus.org/sparql?default-graph-uri=&query="
   // var querytext = "SELECT DISTINCT ?title WHERE { ?expression a efrbroo:F22_Self-Contained_Expression ; rdfs:label ?title . ?expCreation efrbroo:R17_created ?expression ; ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . ?composer foaf:name \"" + artist + "\"} ORDER BY ?title LIMIT 10"
