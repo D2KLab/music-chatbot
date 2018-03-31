@@ -46,8 +46,8 @@ var Botkit = require('botkit');
 var bot_options = {
     clientId: process.env.clientId,
     clientSecret: process.env.clientSecret,
-    redirectUri: 'https://doraemon-bot.glitch.me/oauth',
-    json_file_store: __dirname + '/.data/db/',
+    //redirectUri: 'https://doraemon-bot.glitch.me/oauth',
+    //json_file_store: __dirname + '/.data/db/',
     debug: true,
     scopes: ['bot'],
 };
@@ -57,10 +57,8 @@ var slackController = Botkit.slackbot(bot_options);
 
 slackController.startTicking();
 
-slackController.setupWebserver(process.env.PORT ,function(err,express_webserver) {
-  slackController.createOauthEndpoints(express_webserver)
-  slackController.createWebhookEndpoints(express_webserver);
-});
+var webserver = require(__dirname + '/components/express_webserver.js')(slackController);
+//slackController.setupWebserver(webserver);
 
 var slackBot = slackController.spawn({
     token: process.env.token,
