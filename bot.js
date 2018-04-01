@@ -69,7 +69,7 @@ slackBot.startRTM()
 
 var sendClearContext = function(sessionID) {
   var request = require('request');
-  console.log("---" + sessionID)
+  console.log("---" + sessionID);
   var options = {
     method: 'DELETE',
     uri: 'https://api.dialogflow.com/v1/contexts/sessionId=' + sessionID,
@@ -87,6 +87,26 @@ var sendClearContext = function(sessionID) {
   }
   
   request(options, callback)
+  
+}
+
+var sendClearContext2 = function(sessionID) {
+
+  var req = require('request')
+  
+  req({
+    method: 'DELETE',
+    uri: 'https://api.dialogflow.com/v1/contexts/sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body);
+      console.log(response);
+    }
+  });
   
 }
 
@@ -141,11 +161,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
         // we must clear the context
-        // sendClearContext(message['nlpResponse']['sessionId']);
+        sendClearContext2(message['nlpResponse']['sessionId']);
         console.log("----------------------------------")
         console.log(message['nlpResponse']['result']['contexts']);  
         console.log(message['nlpResponse']['sessionId'])
-        console.log("###############################")
+        console.log("##################################")
       } else {
         bot.reply(message, message['fulfillment']['speech']);
       }
