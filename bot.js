@@ -141,7 +141,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         console.log(result)
         var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
-        for (var i = 0; i < result.length && i < 4; i++) {
+        for (var i = 0; i < result.length && i < 3; i++) {
           answer += result[i][1] + '\n';
         }
         bot.reply(message, answer);
