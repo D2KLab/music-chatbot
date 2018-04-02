@@ -139,7 +139,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     if (mispelled != '') {
       var result = mispellingSolver.get(mispelled);
       if (result != null) {
-        bot.reply(message, "I'm sorry, I can't find your artist. Try with '" + result[0][1] + "'.");
+        console.log(result)
+        var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
+        for (var i = 0; i < result.length && i < 4; i++) {
+          answer += result[i][1] + '\n';
+        }
+        bot.reply(message, answer);
         // we must clear the context
         sendClearContext(message['nlpResponse']['sessionId']);
       } else {
