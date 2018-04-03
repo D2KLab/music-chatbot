@@ -69,7 +69,6 @@ slackBot.startRTM()
 
 var sendClearContext = function(sessionID) {
   var request = require('request');
-  console.log('https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID);
   var options = {
     method: 'DELETE',
     uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
@@ -84,11 +83,8 @@ var sendClearContext = function(sessionID) {
       console.log(body);
       console.log(response);
     }
-    //console.log(body)
   }
-  
   request(options, callback)
-  
 }
 
 var mispellingSolver = FuzzySet();
