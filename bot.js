@@ -69,10 +69,10 @@ slackBot.startRTM()
 
 var sendClearContext = function(sessionID) {
   var request = require('request');
-  console.log("---" + sessionID);
+  console.log('https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID);
   var options = {
     method: 'DELETE',
-    uri: 'https://api.dialogflow.com/v1/contexts/sessionId=' + sessionID,
+    uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + process.env.dialogflow
@@ -84,6 +84,7 @@ var sendClearContext = function(sessionID) {
       console.log(body);
       console.log(response);
     }
+    //console.log(body)
   }
   
   request(options, callback)
@@ -121,7 +122,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (err) { return console.log(err); }
 
       // JSON PARSING
-      console.log(body)
       var json = JSON.parse(body)
 
       // RESPONSE
@@ -139,7 +139,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     if (mispelled != '') {
       var result = mispellingSolver.get(mispelled);
       if (result != null) {
-        console.log(result)
         var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
         for (var i = 0; i < result.length && i < 3; i++) {
           answer += result[i][1] + '\n';
