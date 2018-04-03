@@ -158,7 +158,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
 
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  bot.reply(message, "Hi there! I'm a classical music expert :D");
+  console.log(message);
+  bot.reply(message, message['fulfillment']['speech']);
 });
 
 slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
