@@ -158,6 +158,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     }
     // if the string doesn't contain anything, send the NLP question
     else {
+      
       bot.reply(message, message['fulfillment']['speech']);
     }
   }
