@@ -133,22 +133,33 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     // MISSING ARTIST NAME
     // - check for misspelling and ask for the most similar (over threshold)
-    // otherwise forward the question sent by DialogFlow ("for which artist?")
-    var mispelled = message.entities["any"];
-    if (mispelled != '') {
-      var result = mispellingSolver.get(mispelled);
+    // - otherwise forward the question sent by DialogFlow ("for which artist?")
+    
+    // Retrieve the mispelled string
+    var misspelled = message.entities["any"];
+    
+    // If contains something...
+    if (misspelled != '') {
+      
+      // Try to solve it and propose the alternatives,
+      // otherwise send the NLP question
+      var result = mispellingSolver.get(misspelled);
       if (result != null) {
         var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
         for (var i = 0; i < result.length && i < 3; i++) {
           answer += result[i][1] + '\n';
         }
         bot.reply(message, answer);
-        // we must clear the context
+        
+        // We must clear the context
         sendClearContext(message['nlpResponse']['sessionId']);
-      } else {
+      }
+      else {
         bot.reply(message, message['fulfillment']['speech']);
       }
-    } else {
+    }
+    // if the string doesn't contain anything, send the NLP question
+    else {
       bot.reply(message, message['fulfillment']['speech']);
     }
   }
