@@ -30,7 +30,7 @@ This bot demonstrates many of the core features of Botkit:
     -> http://howdy.ai/botkit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-
+// CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
     console.log('Error: Specify token in environment');
     process.exit(1);
@@ -41,32 +41,8 @@ if (!process.env.dialogflow) {
     process.exit(1);
 }
 
-var Botkit = require('botkit');
-var FuzzySet = require('fuzzyset.js')
-var http = require('http');
 
-var bot_options = {
-    clientId: process.env.clientId,
-    clientSecret: process.env.clientSecret,
-    //debug: true,
-    scopes: ['bot'],
-};
-
-
-var slackController = Botkit.slackbot(bot_options);
-
-var slackBot = slackController.spawn({
-    token: process.env.token,
-});
-
-var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
-    token: process.env.dialogflow,
-});
-
-slackController.middleware.receive.use(dialogflowMiddleware.receive);
-
-slackBot.startRTM()
-
+// FUNCTION TO CLEAR THE ACTIVE CONTEXT
 var sendClearContext = function(sessionID) {
   var request = require('request');
   var options = {
@@ -87,15 +63,37 @@ var sendClearContext = function(sessionID) {
   request(options, callback)
 }
 
-var mispellingSolver = FuzzySet();
 
+// VARIABLES DECLARATION
+var Botkit = require('botkit');
+var FuzzySet = require('fuzzyset.js')
+var http = require('http');
+var bot_options = {
+    clientId: process.env.clientId,
+    clientSecret: process.env.clientSecret,
+    //debug: true,
+    scopes: ['bot'],
+};
+var slackController = Botkit.slackbot(bot_options);
+var slackBot = slackController.spawn({
+    token: process.env.token,
+});
+var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
+    token: process.env.dialogflow,
+});
+var mispellingSolver = FuzzySet();
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('names.txt')
 });
-
 lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
+
+
+// INITs
+slackController.middleware.receive.use(dialogflowMiddleware.receive);
+slackBot.startRTM()
+
 
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
@@ -165,11 +163,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
+
 // HELLO INTENT
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(message);
   bot.reply(message, message['fulfillment']['speech']);
 });
+
 
 // DEFAULT INTENT
 slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
