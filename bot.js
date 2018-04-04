@@ -97,6 +97,7 @@ lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
 
+// WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
@@ -127,10 +128,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       });
       bot.reply(message, resp);
     });
-  } else {
-    // missing artist name
-    // check for mispelling and ask for the most similar (over threshold)
-    // otherwise forward the question sent by DialogFlow
+  }
+  else {
+    
+    // MISSING ARTIST NAME
+    // - check for misspelling and ask for the most similar (over threshold)
+    // otherwise forward the question sent by DialogFlow ("for which artist?")
     var mispelled = message.entities["any"];
     if (mispelled != '') {
       var result = mispellingSolver.get(mispelled);
@@ -151,12 +154,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-
+// HELLO INTENT
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(message);
   bot.reply(message, message['fulfillment']['speech']);
 });
 
+// DEFAULT INTENT
 slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   bot.reply(message, message['fulfillment']['speech']);
 });
