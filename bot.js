@@ -134,6 +134,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // MISSING ARTIST NAME
     // - check for misspelling and ask for the most similar (over threshold)
     // - otherwise forward the question sent by Dialogflow ("for which artist?")
+    if (message["text"].equals("yes")) {
+      
+    }
     
     // Retrieve the mispelled string
     var misspelled = message.entities["any"];
@@ -150,7 +153,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         bot.reply(message, answer);
         
         // We must clear the context
-        sendClearContext(message['nlpResponse']['sessionId']);
+        // sendClearContext(message['nlpResponse']['sessionId']);
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
