@@ -146,11 +146,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
-        /******************************** /
+        /********************************/
         if (message["text"] === "yes") {
 
           // GET PARAMETERS
-          var artist = message.entities["doremus-artist-ext"];
+          var artist = message.entities["doremus-artist-ext"]; ////////////////////// BUG
           var number = message.entities["number"];
 
           // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
@@ -176,6 +176,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
               resp += ("  >  " + row["title"]["value"] + "\n");
             });
             bot.reply(message, resp);
+            
+            sendClearContext(message['nlpResponse']['sessionId']);
           });
         }
         else if ((message["text"] === "no")) {
@@ -184,11 +186,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
           sendClearContext(message['nlpResponse']['sessionId']);
         }
         else {
-        var answer = "Did you mean " + result[0][1] + "?"
-        bot.reply(message, answer);
-        
-        // We must clear the context
-        // sendClearContext(message['nlpResponse']['sessionId']);
+          var answer = "Did you mean " + result[0][1] + "?"
+          bot.reply(message, answer);
+
+          // We must clear the context
+          // sendClearContext(message['nlpResponse']['sessionId']);
+        }
+        /**********************/
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
