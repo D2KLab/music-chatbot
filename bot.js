@@ -147,7 +147,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         
         /********************************/
-        if (message["text"] === "yes") {
+        if (message.entities["yes-no"] === "yes") {
+          
+          sendClearContext(message['nlpResponse']['sessionId']);
 
           // GET PARAMETERS
           var artist = message.entities["doremus-artist-ext"]; ////////////////////// BUG
