@@ -124,10 +124,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         resp += ("  >  " + row["title"]["value"] + "\n");
       });
       bot.reply(message, resp);
+      
+      // We must clear the context
+      sendClearContext(message['nlpResponse']['sessionId']);
     });
   }
   
-  var getUriGivenName = function(sessionID, resolvedName) {
+  var getUriAndQuery = function(sessionID, resolvedName) {
     var request = require('request');
     var options = {
       method: 'GET',
@@ -187,19 +190,26 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
-        // Case Yes
+        // Case YES
         if (message['nlpResponse']['result']['resolvedQuery'] === "yes") {
-          getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]);
-          return;
-        }
-        else if ((message['nlpResponse']['result']['resolvedQuery'] === "no")) {
           
-          bot.reply(message, "Did you mean " + result[0][1] + "?");
+          getUriAndQuery(message['nlpResponse']['sessionId'], result[0][1]);
+          
           // We must clear the context
           sendClearContext(message['nlpResponse']['sessionId']);
         }
-        
-        bot.reply(message, "Did you mean " + result[0][1] + "?");
+        // Case NO
+        else if ((message['nlpResponse']['result']['resolvedQuery'] === "no")) {
+          
+          bot.reply(message, "Ok, sorry...");
+          
+          // We must clear the context
+          sendClearContext(message['nlpResponse']['sessionId']);
+        }
+        else {
+          
+          bot.reply(message, "Did you mean " + result[0][1] + "?");
+        }
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
