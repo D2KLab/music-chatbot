@@ -125,8 +125,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       });
       bot.reply(message, resp);
       
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
     });
   }
   
