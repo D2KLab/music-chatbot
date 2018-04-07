@@ -177,13 +177,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
-        console.log("################" + message['result']['resolvedQuery'])
-        /*******************
-        if (message[) {
-          getUriGivenName(message['nlpResponse']['sessionId'], results[i][1]);
+        if (message['nlpResponse']['result']['resolvedQuery'] === "give me 2 works by Back") {
+          console.log("######" + getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]));
           return;
         }
-       *****/
+        getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]);
         
         var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
         for (var i = 0; i < result.length && i < 3; i++) {
