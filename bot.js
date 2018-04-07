@@ -63,6 +63,26 @@ var sendClearContext = function(sessionID) {
   request(options, callback)
 }
 
+var getUriGivenName = function(sessionID) {
+  var request = require('request');
+  var options = {
+    method: 'GET',
+    uri: 'https://api.dialogflow.com/v1/entities?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+  
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body);
+      console.log(response);
+    }
+  }
+  request(options, callback)
+}
+
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
