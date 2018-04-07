@@ -63,36 +63,7 @@ var sendClearContext = function(sessionID) {
   request(options, callback)
 }
 
-var getUriGivenName = function(sessionID, resolvedName) {
-  var request = require('request');
-  var options = {
-    method: 'GET',
-    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-  
-  function callback(error, response, body) {
-    
-    // JSON PARSING
-    var json = JSON.parse(body)
 
-    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
-    for(var i = 0; i < json["entries"].length; i++) {
-      var entry = json["entries"][i]      
-      for(var j = 0; j < entry["synonyms"].length; j++) {
-        if(entry["synonyms"][j] === resolvedName) {
-          
-          return entry["value"];
-        }
-      }
-    }
-  };
-                                
-  request(options, callback)
-}
 
 
 // VARIABLES DECLARATION
@@ -129,12 +100,7 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    
-    // GET PARAMETERS
-    var artist = message.entities["doremus-artist-ext"];
-    var number = message.entities["number"];
-    
+  function doQuery(artist, number) {
     // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
     if (isNaN(parseInt(number))) {
       number = 10;
@@ -160,6 +126,50 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       bot.reply(message, resp);
     });
   }
+  
+  var getUriGivenName = function(sessionID, resolvedName) {
+    var request = require('request');
+    var options = {
+      method: 'GET',
+      uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + process.env.dialogflow
+      }
+    };
+
+    function callback(error, response, body) {
+
+      // JSON PARSING
+      var json = JSON.parse(body)
+
+      // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
+      for(var i = 0; i < json["entries"].length; i++) {
+        var entry = json["entries"][i]      
+        for(var j = 0; j < entry["synonyms"].length; j++) {
+          if(entry["synonyms"][j] === resolvedName) {
+
+            // GET PARAMETERS
+            var artist = entry["value"];
+            var number = message.entities["number"];
+            
+            doQuery(artist, number);
+          }
+        }
+      }
+    };
+
+    request(options, callback)
+  }
+  
+  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
+    
+    // GET PARAMETERS
+    var artist = message.entities["doremus-artist-ext"];
+    var number = message.entities["number"];
+    
+    doQuery(artist, number);
+  }
   else {
     
     // MISSING ARTIST NAME
@@ -177,20 +187,19 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
-        if (message['nlpResponse']['result']['resolvedQuery'] === "give me 2 works by Back") {
-          console.log("######" + getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]));
+        // Case Yes
+        if (message['nlpResponse']['result']['resolvedQuery'] === "yes") {
+          getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]);
           return;
         }
-        getUriGivenName(message['nlpResponse']['sessionId'], result[0][1]);
-        
-        var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
-        for (var i = 0; i < result.length && i < 3; i++) {
-          answer += result[i][1] + '\n';
+        else if ((message['nlpResponse']['result']['resolvedQuery'] === "no")) {
+          
+          bot.reply(message, "Did you mean " + result[0][1] + "?");
+          // We must clear the context
+          sendClearContext(message['nlpResponse']['sessionId']);
         }
-        bot.reply(message, answer);
         
-        // We must clear the context
-        sendClearContext(message['nlpResponse']['sessionId']);
+        bot.reply(message, "Did you mean " + result[0][1] + "?");
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
