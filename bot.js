@@ -75,21 +75,18 @@ var getUriGivenName = function(sessionID, resolvedName) {
   };
   
   function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log(body);
-      console.log(response);
-    }
-      
+    
     // JSON PARSING
     var json = JSON.parse(body)
 
     json["entries"].forEach(function(entry) {
-      entry["synonyms"].forEach(function(synonym) {
-        if(synonym === resolvedName) {
+      
+      for(var i = 0; i < entry["synonyms"].length; i++) {
+        if(entry["synonyms"][i] === resolvedName) {
           console.log("#######################" + entry["value"]);
           return entry["value"];
         }
-      });
+      }
     });
   };
                                 
@@ -131,7 +128,7 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  getUriGivenName(message['nlpResponse']['sessionId'], resolvedName);
+  getUriGivenName(message['nlpResponse']['sessionId'], "Mozart");
   return;
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
