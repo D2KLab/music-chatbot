@@ -79,15 +79,16 @@ var getUriGivenName = function(sessionID, resolvedName) {
     // JSON PARSING
     var json = JSON.parse(body)
 
-    json["entries"].forEach(function(entry) {
-      
-      for(var i = 0; i < entry["synonyms"].length; i++) {
-        if(entry["synonyms"][i] === resolvedName) {
-          console.log("#######################" + entry["value"]);
+    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
+    for(var i = 0; i < json["entries"].length; i++) {
+      var entry = json["entries"][i]      
+      for(var j = 0; j < entry["synonyms"].length; j++) {
+        if(entry["synonyms"][j] === resolvedName) {
+          
           return entry["value"];
         }
       }
-    });
+    }
   };
                                 
   request(options, callback)
@@ -127,9 +128,6 @@ slackBot.startRTM();
 
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  getUriGivenName(message['nlpResponse']['sessionId'], "Mozart");
-  return;
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
@@ -178,6 +176,15 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       // otherwise send the NLP question
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
+        
+        console.log("################" + message['result']['resolvedQuery'])
+        /*******************
+        if (message[) {
+          getUriGivenName(message['nlpResponse']['sessionId'], results[i][1]);
+          return;
+        }
+       *****/
+        
         var answer = "I'm sorry, I can't find your artist. Try with one of the following:\n";
         for (var i = 0; i < result.length && i < 3; i++) {
           answer += result[i][1] + '\n';
