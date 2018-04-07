@@ -63,7 +63,7 @@ var sendClearContext = function(sessionID) {
   request(options, callback)
 }
 
-var getUriGivenName = function(sessionID) {
+var getUriGivenName = function(sessionID, resolvedName) {
   var request = require('request');
   var options = {
     method: 'GET',
@@ -76,11 +76,23 @@ var getUriGivenName = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log("-------------------")
       console.log(body);
-      console.log("-------------------")
+      console.log(response);
     }
-  }
+      
+    // JSON PARSING
+    var json = JSON.parse(body)
+
+    json["entries"].forEach(function(entry) {
+      entry["synonyms"].forEach(function(synonym) {
+        if(synonym === resolvedName) {
+          console.log("#######################" + entry["value"]);
+          return entry["value"];
+        }
+      });
+    });
+  };
+                                
   request(options, callback)
 }
 
@@ -119,7 +131,7 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  getUriGivenName(message['nlpResponse']['sessionId']);
+  getUriGivenName(message['nlpResponse']['sessionId'], resolvedName);
   return;
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
