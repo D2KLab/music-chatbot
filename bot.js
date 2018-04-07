@@ -63,7 +63,32 @@ var sendClearContext = function(sessionID) {
   request(options, callback)
 }
 
-
+var sendStopConversation = function(sessionID) {
+  var request = require('request');
+  var options = {
+    method: 'POST',
+    mode: 'cors',
+    redirect: 'follow',
+    uri: 'https://api.dialogflow.com/v1/query?v=20150910',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    },
+    body: JSON.stringify({
+      q: 'stop',
+      lang: 'en',
+      sessionId: sessionID
+    })
+  };
+  
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log(body);
+      console.log(response);
+    }
+  }
+  request(options, callback)
+}
 
 
 // VARIABLES DECLARATION
@@ -192,6 +217,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         if (message['nlpResponse']['result']['resolvedQuery'] === "yes") {
           
           getUriAndQuery(message['nlpResponse']['sessionId'], result[0][1]);
+          
+          // We must end the conversation
+          sendStopConversation(message['nlpResponse']['sessionId']);
           
           // We must clear the context
           sendClearContext(message['nlpResponse']['sessionId']);
