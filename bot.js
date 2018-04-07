@@ -88,6 +88,7 @@ var lineReader = require('readline').createInterface({
 lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
+var iter = 0;
 
 
 // INITs
@@ -97,8 +98,6 @@ slackBot.startRTM();
 
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  var iter = 0;
   
   function doQuery(artist, number) {
     // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
@@ -201,20 +200,30 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
            message['nlpResponse']['result']['resolvedQuery'] === "yep" ||
            message['nlpResponse']['result']['resolvedQuery'] === "sure") {
           
-          getUriAndQuery(message['nlpResponse']['sessionId'], result[0][1]);
+          getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1]);
           
           // We must clear the context
           sendClearContext(message['nlpResponse']['sessionId']);
+          iter = 0;
         }
         // Case NO
         else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
                 message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
                 message['nlpResponse']['result']['resolvedQuery'] === "not really") {
           
-          bot.reply(message, "Ok, sorry...");
+          if (iter < 3 && iter < result.length) {
+            
+            bot.reply(message, "Did you mean " + result[iter][1] + "?");
+            iter += 1
+          }
+          else {
+            
+            bot.reply(message, "Ok, sorry for that!");
           
-          // We must clear the context
-          sendClearContext(message['nlpResponse']['sessionId']);
+            // We must clear the context
+            sendClearContext(message['nlpResponse']['sessionId']);
+            iter = 0;
+          }
         }
         else {
           
