@@ -56,8 +56,8 @@ var sendClearContext = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(body);
-      console.log(response);
+      // console.log(body);
+      // console.log(response);
     }
   }
   request(options, callback)
@@ -127,7 +127,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     });
   }
   
-  var getUriAndQuery = function(sessionID, resolvedName) {
+  var getUriAndQuery = function(sessionID, resolvedName, number) {
     var request = require('request');
     var options = {
       method: 'GET',
@@ -152,7 +152,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
             // GET PARAMETERS
             var artist = entry["value"];
-            var number = message.entities["number"];
+            // var number = message.entities["number"];
             
             found = true;
             break;
@@ -200,7 +200,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
            message['nlpResponse']['result']['resolvedQuery'] === "yep" ||
            message['nlpResponse']['result']['resolvedQuery'] === "sure") {
           
-          getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1]);
+          getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1], message.entities["number"]);
           
           // We must clear the context
           sendClearContext(message['nlpResponse']['sessionId']);
