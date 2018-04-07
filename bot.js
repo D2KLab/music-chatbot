@@ -98,6 +98,8 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  var iter = 0;
+  
   function doQuery(artist, number) {
     // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
     if (isNaN(parseInt(number))) {
@@ -141,6 +143,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
       // JSON PARSING
       var json = JSON.parse(body)
+      var found = false
 
       // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
       for(var i = 0; i < json["entries"].length; i++) {
@@ -152,8 +155,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
             var artist = entry["value"];
             var number = message.entities["number"];
             
-            doQuery(artist, number);
+            found = true;
+            break;
           }
+        }
+        
+        if (found) {
+          doQuery(artist, number);
+          break;
         }
       }
     };
@@ -187,18 +196,20 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         
         // Case YES
-        if (message['nlpResponse']['result']['resolvedQuery'] === "yes") {
+        if (message['nlpResponse']['result']['resolvedQuery'] === "yes" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "yeah" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "yep" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "sure") {
           
           getUriAndQuery(message['nlpResponse']['sessionId'], result[0][1]);
-          
-          // We must end the conversation
-          sendStopConversation(message['nlpResponse']['sessionId']);
           
           // We must clear the context
           sendClearContext(message['nlpResponse']['sessionId']);
         }
         // Case NO
-        else if ((message['nlpResponse']['result']['resolvedQuery'] === "no")) {
+        else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
+                message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
+                message['nlpResponse']['result']['resolvedQuery'] === "not really") {
           
           bot.reply(message, "Ok, sorry...");
           
@@ -207,7 +218,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         }
         else {
           
-          bot.reply(message, "Did you mean " + result[0][1] + "?");
+          bot.reply(message, "Did you mean " + result[iter][1] + "?");
+          iter += 1
         }
       }
       else {
