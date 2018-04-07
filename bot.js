@@ -67,7 +67,7 @@ var getUriGivenName = function(sessionID) {
   var request = require('request');
   var options = {
     method: 'GET',
-    uri: 'https://api.dialogflow.com/v1/entities?sessionId=' + sessionID,
+    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + process.env.dialogflow
@@ -76,8 +76,9 @@ var getUriGivenName = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
+      console.log("-------------------")
       console.log(body);
-      console.log(response);
+      console.log("-------------------")
     }
   }
   request(options, callback)
@@ -117,6 +118,9 @@ slackBot.startRTM();
 
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  getUriGivenName(message['nlpResponse']['sessionId']);
+  return;
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
