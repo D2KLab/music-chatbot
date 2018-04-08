@@ -90,6 +90,49 @@ lineReader.on('line', function (line) {
 });
 var iter = 0;
 
+var bioAttachment = {
+  'username': 'My bot' ,
+  'text': 'This is a pre-text',
+  "attachments": [
+        {
+			"pretext": "This is what I found:",
+            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+            "title" : "Johann Sebastian Bach",
+			"text": "This is what I found for you",
+			"thumb_url": "http://commons.wikimedia.org/wiki/Special:FilePath/Johann_Sebastian_Bach.jpg",
+            "fields": [
+                {
+                    "title": "Born in",
+                    "value": "Eisenach",
+                    "short": true
+                },
+                {
+                    "title": "Birthdate",
+                    "value": "1685-01-01",
+                    "short": true
+                },
+				{
+                    "title": "Dead in",
+                    "value": "Leipzig",
+                    "short": true
+                },
+                {
+                    "title": "Death date",
+                    "value": "1750-01-01",
+                    "short": true
+                },
+				{
+                    "title": "Bio",
+                    "value": "Johann Sebastian Bach (31 March [O.S. 21 March] 1685 – 28 July 1750) was a German composer and musician of the Baroque period. He enriched established German styles through his skill in counterpoint, harmonic and motivic organisation, and the adaptation of rhythms, forms, and textures from abroad, particularly from Italy and France. Bach's compositions include the Brandenburg Concertos, the Goldberg Variations, the Mass in B minor, two Passions, and over three hundred cantatas of which around two hundred survive. His music is revered for its technical command, artistic beauty, and intellectual depth.",
+                    "short": false
+                }
+            ],
+            "color": "good"
+        }
+    ],
+  'icon_url': 'http://lorempixel.com/48/48'
+}
+
 
 // INITs
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
@@ -243,11 +286,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-// HELLO INTENT
+// DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(message);
   var artist = message.entities["doremus-artist-ext"];
-  var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F6963af5e-b126-3d40-a84b-97e0b78f5452%3E%29%7D+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place+.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
+  var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%7D+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place+.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
   bot.reply(message, message['fulfillment']['speech']);
   const request = require('request');
   
@@ -256,8 +299,6 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
 
     // JSON PARSING
     var json = JSON.parse(body)
-    
-    console.log(json)
 
     // RESPONSE
     var bio = "";
@@ -268,9 +309,11 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
     
     json["results"]["bindings"].forEach(function(row) {
       bio = row["bio"]["value"];
-      birthPlace = row["birth_place"]["value"];
+      if (row["birth_place"])
+        birthPlace = row["birth_place"]["value"];
       birthDate = row["birth_date"]["value"];
-      deathPlace = row["death_place"]["value"];
+      if (row["death_place"])
+        deathPlace = row["death_place"]["value"];
       deathDate = row["death_date"]["value"];      
     });
     bot.reply(message, bio);
