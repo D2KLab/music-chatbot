@@ -89,6 +89,7 @@ lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
 var iter = 0;
+const request = require('request');
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var bioAttachment = {
@@ -141,34 +142,6 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  function doQuery(artist, number) {
-    // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-    if (isNaN(parseInt(number))) {
-      number = 10;
-    }
-
-    // JSON VERSION
-    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
-    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
-
-    const request = require('request');
-    request(jsonQuery, (err, res, body) => {
-
-      if (err) { return console.log(err); }
-
-      // JSON PARSING
-      var json = JSON.parse(body)
-
-      // RESPONSE
-      var resp = "This is the list:\n";
-      json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["value"] + "\n");
-      });
-      bot.reply(message, resp);
-      
-    });
-  }
-  
   var getUriAndQuery = function(sessionID, resolvedName, number) {
     var request = require('request');
     var options = {
@@ -218,6 +191,28 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var number = message.entities["number"];
     
     doQuery(artist, number);
+    // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
+    if (isNaN(parseInt(number))) {
+      number = 10;
+    }
+    
+    //var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
+    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
+    request(jsonQuery, (err, res, body) => {
+
+      if (err) { return console.log(err); }
+
+      // JSON PARSING
+      var json = JSON.parse(body)
+
+      // RESPONSE
+      var resp = "This is the list:\n";
+      json["results"]["bindings"].forEach(function(row) {
+        resp += ("  >  " + row["title"]["value"] + "\n");
+      });
+      bot.reply(message, resp);
+      
+    });
   }
   else {
     
