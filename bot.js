@@ -90,47 +90,47 @@ lineReader.on('line', function (line) {
 });
 var iter = 0;
 
-var bioAttachment = {
-  'username': 'My bot' ,
-  'text': 'This is a pre-text',
-  "attachments": [
-        {
-			"pretext": "This is what I found:",
-            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
-            "title" : "Johann Sebastian Bach",
-			"text": "This is what I found for you",
-			"thumb_url": "http://commons.wikimedia.org/wiki/Special:FilePath/Johann_Sebastian_Bach.jpg",
-            "fields": [
-                {
-                    "title": "Born in",
-                    "value": "Eisenach",
-                    "short": true
-                },
-                {
-                    "title": "Birthdate",
-                    "value": "1685-01-01",
-                    "short": true
-                },
-				{
-                    "title": "Dead in",
-                    "value": "Leipzig",
-                    "short": true
-                },
-                {
-                    "title": "Death date",
-                    "value": "1750-01-01",
-                    "short": true
-                },
-				{
-                    "title": "Bio",
-                    "value": "Johann Sebastian Bach (31 March [O.S. 21 March] 1685 – 28 July 1750) was a German composer and musician of the Baroque period. He enriched established German styles through his skill in counterpoint, harmonic and motivic organisation, and the adaptation of rhythms, forms, and textures from abroad, particularly from Italy and France. Bach's compositions include the Brandenburg Concertos, the Goldberg Variations, the Mass in B minor, two Passions, and over three hundred cantatas of which around two hundred survive. His music is revered for its technical command, artistic beauty, and intellectual depth.",
-                    "short": false
-                }
-            ],
-            "color": "good"
-        }
-    ],
-  'icon_url': 'http://lorempixel.com/48/48'
+var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
+  var bioAttachment = {
+    "attachments": [
+          {
+        "pretext": "This is what I found:",
+              "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+              "title" : fullname,
+        "text": "This is what I found for you",
+        "thumb_url": "http://commons.wikimedia.org/wiki/Special:FilePath/Johann_Sebastian_Bach.jpg",
+              "fields": [
+                  {
+                      "title": "Born in",
+                      "value": birthPlace,
+                      "short": true
+                  },
+                  {
+                      "title": "Birthdate",
+                      "value": birthDate,
+                      "short": true
+                  },
+          {
+                      "title": "Dead in",
+                      "value": deathPlace,
+                      "short": true
+                  },
+                  {
+                      "title": "Death date",
+                      "value": deathDate,
+                      "short": true
+                  },
+          {
+                      "title": "Bio",
+                      "value": bio, 
+                      "short": false
+                  }
+              ],
+              "color": "good"
+          }
+      ]
+  }
+  return bioAttachment;
 }
 
 
@@ -306,6 +306,7 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
     var birthDate = "";
     var deathPlace = "";
     var deathDate = "";
+    var image = ""
     
     json["results"]["bindings"].forEach(function(row) {
       bio = row["bio"]["value"];
@@ -314,9 +315,11 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
       birthDate = row["birth_date"]["value"];
       if (row["death_place"])
         deathPlace = row["death_place"]["value"];
-      deathDate = row["death_date"]["value"];      
+      deathDate = row["death_date"]["value"];
+      image = row["image"]["value"]
     });
-    bot.reply(message, bio);
+    var attachment = getBioCard("mozart", birthPlace, birthDate, deathPlace, deathDate, image, bio)
+    bot.reply(message, attachment);
   });
   
 });
