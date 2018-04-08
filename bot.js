@@ -256,19 +256,22 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
 
     // JSON PARSING
     var json = JSON.parse(body)
+    
+    console.log(json)
 
     // RESPONSE
     var bio = "";
     var birthPlace = "";
     var birthDate = "";
-    var birthPlace = "";
+    var deathPlace = "";
+    var deathDate = "";
     
     json["results"]["bindings"].forEach(function(row) {
       bio = row["bio"]["value"];
       birthPlace = row["birth_place"]["value"];
       birthDate = row["birth_date"]["value"];
-      
-      
+      deathPlace = row["death_place"]["value"];
+      deathDate = row["death_date"]["value"];      
     });
     bot.reply(message, bio);
   });
