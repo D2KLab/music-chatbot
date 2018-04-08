@@ -97,7 +97,6 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
         "pretext": "This is what I found:",
               "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
               "title" : fullname,
-        "text": "This is what I found for you",
         "image_url": imageURL,
               "fields": [
                   {
