@@ -98,7 +98,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
               "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
               "title" : fullname,
         "text": "This is what I found for you",
-        "thumb_url": "http://commons.wikimedia.org/wiki/Special:FilePath/Johann_Sebastian_Bach.jpg",
+        "image_url": imageURL,
               "fields": [
                   {
                       "title": "Born in",
@@ -318,6 +318,7 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
       deathDate = row["death_date"]["value"];
       image = row["image"]["value"]
     });
+    console.log(">>>>>" + image)
     var attachment = getBioCard("mozart", birthPlace, birthDate, deathPlace, deathDate, image, bio)
     bot.reply(message, attachment);
   });
