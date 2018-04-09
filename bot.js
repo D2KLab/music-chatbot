@@ -212,10 +212,6 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  
-  
-  
-  
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // GET PARAMETERS
@@ -265,15 +261,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 // CONFIRM INTENT
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  // Case YES
-  if (message['nlpResponse']['result']['metadata']['intentName'] === "confirm") {
+  getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter][1], message.entities["number"], bot, message);
 
-    getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter][1], message.entities["number"], bot, message);
+  // We must clear the context
+  sendClearContext(message['nlpResponse']['sessionId']);
+  iter = 0;
+  mispelledStack = [];
 
-    // We must clear the context
-    sendClearContext(message['nlpResponse']['sessionId']);
-    iter = 0;
-  }
   // Case NO
   else {
 
@@ -289,6 +283,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       // We must clear the context
       sendClearContext(message['nlpResponse']['sessionId']);
       iter = 0;
+      mispelledStack = [];
     }
   }
 });
