@@ -241,7 +241,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
           mispelledStack.push(result[i][1]);
         
         // We must clear the context
-        sendClearContext(message['nlpResponse']['sessionId']);
+        //sendClearContext(message['nlpResponse']['sessionId']);
         iter = 0;
         
         bot.reply(message, "Did you mean " + result[iter][1] + "?");
@@ -269,6 +269,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
   mispelledStack = [];
 
   // Case NO
+  /*
   else {
 
     if (iter < 3 && iter < mispelledStack.length) {
@@ -286,6 +287,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       mispelledStack = [];
     }
   }
+  */
 });
 
 // DISCOVER ARTIST
