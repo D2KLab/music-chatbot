@@ -42,28 +42,6 @@ if (!process.env.dialogflow) {
 }
 
 
-// FUNCTION TO CLEAR THE ACTIVE CONTEXT
-var sendClearContext = function(sessionID) {
-  var request = require('request');
-  var options = {
-    method: 'DELETE',
-    uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-  
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // console.log(body);
-      // console.log(response);
-    }
-  }
-  request(options, callback)
-}
-
-
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
 var FuzzySet = require('fuzzyset.js');
@@ -90,6 +68,27 @@ lineReader.on('line', function (line) {
 });
 var iter = 0;
 var mispelledStack = [];
+
+// FUNCTIONS
+var sendClearContext = function(sessionID) {
+  var request = require('request');
+  var options = {
+    method: 'DELETE',
+    uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+  
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // console.log(body);
+      // console.log(response);
+    }
+  }
+  request(options, callback)
+}
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var bioAttachment = {
@@ -133,6 +132,77 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
+function doQuery(artist, number, bot, message) {
+  // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
+  if (isNaN(parseInt(number))) {
+    number = 10;
+  }
+
+  // JSON VERSION
+  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
+  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
+
+  const request = require('request');
+  request(jsonQuery, (err, res, body) => {
+
+    if (err) { return console.log(err); }
+
+    // JSON PARSING
+    var json = JSON.parse(body)
+
+    // RESPONSE
+    var resp = "This is the list:\n";
+    json["results"]["bindings"].forEach(function(row) {
+      resp += ("  >  " + row["title"]["value"] + "\n");
+    });
+    
+    bot.reply(message, resp);
+
+  });
+}
+
+var getUriAndQuery = function(sessionID, resolvedName, number) {
+  var request = require('request');
+  var options = {
+    method: 'GET',
+    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+
+  function callback(error, response, body) {
+
+    // JSON PARSING
+    var json = JSON.parse(body)
+    var found = false
+
+    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
+    for(var i = 0; i < json["entries"].length; i++) {
+      var entry = json["entries"][i]      
+      for(var j = 0; j < entry["synonyms"].length; j++) {
+        if(entry["synonyms"][j] === resolvedName) {
+
+          // GET PARAMETERS
+          var artist = entry["value"];
+          // var number = message.entities["number"];
+
+          found = true;
+          break;
+        }
+      }
+
+      if (found) {
+        doQuery(artist, number);
+        break;
+      }
+    }
+  };
+
+  request(options, callback)
+}
+
 
 // INITs
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
@@ -142,75 +212,9 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  function doQuery(artist, number) {
-    // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-    if (isNaN(parseInt(number))) {
-      number = 10;
-    }
-
-    // JSON VERSION
-    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
-    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
-
-    const request = require('request');
-    request(jsonQuery, (err, res, body) => {
-
-      if (err) { return console.log(err); }
-
-      // JSON PARSING
-      var json = JSON.parse(body)
-
-      // RESPONSE
-      var resp = "This is the list:\n";
-      json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["value"] + "\n");
-      });
-      bot.reply(message, resp);
-      
-    });
-  }
   
-  var getUriAndQuery = function(sessionID, resolvedName, number) {
-    var request = require('request');
-    var options = {
-      method: 'GET',
-      uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + process.env.dialogflow
-      }
-    };
-
-    function callback(error, response, body) {
-
-      // JSON PARSING
-      var json = JSON.parse(body)
-      var found = false
-
-      // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
-      for(var i = 0; i < json["entries"].length; i++) {
-        var entry = json["entries"][i]      
-        for(var j = 0; j < entry["synonyms"].length; j++) {
-          if(entry["synonyms"][j] === resolvedName) {
-
-            // GET PARAMETERS
-            var artist = entry["value"];
-            // var number = message.entities["number"];
-            
-            found = true;
-            break;
-          }
-        }
-        
-        if (found) {
-          doQuery(artist, number);
-          break;
-        }
-      }
-    };
-
-    request(options, callback)
-  }
+  
+  
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
@@ -258,7 +262,42 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-slackController.hears(['
+slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message,) {
+  
+  // Case YES
+  if (message['nlpResponse']['result']['metadata']['intentName'] === "confirm") {
+
+    getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1], message.entities["number"]);
+
+    // We must clear the context
+    sendClearContext(message['nlpResponse']['sessionId']);
+    iter = 0;
+  }
+  // Case NO
+  else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
+          message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
+          message['nlpResponse']['result']['resolvedQuery'] === "not really") {
+
+    if (iter < 3 && iter < result.length) {
+
+      bot.reply(message, "Did you mean " + result[iter][1] + "?");
+      iter += 1
+    }
+    else {
+
+      bot.reply(message, "Ok, sorry for that!");
+
+      // We must clear the context
+      sendClearContext(message['nlpResponse']['sessionId']);
+      iter = 0;
+    }
+  }
+  else {
+
+    bot.reply(message, "Did you mean " + result[iter][1] + "?");
+    iter += 1
+  }
+});
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
