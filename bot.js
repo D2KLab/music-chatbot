@@ -361,7 +361,34 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
       bot.reply(message, attachment);
     });
   } else {
+    var misspelled = message.entities["any"];
     
+    // If contains something...
+    if (misspelled != '') {
+      
+      // Try to solve it and propose the alternatives,
+      // otherwise send the NLP question
+      var result = mispellingSolver.get(misspelled);
+      if (result != null) {
+        
+        for (var i = 0; i < 3 && i < result.length; i++)
+          mispelledStack[i] = result[i][1];
+        
+        // We must clear the context
+        intentThrowsMisspelled = "discover-artist";
+        sendClearContext(message['nlpResponse']['sessionId']);
+        iter = 0;
+        
+        bot.reply(message, "Did you mean " + mispelledStack[iter]+ "?");
+      }
+      else {
+        bot.reply(message, message['fulfillment']['speech']);
+      }
+    }
+    // if the string doesn't contain anything, send the NLP question
+    else {
+      bot.reply(message, message['fulfillment']['speech']);
+    }
   }
   
 });
