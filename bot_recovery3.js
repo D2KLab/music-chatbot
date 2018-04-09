@@ -66,7 +66,7 @@ var sendClearContext = function(sessionID) {
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
-var FuzzySet = require('fuzzyset.js');
+var FuzzySet = require('fuzzyset.js')
 var http = require('http');
 var bot_options = {
     clientId: process.env.clientId,
@@ -89,7 +89,6 @@ lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
 var iter = 0;
-var mispelledStack = [];
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var bioAttachment = {
@@ -236,8 +235,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       // otherwise send the NLP question
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
-        
-        
         
         // Case YES
         if (message['nlpResponse']['result']['resolvedQuery'] === "yes" ||
