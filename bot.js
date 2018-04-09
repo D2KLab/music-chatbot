@@ -241,7 +241,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
           mispelledStack.push(result[i][1]);
         
         // We must clear the context
-        //sendClearContext(message['nlpResponse']['sessionId']);
+        // sendClearContext(message['nlpResponse']['sessionId']);
         iter = 0;
         
         bot.reply(message, "Did you mean " + result[iter][1] + "?");
@@ -258,8 +258,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-// CONFIRM INTENT
-slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+// YES FOLLOW-UP INTENT
+slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter][1], message.entities["number"], bot, message);
 
@@ -268,27 +268,28 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
   iter = 0;
   mispelledStack = [];
 
-  // Case NO
-  /*
+});
+
+// NO FOLLOW-UP INTENT
+slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  if (iter < 3 && iter < mispelledStack.length) {
+
+    bot.reply(message, "Did you mean " + mispelledStack[iter][1] + "?");
+    iter += 1
+  }
   else {
 
-    if (iter < 3 && iter < mispelledStack.length) {
+    bot.reply(message, "Ok, sorry for that!");
 
-      bot.reply(message, "Did you mean " + mispelledStack[iter][1] + "?");
-      iter += 1
-    }
-    else {
-
-      bot.reply(message, "Ok, sorry for that!");
-
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
-      iter = 0;
-      mispelledStack = [];
-    }
+    // We must clear the context
+    sendClearContext(message['nlpResponse']['sessionId']);
+    iter = 0;
+    mispelledStack = [];
   }
-  */
+
 });
+
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
