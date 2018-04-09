@@ -244,7 +244,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         sendClearContext(message['nlpResponse']['sessionId']);
         iter = 0;
         
-        bot.reply(message, "Did you mean " + result[iter][1] + "?");
+        bot.reply(message, "Did you mean " + mispelledStack[iter]+ "?");
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
@@ -263,7 +263,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
   
   if (mispelledStack.length > 0) {
     
-    getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter][1], message.entities["number"], bot, message);
+    getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter], message.entities["number"], bot, message);
 
     // We must clear the context
     sendClearContext(message['nlpResponse']['sessionId']);
@@ -284,8 +284,8 @@ slackController.hears(['decline'], 'direct_message, direct_mention, mention', di
     
     if (iter < 3 && iter < mispelledStack.length) {
 
-      bot.reply(message, "Did you mean " + mispelledStack[iter][1] + "?");
       iter += 1
+      bot.reply(message, "Did you mean " + mispelledStack[iter] + "?");
     }
     else {
 
