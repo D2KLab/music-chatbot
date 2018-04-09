@@ -222,7 +222,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
     
-    doQuery(artist, number);
+    doQuery(artist, number, bot, message);
   }
   else {
     
