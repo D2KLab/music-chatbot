@@ -237,44 +237,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
+        for (var i = 0; i < 3 && i < result.length; i++)
+          mispelledStack.push(result[i][1]);
         
+        // We must clear the context
+        sendClearContext(message['nlpResponse']['sessionId']);
+        iter = 0;
         
-        // Case YES
-        if (message['nlpResponse']['result']['resolvedQuery'] === "yes" ||
-           message['nlpResponse']['result']['resolvedQuery'] === "yeah" ||
-           message['nlpResponse']['result']['resolvedQuery'] === "yep" ||
-           message['nlpResponse']['result']['resolvedQuery'] === "sure") {
-          
-          getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1], message.entities["number"]);
-          
-          // We must clear the context
-          sendClearContext(message['nlpResponse']['sessionId']);
-          iter = 0;
-        }
-        // Case NO
-        else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
-                message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
-                message['nlpResponse']['result']['resolvedQuery'] === "not really") {
-          
-          if (iter < 3 && iter < result.length) {
-            
-            bot.reply(message, "Did you mean " + result[iter][1] + "?");
-            iter += 1
-          }
-          else {
-            
-            bot.reply(message, "Ok, sorry for that!");
-          
-            // We must clear the context
-            sendClearContext(message['nlpResponse']['sessionId']);
-            iter = 0;
-          }
-        }
-        else {
-          
-          bot.reply(message, "Did you mean " + result[iter][1] + "?");
-          iter += 1
-        }
+        bot.reply(message, "Did you mean " + result[iter][1] + "?");
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
@@ -287,6 +257,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     }
   }
 });
+
+slackController.hears(['
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
