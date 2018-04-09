@@ -60,16 +60,16 @@ var slackBot = slackController.spawn({
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
-var mispellingSolver = FuzzySet();
+var misspellingSolver = FuzzySet();
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('names.txt')
 });
 lineReader.on('line', function (line) {
-  mispellingSolver.add(line);
+  misspellingSolver.add(line);
 });
 
 var iter = 0;
-var mispelledStack = [];
+var misspelledStack = [];
 var intentThrowsMisspelled = "";
 var oldNumber = 10;
 
@@ -289,7 +289,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     doQuery(artist, number, bot, message);
     
-    mispelledStack = [];
+    misspelledStack = [];
     // We must clear the context
     oldNumber = message.entities["number"];
     sendClearContext(message['nlpResponse']['sessionId']);
@@ -301,7 +301,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // - check for misspelling and ask for the most similar (over threshold)
     // - otherwise forward the question sent by DialogFlow ("for which artist?")
     
-    // Retrieve the mispelled string
+    // Retrieve the misspelled string
     var misspelled = message.entities["any"];
     
     // If contains something...
@@ -309,11 +309,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       
       // Try to solve it and propose the alternatives,
       // otherwise send the NLP question
-      var result = mispellingSolver.get(misspelled);
+      var result = misspellingSolver.get(misspelled);
       if (result != null) {
         
         for (var i = 0; i < 3 && i < result.length; i++)
-          mispelledStack[i] = result[i][1];
+          misspelledStack[i] = result[i][1];
         
         // We must clear the context
         oldNumber = message.entities["number"];
@@ -321,7 +321,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         sendClearContext(message['nlpResponse']['sessionId']);
         iter = 0;
         
-        bot.reply(message, "Did you mean " + mispelledStack[iter]+ "?");
+        bot.reply(message, "Did you mean " + misspelledStack[iter]+ "?");
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
@@ -337,20 +337,21 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
 // YES FOLLOW-UP INTENT
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  if (mispelledStack.length > 0) {
+  console.log(misspelledStack)
+  if (misspelledStack.length > 0) {
     if (intentThrowsMisspelled == "works-by-artist") {
     
-      getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter], oldNumber, bot, message);
+      getUriAndQuery(message['nlpResponse']['sessionId'], misspelledStack[iter], oldNumber, bot, message);
 
       // We must clear the context
       sendClearContext(message['nlpResponse']['sessionId']);
       iter = 0;
-      mispelledStack = [];
+      misspelledStack = [];
       oldNumber = 10;
       
     } else if (intentThrowsMisspelled == "discover-artist") {
-      var artistURI = getArtistURI(message['nlpResponse']['sessionId'], mispelledStack[iter])
+      var artistURI = getArtistURI(message['nlpResponse']['sessionId'], misspelledStack[iter])
+      console.log(artistURI)
       answerBio(bot, message, artistURI);
     }
   }
@@ -363,12 +364,12 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
 // NO FOLLOW-UP INTENT
 slackController.hears(['decline'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  if (mispelledStack.length > 0) {
+  if (misspelledStack.length > 0) {
     
-    if (iter < 2 && iter < mispelledStack.length) {
+    if (iter < 2 && iter < misspelledStack.length) {
 
       iter += 1
-      bot.reply(message, "Did you mean " + mispelledStack[iter] + "?");
+      bot.reply(message, "Did you mean " + misspelledStack[iter] + "?");
     }
     else {
 
@@ -377,7 +378,7 @@ slackController.hears(['decline'], 'direct_message, direct_mention, mention', di
       // We must clear the context
       sendClearContext(message['nlpResponse']['sessionId']);
       iter = 0;
-      mispelledStack = [];
+      misspelledStack = [];
       oldNumber = 10;
     }
   }
@@ -403,18 +404,18 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
       
       // Try to solve it and propose the alternatives,
       // otherwise send the NLP question
-      var result = mispellingSolver.get(misspelled);
+      var result = misspellingSolver.get(misspelled);
       if (result != null) {
         
         for (var i = 0; i < 3 && i < result.length; i++)
-          mispelledStack[i] = result[i][1];
+          misspelledStack[i] = result[i][1];
         
         // We must clear the context
         intentThrowsMisspelled = "discover-artist";
         sendClearContext(message['nlpResponse']['sessionId']);
         iter = 0;
         
-        bot.reply(message, "Did you mean " + mispelledStack[iter]+ "?");
+        bot.reply(message, "Did you mean " + misspelledStack[iter]+ "?");
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
