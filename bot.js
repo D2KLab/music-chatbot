@@ -161,7 +161,7 @@ function doQuery(artist, number, bot, message) {
   });
 }
 
-var getUriAndQuery = function(sessionID, resolvedName, number) {
+var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
   var request = require('request');
   var options = {
     method: 'GET',
@@ -194,7 +194,7 @@ var getUriAndQuery = function(sessionID, resolvedName, number) {
       }
 
       if (found) {
-        doQuery(artist, number);
+        doQuery(artist, number, bot, message);
         break;
       }
     }
@@ -262,25 +262,24 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message,) {
+// CONFIRM INTENT
+slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   // Case YES
   if (message['nlpResponse']['result']['metadata']['intentName'] === "confirm") {
 
-    getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1], message.entities["number"]);
+    getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter][1], message.entities["number"], bot, message);
 
     // We must clear the context
     sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
   }
   // Case NO
-  else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
-          message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
-          message['nlpResponse']['result']['resolvedQuery'] === "not really") {
+  else {
 
-    if (iter < 3 && iter < result.length) {
+    if (iter < 3 && iter < mispelledStack.length) {
 
-      bot.reply(message, "Did you mean " + result[iter][1] + "?");
+      bot.reply(message, "Did you mean " + mispelledStack[iter][1] + "?");
       iter += 1
     }
     else {
@@ -291,11 +290,6 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       sendClearContext(message['nlpResponse']['sessionId']);
       iter = 0;
     }
-  }
-  else {
-
-    bot.reply(message, "Did you mean " + result[iter][1] + "?");
-    iter += 1
   }
 });
 
