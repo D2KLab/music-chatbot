@@ -42,9 +42,31 @@ if (!process.env.dialogflow) {
 }
 
 
+// FUNCTION TO CLEAR THE ACTIVE CONTEXT
+var sendClearContext = function(sessionID) {
+  var request = require('request');
+  var options = {
+    method: 'DELETE',
+    uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+  
+  function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // console.log(body);
+      // console.log(response);
+    }
+  }
+  request(options, callback)
+}
+
+
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
-var FuzzySet = require('fuzzyset.js');
+var FuzzySet = require('fuzzyset.js')
 var http = require('http');
 var bot_options = {
     clientId: process.env.clientId,
@@ -67,29 +89,6 @@ lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
 var iter = 0;
-var mispelledStack = [];
-var oldNumber = 10;
-
-// FUNCTIONS
-var sendClearContext = function(sessionID) {
-  var request = require('request');
-  var options = {
-    method: 'DELETE',
-    uri: 'https://api.dialogflow.com/v1/contexts?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-  
-  function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-      // console.log(body);
-      // console.log(response);
-    }
-  }
-  request(options, callback)
-}
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var bioAttachment = {
@@ -133,77 +132,6 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-function doQuery(artist, number, bot, message) {
-  // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-  if (isNaN(parseInt(number))) {
-    number = 10;
-  }
-
-  // JSON VERSION
-  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
-  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
-
-  const request = require('request');
-  request(jsonQuery, (err, res, body) => {
-
-    if (err) { return console.log(err); }
-
-    // JSON PARSING
-    var json = JSON.parse(body)
-
-    // RESPONSE
-    var resp = "This is the list:\n";
-    json["results"]["bindings"].forEach(function(row) {
-      resp += ("  >  " + row["title"]["value"] + "\n");
-    });
-    
-    bot.reply(message, resp);
-
-  });
-}
-
-var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
-  var request = require('request');
-  var options = {
-    method: 'GET',
-    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-
-  function callback(error, response, body) {
-
-    // JSON PARSING
-    var json = JSON.parse(body)
-    var found = false
-
-    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
-    for(var i = 0; i < json["entries"].length; i++) {
-      var entry = json["entries"][i]      
-      for(var j = 0; j < entry["synonyms"].length; j++) {
-        if(entry["synonyms"][j] === resolvedName) {
-
-          // GET PARAMETERS
-          var artist = entry["value"];
-          // var number = message.entities["number"];
-
-          found = true;
-          break;
-        }
-      }
-
-      if (found) {
-        doQuery(artist, number, bot, message);
-        break;
-      }
-    }
-  };
-
-  request(options, callback)
-}
-
 
 // INITs
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
@@ -213,13 +141,83 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  function doQuery(artist, number) {
+    // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
+    if (isNaN(parseInt(number))) {
+      number = 10;
+    }
+
+    // JSON VERSION
+    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A++%3Fcomposer+foaf%3Aname+%22" + artist + "%22%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"
+    var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
+
+    const request = require('request');
+    request(jsonQuery, (err, res, body) => {
+
+      if (err) { return console.log(err); }
+
+      // JSON PARSING
+      var json = JSON.parse(body)
+
+      // RESPONSE
+      var resp = "This is the list:\n";
+      json["results"]["bindings"].forEach(function(row) {
+        resp += ("  >  " + row["title"]["value"] + "\n");
+      });
+      bot.reply(message, resp);
+      
+    });
+  }
+  
+  var getUriAndQuery = function(sessionID, resolvedName, number) {
+    var request = require('request');
+    var options = {
+      method: 'GET',
+      uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + process.env.dialogflow
+      }
+    };
+
+    function callback(error, response, body) {
+
+      // JSON PARSING
+      var json = JSON.parse(body)
+      var found = false
+
+      // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
+      for(var i = 0; i < json["entries"].length; i++) {
+        var entry = json["entries"][i]      
+        for(var j = 0; j < entry["synonyms"].length; j++) {
+          if(entry["synonyms"][j] === resolvedName) {
+
+            // GET PARAMETERS
+            var artist = entry["value"];
+            // var number = message.entities["number"];
+            
+            found = true;
+            break;
+          }
+        }
+        
+        if (found) {
+          doQuery(artist, number);
+          break;
+        }
+      }
+    };
+
+    request(options, callback)
+  }
+  
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
     
-    doQuery(artist, number, bot, message);
+    doQuery(artist, number);
   }
   else {
     
@@ -238,15 +236,42 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var result = mispellingSolver.get(misspelled);
       if (result != null) {
         
-        for (var i = 0; i < 3 && i < result.length; i++)
-          mispelledStack.push(result[i][1]);
-        
-        // We must clear the context
-        oldNumber = message.entities["number"];
-        sendClearContext(message['nlpResponse']['sessionId']);
-        iter = 0;
-        
-        bot.reply(message, "Did you mean " + mispelledStack[iter]+ "?");
+        // Case YES
+        if (message['nlpResponse']['result']['resolvedQuery'] === "yes" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "yeah" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "yep" ||
+           message['nlpResponse']['result']['resolvedQuery'] === "sure") {
+          
+          getUriAndQuery(message['nlpResponse']['sessionId'], result[iter][1], message.entities["number"]);
+          
+          // We must clear the context
+          sendClearContext(message['nlpResponse']['sessionId']);
+          iter = 0;
+        }
+        // Case NO
+        else if (message['nlpResponse']['result']['resolvedQuery'] === "no" ||
+                message['nlpResponse']['result']['resolvedQuery'] === "nope" ||
+                message['nlpResponse']['result']['resolvedQuery'] === "not really") {
+          
+          if (iter < 3 && iter < result.length) {
+            
+            bot.reply(message, "Did you mean " + result[iter][1] + "?");
+            iter += 1
+          }
+          else {
+            
+            bot.reply(message, "Ok, sorry for that!");
+          
+            // We must clear the context
+            sendClearContext(message['nlpResponse']['sessionId']);
+            iter = 0;
+          }
+        }
+        else {
+          
+          bot.reply(message, "Did you mean " + result[iter][1] + "?");
+          iter += 1
+        }
       }
       else {
         bot.reply(message, message['fulfillment']['speech']);
@@ -259,55 +284,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     }
   }
 });
-
-// YES FOLLOW-UP INTENT
-slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  if (mispelledStack.length > 0) {
-    
-    getUriAndQuery(message['nlpResponse']['sessionId'], mispelledStack[iter], oldNumber, bot, message);
-
-    // We must clear the context
-    sendClearContext(message['nlpResponse']['sessionId']);
-    iter = 0;
-    mispelledStack = [];
-    oldNumber = 10;
-  }
-  else {
-    
-    bot.reply(message, message['fulfillment']['speech']);
-  }
-
-});
-
-// NO FOLLOW-UP INTENT
-slackController.hears(['decline'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  if (mispelledStack.length > 0) {
-    
-    if (iter < 2 && iter < mispelledStack.length) {
-
-      iter += 1
-      bot.reply(message, "Did you mean " + mispelledStack[iter] + "?");
-    }
-    else {
-
-      bot.reply(message, "Ok, sorry for that!");
-
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
-      iter = 0;
-      mispelledStack = [];
-      oldNumber = 10;
-    }
-  }
-  else {
-    
-    bot.reply(message, message['fulfillment']['speech']);
-  }
-
-});
-
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
