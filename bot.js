@@ -68,7 +68,6 @@ lineReader.on('line', function (line) {
 });
 var iter = 0;
 var mispelledStack = [];
-mispelledStack.length = 0;
 var oldNumber = 10;
 
 // FUNCTIONS
@@ -222,12 +221,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     doQuery(artist, number, bot, message);
     
+    mispelledStack = [];
     // We must clear the context
+    oldNumber = message.entities["number"];
     sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
-    mispelledStack = [];
-    mispelledStack.length = 0;
-    oldNumber = 10;
   }
   else {
     
@@ -247,7 +245,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (result != null) {
         
         for (var i = 0; i < 3 && i < result.length; i++)
-          mispelledStack.push(result[i][1]);
+          mispelledStack[i] = result[i][1];
         
         // We must clear the context
         oldNumber = message.entities["number"];
@@ -279,7 +277,6 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
     sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
     mispelledStack = [];
-    mispelledStack.length = 0;
     oldNumber = 10;
   }
   else {
