@@ -66,6 +66,7 @@ var lineReader = require('readline').createInterface({
 lineReader.on('line', function (line) {
   mispellingSolver.add(line);
 });
+
 var iter = 0;
 var mispelledStack = [];
 var oldNumber = 10;
