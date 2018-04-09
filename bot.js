@@ -45,6 +45,7 @@ if (!process.env.dialogflow) {
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
 var FuzzySet = require('fuzzyset.js');
+var request = require('request');
 var http = require('http');
 var bot_options = {
     clientId: process.env.clientId,
@@ -162,6 +163,72 @@ function doQuery(artist, number, bot, message) {
     bot.reply(message, resp);
 
   });
+}
+
+var answerBio = function(bot, message) {
+    var artist = message.entities["doremus-artist-ext"];
+    var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
+    bot.reply(message, message['fulfillment']['speech']);
+
+    request(query, (err, res, body) => {
+      if (err) { return console.log(err); }
+
+      // JSON PARSING
+      var json = JSON.parse(body)
+
+      // RESPONSE
+      var name = "";
+      var bio = "";
+      var birthPlace = "";
+      var birthDate = "";
+      var deathPlace = "";
+      var deathDate = "";
+      var image = ""
+
+      var row = json["results"]["bindings"][0];
+      name = row["name"]["value"];
+      bio = row["bio"]["value"];
+      if (row["birth_place"])
+        birthPlace = row["birth_place"]["value"];
+      birthDate = row["birth_date"]["value"];
+      if (row["death_place"])
+        deathPlace = row["death_place"]["value"];
+      deathDate = row["death_date"]["value"];
+      image = row["image"]["value"];
+
+      var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
+      bot.reply(message, attachment);
+    });
+}
+
+var getArtistURI = function(sessionID, resolvedName) {
+  var options = {
+    method: 'GET',
+    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + process.env.dialogflow
+    }
+  };
+  
+  function callback(error, response, body) {
+
+    // JSON PARSING
+    var json = JSON.parse(body)
+
+    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
+    for(var i = 0; i < json["entries"].length; i++) {
+      var entry = json["entries"][i]      
+      for(var j = 0; j < entry["synonyms"].length; j++) {
+        if(entry["synonyms"][j] === resolvedName) {
+          return entry["value"];
+        }
+      }
+    }
+    return "";
+  };
+
+  request(options, callback)
 }
 
 var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
@@ -284,11 +351,11 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       oldNumber = 10;
       
     } else if (intentThrowsMisspelled == "discover-artist") {
+      var artistURI = getArtistURI(message['nlpResponse']['sessionId'], mispelledStack[iter])
       
     }
   }
   else {
-    
     bot.reply(message, message['fulfillment']['speech']);
   }
 
@@ -326,40 +393,7 @@ slackController.hears(['decline'], 'direct_message, direct_mention, mention', di
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    var artist = message.entities["doremus-artist-ext"];
-    var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
-    bot.reply(message, message['fulfillment']['speech']);
-    const request = require('request');
-
-    request(query, (err, res, body) => {
-      if (err) { return console.log(err); }
-
-      // JSON PARSING
-      var json = JSON.parse(body)
-
-      // RESPONSE
-      var name = "";
-      var bio = "";
-      var birthPlace = "";
-      var birthDate = "";
-      var deathPlace = "";
-      var deathDate = "";
-      var image = ""
-
-      var row = json["results"]["bindings"][0];
-      name = row["name"]["value"];
-      bio = row["bio"]["value"];
-      if (row["birth_place"])
-        birthPlace = row["birth_place"]["value"];
-      birthDate = row["birth_date"]["value"];
-      if (row["death_place"])
-        deathPlace = row["death_place"]["value"];
-      deathDate = row["death_date"]["value"];
-      image = row["image"]["value"];
-
-      var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
-      bot.reply(message, attachment);
-    });
+    answerBio(bot, m
   } else {
     var misspelled = message.entities["any"];
     
