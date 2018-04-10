@@ -200,7 +200,8 @@ var answerBio = function(bot, message, artist) {
     });
 }
 
-var getArtistURI = function(sessionID, resolvedName) {
+var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
+  var request = require('request');
   var options = {
     method: 'GET',
     uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
@@ -209,22 +210,33 @@ var getArtistURI = function(sessionID, resolvedName) {
       'Authorization': 'Bearer ' + process.env.dialogflow
     }
   };
-  
+
   function callback(error, response, body) {
 
     // JSON PARSING
     var json = JSON.parse(body)
+    var found = false
 
     // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
     for(var i = 0; i < json["entries"].length; i++) {
       var entry = json["entries"][i]      
       for(var j = 0; j < entry["synonyms"].length; j++) {
         if(entry["synonyms"][j] === resolvedName) {
-          return entry["value"];
+
+          // GET PARAMETERS
+          var artist = entry["value"];
+          // var number = message.entities["number"];
+
+          found = true;
+          break;
         }
       }
+
+      if (found) {
+        answerBio(bot, message, artist);
+        break;
+      }
     }
-    return "";
   };
 
   request(options, callback)
@@ -339,6 +351,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(misspelledStack)
   if (misspelledStack.length > 0) {
+    console.log("I'M HEREEEE")
     if (intentThrowsMisspelled == "works-by-artist") {
     
       getUriAndQuery(message['nlpResponse']['sessionId'], misspelledStack[iter], oldNumber, bot, message);
@@ -350,12 +363,16 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       oldNumber = 10;
       
     } else if (intentThrowsMisspelled == "discover-artist") {
-      var artistURI = getArtistURI(message['nlpResponse']['sessionId'], misspelledStack[iter])
-      console.log(artistURI)
-      answerBio(bot, message, artistURI);
+      getUriAndAnswerBio(message['nlpResponse']['sessionId'], misspelledStack[iter], bot, message);
+      
+      // We must clear the context
+      sendClearContext(message['nlpResponse']['sessionId']);
+      iter = 0;
+      misspelledStack = [];
     }
   }
   else {
+    console.log("I'M HEREEEE :(")
     bot.reply(message, message['fulfillment']['speech']);
   }
 
