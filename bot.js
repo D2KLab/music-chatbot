@@ -194,7 +194,7 @@ var answerBio = function(bot, message, artist) {
         deathPlace = row["death_place"]["value"];
       deathDate = row["death_date"]["value"];
       image = row["image"]["value"];
-
+      
       var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
       bot.reply(message, attachment);
     });
@@ -351,7 +351,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(misspelledStack)
   if (misspelledStack.length > 0) {
-    console.log("I'M HEREEEE")
+    
     if (intentThrowsMisspelled == "works-by-artist") {
     
       getUriAndQuery(message['nlpResponse']['sessionId'], misspelledStack[iter], oldNumber, bot, message);
@@ -363,6 +363,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
       oldNumber = 10;
       
     } else if (intentThrowsMisspelled == "discover-artist") {
+
       getUriAndAnswerBio(message['nlpResponse']['sessionId'], misspelledStack[iter], bot, message);
       
       // We must clear the context
@@ -372,7 +373,6 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
     }
   }
   else {
-    console.log("I'M HEREEEE :(")
     bot.reply(message, message['fulfillment']['speech']);
   }
 
