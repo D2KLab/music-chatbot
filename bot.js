@@ -370,11 +370,11 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    console.log(message["nlpResponse"]["result"]["contexts"])
+    var parentContext = message["nlpResponse"]["result"]["contexts"][0]
     
     // GET PARAMETERS
-    var artist = message.entities["doremus-artist-ext"];
-    var number = message.entities["number"];
+    var artist = parentContext["parameters"]["doremus-artist-ext"];
+    var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     
       // DO THE QUERY (WITH ALL THE INFOS)
