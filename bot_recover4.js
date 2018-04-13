@@ -309,21 +309,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var number = message.entities["number"];
     var instrument = message.entities["doremus-instrument"];
     
-    // CHECK IF INSTRUMENT IS PRESENT
-    if (instrument != "") {
-      
-      // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instrument, bot, message);
-    }
-    else {
-      
-      // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
-      bot.reply(message, message['fulfillment']['speech']);
-    }
+    doQuery(artist, number, instrument, bot, message);
     
     misspelledStack = [];
+    // We must clear the context
     oldNumber = message.entities["number"];
-    // (sendClearContext(message['nlpResponse']['sessionId']);
+    sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
   }
   else {
