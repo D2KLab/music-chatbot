@@ -370,8 +370,7 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
   
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    var json = JSON.parse(message);
-    console.log(json)
+    console.log(message["nlpResponse"]["result"]["contexts"])
     
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
