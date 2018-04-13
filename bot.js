@@ -366,7 +366,29 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
-// YES FOLLOW-UP INTENT
+slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
+    
+    var json = JSON.parse(message);
+    console.log(json)
+    
+    // GET PARAMETERS
+    var artist = message.entities["doremus-artist-ext"];
+    var number = message.entities["number"];
+    var instrument = message.entities["doremus-instrument"];
+    
+      // DO THE QUERY (WITH ALL THE INFOS)
+      doQuery(artist, number, instrument, bot, message);
+  }
+  else {
+      
+      // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
+      bot.reply(message, message['fulfillment']['speech']);
+  }
+});
+
+// YES (CONFIRM) INTENT
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(misspelledStack)
   if (misspelledStack.length > 0) {
