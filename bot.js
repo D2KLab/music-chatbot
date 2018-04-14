@@ -171,8 +171,10 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
   // List of instruments
   else {
     
+    console.log("------------------------------" + strictly)
+    
     // And
-    if (strict === "and") {
+    if (strictly === "and") {
       for (var i = 0; i < instrument.length; i++) {
         newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
                      ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
