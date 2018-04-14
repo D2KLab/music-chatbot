@@ -148,7 +148,7 @@ function doQuery(artist, number, instrument, bot, message) {
   var instrQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+%3B%0D%0A++++mus%3AU13_has_casting+%3Fcasting+.%0D%0A%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A%0D%0A++%3Fcasting+mus%3AU23_has_casting_detail+%3FcastingDetail+.%0D%0A%0D%0A++%3FcastingDetail+mus%3AU2_foresees_use_of_medium_of_performance+%3Finstrument+.%0D%0A%0D%0A++VALUES%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A++%0D%0A++VALUES%28%3Finstrument%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fvocabulary%2Fiaml%2Fmop%2F" + instrument + "%3E%29%0D%0A++%7D%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"  
   var query = ""
 
-  console.log(typeof instrument)
+  console.log(instrument.length)
   
   if (instrument == "") {
     query = jsonQuery;
@@ -156,8 +156,6 @@ function doQuery(artist, number, instrument, bot, message) {
   else {
     query = instrQuery;
   }
-  
-  console.log(instrument)
   
   const request = require('request');
   request(query, (err, res, body) => {
@@ -386,7 +384,7 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     
-    console.log(instrument)
+    console.log(instrument);
     
     // DO THE QUERY (WITH ALL THE INFOS)
     doQuery(artist, number, instrument, bot, message);
