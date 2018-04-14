@@ -165,12 +165,18 @@ function doQuery(artist, number, instrument, bot, message) {
     var json = JSON.parse(body)
 
     // RESPONSE
-    var resp = "This is the list:\n";
-    json["results"]["bindings"].forEach(function(row) {
-      resp += ("  >  " + row["title"]["value"] + "\n");
-    });
-    
-    bot.reply(message, resp);
+    if (json["results"]["bindings"].length === 0) {
+      
+      bot.reply(message, "Sorry! I didn't find anything!");
+    }
+    else {
+      var resp = "This is the list:\n";
+      json["results"]["bindings"].forEach(function(row) {
+        resp += ("  >  " + row["title"]["value"] + "\n");
+      });
+
+      bot.reply(message, resp);
+    }
 
   });
 }
