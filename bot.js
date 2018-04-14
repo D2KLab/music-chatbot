@@ -147,6 +147,25 @@ function doQuery(artist, number, instrument, bot, message) {
   var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
   var instrQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+%3B%0D%0A++++mus%3AU13_has_casting+%3Fcasting+.%0D%0A%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A%0D%0A++%3Fcasting+mus%3AU23_has_casting_detail+%3FcastingDetail+.%0D%0A%0D%0A++%3FcastingDetail+mus%3AU2_foresees_use_of_medium_of_performance+%3Finstrument+.%0D%0A%0D%0A++VALUES%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A++%0D%0A++VALUES%28%3Finstrument%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fvocabulary%2Fiaml%2Fmop%2F" + instrument + "%3E%29%0D%0A++%7D%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"  
   var query = ""
+  
+  var newQuery = 'SELECT DISTINCT ?title \
+WHERE { \
+  ?expression a efrbroo:F22_Self-Contained_Expression ; \
+    rdfs:label ?title ; \
+    mus:U13_has_casting ?casting . \
+  ?expCreation efrbroo:R17_created ?expression ; \
+    ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+  VALUES(?composer) { \
+    (<http://data.doremus.org/artist/6963af5e-b126-3d40-a84b-97e0b78f5452>) \
+  } \
+  ?casting mus:U23_has_casting_detail ?castingDetail . \
+  ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+  VALUES(?instrument) { \
+    (<http://data.doremus.org/vocabulary/iaml/mop/wcl>) \
+  } \
+} \
+ORDER BY rand() \
+LIMIT 10'
 
   console.log(instrument.length)
   
@@ -156,6 +175,7 @@ function doQuery(artist, number, instrument, bot, message) {
   else {
     query = instrQuery;
   }
+  instrQuery += 
   
   const request = require('request');
   request(query, (err, res, body) => {
