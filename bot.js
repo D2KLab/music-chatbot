@@ -377,14 +377,27 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     
-      // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instrument, bot, message);
+    // DO THE QUERY (WITH ALL THE INFOS)
+    doQuery(artist, number, instrument, bot, message);
   }
   else {
       
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
       bot.reply(message, message['fulfillment']['speech']);
   }
+});
+
+slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  var parentContext = message["nlpResponse"]["result"]["contexts"][0]
+
+  // GET PARAMETERS
+  var artist = parentContext["parameters"]["doremus-artist-ext"];
+  var number = parentContext["parameters"]["number"];
+
+  // DO THE QUERY (WITH ALL THE INFOS)
+  doQuery(artist, number, "", bot, message);
+
 });
 
 // YES (CONFIRM) INTENT
