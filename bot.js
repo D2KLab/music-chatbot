@@ -156,29 +156,25 @@ WHERE { \
   ?expCreation efrbroo:R17_created ?expression ; \
     ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
   VALUES(?composer) { \
-    (<http://data.doremus.org/artist/6963af5e-b126-3d40-a84b-97e0b78f5452>) \
-  } \
-  ?casting mus:U23_has_casting_detail ?castingDetail . \
-  ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
-  VALUES(?instrument) { \
-    (<http://data.doremus.org/vocabulary/iaml/mop/wcl>) \
-  } \
-} \
-ORDER BY rand() \
-LIMIT 10'
-
-  console.log(instrument.length)
+    (<http://data.doremus.org/artist/' + artist + '>) \
+  }'
   
-  if (instrument == "") {
-    query = jsonQuery;
+  for (var i = 0; i < instrument.length; i++) {
+    newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
+  ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
+  VALUES(?instrument' + i + ') { \
+    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
+  }'
   }
-  else {
-    query = instrQuery;
-  }
-  instrQuery += 
+  
+  newQuery += '} \
+ORDER BY rand() \
+LIMIT ' + number
+
+  console.log(newQuery)
   
   const request = require('request');
-  request(query, (err, res, body) => {
+  request(newQuery, (err, res, body) => {
 
     if (err) { return console.log(err); }
 
