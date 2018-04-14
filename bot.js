@@ -95,13 +95,14 @@ var sendClearContext = function(sessionID) {
 }
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
+  var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
     "attachments": [
           {
         "pretext": "This is what I found:",
               "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
               "title" : fullname,
-        "image_url": imageURL,
+        "image_url": "https://rsz.io/" + imageURLHTTPDropped + "?mode=crop&width=150&height=150",
               "fields": [
                   {
                       "title": "Born in",
