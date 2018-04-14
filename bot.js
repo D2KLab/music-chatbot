@@ -137,7 +137,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-function doQuery(artist, number, instrument, strict, bot, message) {
+function doQuery(artist, number, instrument, strictly, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   if (isNaN(parseInt(number))) {
@@ -156,27 +156,49 @@ function doQuery(artist, number, instrument, strict, bot, message) {
         (<http://data.doremus.org/artist/' + artist + '>) \
       }'
   
-  if (strict === "and") {
-    for (var i = 0; i < instrument.length; i++) {
-      newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
-                   ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
-                   VALUES(?instrument' + i + ') { \
-                     (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
-                   }'
-    }
-
-    newQuery += '} \
-        ORDER BY rand() \
-        LIMIT ' + number
-  }
-  else {
+  // Just one instrument
+  if (typeof instrument == "string") {
+  
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
-                   VALUES(?instrument) {'
+                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                     VALUES(?instrument) { \
+                       (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
+                     } \
+                   } \
+                   ORDER BY rand() \
+                   LIMIT ' + number
+  }
+  // List of instruments
+  else {
     
-    for (var i = 0; i < instrument.length; i++) {
-                     (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
-                   }'
+    // And
+    if (strict === "and") {
+      for (var i = 0; i < instrument.length; i++) {
+        newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
+                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
+                     VALUES(?instrument' + i + ') { \
+                       (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
+                     }'
+      }
+
+      newQuery += '} \
+          ORDER BY rand() \
+          LIMIT ' + number
+    }
+    // Or
+    else {
+      newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
+                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                     VALUES(?instrument) {'
+
+      for (var i = 0; i < instrument.length; i++) {
+        newQuery += '(<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>)'
+      }
+
+      newQuery += '}} \
+          ORDER BY rand() \
+          LIMIT ' + number
+    }
   }
 
   console.log(newQuery)
@@ -343,13 +365,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
     var instrument = message.entities["doremus-instrument"];
-    var strict = message.entities["doremus-strict"];
+    var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instrument != "") {
       
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instrument, strict, bot, message);
+      doQuery(artist, number, instrument, strictly, bot, message);
     }
     else {
       
@@ -412,12 +434,12 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var artist = parentContext["parameters"]["doremus-artist-ext"];
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
-    var strict = message.entities["doremus-strict"];
+    var strictly = message.entities["doremus-strictly"];
     
     console.log(instrument);
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strict, bot, message);
+    doQuery(artist, number, instrument, strictly, bot, message);
   }
   else {
       
