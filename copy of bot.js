@@ -137,39 +137,71 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-function doQuery(artist, number, instrument, bot, message) {
+function doQuery(artist, number, instrument, strictly, bot, message) {
+  
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   if (isNaN(parseInt(number))) {
     number = 10;
   }
 
-  // JSON VERSION
-  var jsonQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+.%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer%0D%0A++VALUES+%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "%0D%0A&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on";
-  var instrQuery = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Ftitle%0D%0AWHERE+%7B%0D%0A++%3Fexpression+a+efrbroo%3AF22_Self-Contained_Expression+%3B%0D%0A++++rdfs%3Alabel+%3Ftitle+%3B%0D%0A++++mus%3AU13_has_casting+%3Fcasting+.%0D%0A%0D%0A++%3FexpCreation+efrbroo%3AR17_created+%3Fexpression+%3B%0D%0A++++ecrm%3AP9_consists_of+%2F+ecrm%3AP14_carried_out_by+%3Fcomposer+.%0D%0A%0D%0A++%3Fcasting+mus%3AU23_has_casting_detail+%3FcastingDetail+.%0D%0A%0D%0A++%3FcastingDetail+mus%3AU2_foresees_use_of_medium_of_performance+%3Finstrument+.%0D%0A%0D%0A++VALUES%28%3Fcomposer%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist + "%3E%29%0D%0A++%7D%0D%0A++%0D%0A++VALUES%28%3Finstrument%29+%7B%0D%0A++++%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fvocabulary%2Fiaml%2Fmop%2F" + instrument + "%3E%29%0D%0A++%7D%0D%0A%7D%0D%0AORDER+BY+rand%28%29%0D%0ALIMIT+" + number + "&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on"  
-  var query = ""
-  
+  // JSON QUERY
   var newQuery = 'SELECT DISTINCT ?title \
-WHERE { \
-  ?expression a efrbroo:F22_Self-Contained_Expression ; \
-    rdfs:label ?title ; \
-    mus:U13_has_casting ?casting . \
-  ?expCreation efrbroo:R17_created ?expression ; \
-    ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
-  VALUES(?composer) { \
-    (<http://data.doremus.org/artist/' + artist + '>) \
-  }'
+    WHERE { \
+      ?expression a efrbroo:F22_Self-Contained_Expression ; \
+        rdfs:label ?title ; \
+        mus:U13_has_casting ?casting . \
+      ?expCreation efrbroo:R17_created ?expression ; \
+        ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+      VALUES(?composer) { \
+        (<http://data.doremus.org/artist/' + artist + '>) \
+      }'
   
-  for (var i = 0; i < instrument.length; i++) {
-    newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
-  ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
-  VALUES(?instrument' + i + ') { \
-    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
-  }'
+  // Just one instrument
+  if (typeof instrument == "string") {
+  
+    newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
+                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                     VALUES(?instrument) { \
+                       (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
+                     } \
+                   } \
+                   ORDER BY rand() \
+                   LIMIT ' + number
   }
-  
-  newQuery += '} \
-ORDER BY rand() \
-LIMIT ' + number
+  // List of instruments
+  else {
+    
+    console.log("------------------------------" + strictly)
+    
+    // And
+    if (strictly === "and") {
+      for (var i = 0; i < instrument.length; i++) {
+        newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
+                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
+                     VALUES(?instrument' + i + ') { \
+                       (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
+                     }'
+      }
+
+      newQuery += '} \
+          ORDER BY rand() \
+          LIMIT ' + number
+    }
+    // Or
+    else {
+      newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
+                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                     VALUES(?instrument) {'
+
+      for (var i = 0; i < instrument.length; i++) {
+        newQuery += '(<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>)'
+      }
+
+      newQuery += '}} \
+          ORDER BY rand() \
+          LIMIT ' + number
+    }
+  }
 
   console.log(newQuery)
   
@@ -335,12 +367,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
     var instrument = message.entities["doremus-instrument"];
+    var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instrument != "") {
       
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instrument, bot, message);
+      doQuery(artist, number, instrument, strictly, bot, message);
     }
     else {
       
@@ -403,11 +436,12 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var artist = parentContext["parameters"]["doremus-artist-ext"];
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
+    var strictly = message.entities["doremus-strictly"];
     
     console.log(instrument);
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, bot, message);
+    doQuery(artist, number, instrument, strictly, bot, message);
   }
   else {
       
@@ -425,7 +459,7 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   var number = parentContext["parameters"]["number"];
 
   // DO THE QUERY (WITH ALL THE INFOS)
-  doQuery(artist, number, "", bot, message);
+  doQuery(artist, number, "", "", bot, message);
 
 });
 
