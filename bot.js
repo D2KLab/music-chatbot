@@ -356,7 +356,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments !== "") {
+    if (instruments && instruments.length > 0) {
       
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
@@ -493,10 +493,9 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    console.log(instruments[0])
+  
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments && instruments.size > 0 ) {
-      console.log(instruments);
+    if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
     }
