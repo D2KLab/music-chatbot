@@ -136,8 +136,15 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
         (<http://data.doremus.org/artist/' + artist + '>) \
       }'
   
+  // -> No instrument
+  if (instrument == null) {
+    
+    newQuery += '} \
+                 ORDER BY rand() \
+                 LIMIT ' + number
+  }
   // -> Just one instrument
-  if (typeof instrument == "string") {
+  else if (typeof instrument == "string") {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
                  ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
@@ -214,6 +221,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
 }
 
 var answerBio = function(bot, message, artist) {
+  
     var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
 
     request(query, (err, res, body) => {
@@ -435,75 +443,11 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   // GET PARAMETERS
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
-  
-  console.log("### " + artist + " #### " + number);
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, "", "", bot, message);
+  doQuery(artist, number, null, "", bot, message);
 
 });
-
-// YES (CONFIRM) INTENT
-/*
-slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  console.log(misspelledStack)
-  if (misspelledStack.length > 0) {
-    
-    if (intentThrowsMisspelled == "works-by-artist") {
-    
-      getUriAndQuery(message['nlpResponse']['sessionId'], misspelledStack[iter], oldNumber, bot, message);
-
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
-      iter = 0;
-      misspelledStack = [];
-      oldNumber = 10;
-      
-    } else if (intentThrowsMisspelled == "discover-artist") {
-
-      getUriAndAnswerBio(message['nlpResponse']['sessionId'], misspelledStack[iter], bot, message);
-      
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
-      iter = 0;
-      misspelledStack = [];
-    }
-  }
-  else {
-    bot.reply(message, message['fulfillment']['speech']);
-  }
-
-});
-
-// NO (DECLINE) INTENT
-slackController.hears(['decline'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  if (misspelledStack.length > 0) {
-    
-    if (iter < 2 && iter < misspelledStack.length) {
-
-      iter += 1
-      bot.reply(message, "Did you mean " + misspelledStack[iter] + "?");
-    }
-    else {
-
-      bot.reply(message, "Ok, sorry for that!");
-
-      // We must clear the context
-      sendClearContext(message['nlpResponse']['sessionId']);
-      iter = 0;
-      misspelledStack = [];
-      oldNumber = 10;
-    }
-  }
-  else {
-    
-    bot.reply(message, message['fulfillment']['speech']);
-  }
-
-});
-*/
-
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
