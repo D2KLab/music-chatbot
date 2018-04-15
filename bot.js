@@ -97,42 +97,40 @@ var sendClearContext = function(sessionID) {
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
-    "attachments": [
-          {
+    "attachments": [{
         "pretext": "This is what I found:",
-              "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
-              "title" : fullname,
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "title" : fullname,
         "image_url": "https://rsz.io/" + imageURLHTTPDropped + "?mode=crop&width=150&height=150",
-              "fields": [
-                  {
-                      "title": "Born in",
-                      "value": birthPlace,
-                      "short": true
-                  },
-                  {
-                      "title": "Birthdate",
-                      "value": birthDate,
-                      "short": true
-                  },
-          {
-                      "title": "Dead in",
-                      "value": deathPlace,
-                      "short": true
-                  },
-                  {
-                      "title": "Death date",
-                      "value": deathDate,
-                      "short": true
-                  },
-          {
-                      "title": "Bio",
-                      "value": bio, 
-                      "short": false
-                  }
-              ],
-              "color": "good"
-          }
-      ]
+        "fields": [
+            {
+                "title": "Born in",
+                "value": birthPlace,
+                "short": true
+            },
+            {
+                "title": "Birthdate",
+                "value": birthDate,
+                "short": true
+            },
+            {
+                "title": "Dead in",
+                "value": deathPlace,
+                "short": true
+            },
+            {
+                "title": "Death date",
+                "value": deathDate,
+                "short": true
+            },
+            {
+                "title": "Bio",
+                "value": bio, 
+                "short": false
+            }
+        ],
+        "color": "good"
+    }]
   }
   return bioAttachment;
 }
@@ -144,7 +142,8 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
     number = 10;
   }
 
-  // JSON QUERY
+  // JSON QUERY  
+  // Init query
   var newQuery = 'SELECT DISTINCT ?title \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
@@ -160,18 +159,16 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
   if (typeof instrument == "string") {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
-                     VALUES(?instrument) { \
-                       (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
-                     } \
-                   } \
-                   ORDER BY rand() \
-                   LIMIT ' + number
+                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                 VALUES(?instrument) { \
+                   (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
+                 } \
+               } \
+               ORDER BY rand() \
+               LIMIT ' + number
   }
   // List of instruments
   else {
-    
-    console.log("------------------------------" + strictly)
     
     // And
     if (strictly === "and") {
@@ -184,31 +181,32 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
       }
 
       newQuery += '} \
-          ORDER BY rand() \
-          LIMIT ' + number
+                   ORDER BY rand() \
+                   LIMIT ' + number
     }
     // Or
     else {
       newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                     ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
-                     VALUES(?instrument) {'
+                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                   VALUES(?instrument) {'
 
       for (var i = 0; i < instrument.length; i++) {
         newQuery += '(<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>)'
       }
 
-      newQuery += '}} \
-          ORDER BY rand() \
-          LIMIT ' + number
+      newQuery += '} \
+                 } \
+                 ORDER BY rand() \
+                 LIMIT ' + number
     }
   }
-
-  console.log(newQuery)
   
+  // Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
   
+  // Do the HTTP request
   const request = require('request');
   request(finalQuery, (err, res, body) => {
 
