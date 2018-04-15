@@ -491,23 +491,19 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
 // WORKS-BY-DISCOVERED-ARTIST INTENT
 slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  // ACTION COMPLETE (the artist name has been provided)
-  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    
+    console.log(instruments)
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments && instruments.size > 0) {
+    if (instruments && (instruments.size > 0 || instruments != "")) {
       console.log(instruments);
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
     }
     else {
-      console.log("here");
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
       bot.reply(message, message['fulfillment']['speech']);
     }
@@ -516,39 +512,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     oldNumber = message.entities["number"];
     // (sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
-  }
   
-  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
-  else {
-    
-    // MISSING ARTIST NAME
-    // -> check for misspelling and ask for the most similar (over threshold)
-    // -> otherwise forward the question sent by DialogFlow ("For which artist?")
-    
-    // Retrieve the misspelled string
-    var misspelled = message.entities["any"];
-    
-    // If contains something...
-    if (misspelled != '') {
-      
-      // ...make prettier the Dialogflow response ("Who is the artist?")
-      var response = "Sorry, I didn't found him! I give you some hints:\n";
-      
-      // ...get the 3 most similar artist names and propose them to the user
-      var result = misspellingSolver.get(misspelled);
-      for (var i = 0; i < 3 && i < result.length; i++)
-          response += "- " + result[i][1] + "\n";
-      
-      response += "So, for which artist?";
-      
-      bot.reply(message, response);
-    }
-    // if the string doesn't contain anything, send the NLP question
-    else {
-      
-      bot.reply(message, message['fulfillment']['speech']);
-    }
-  }
 });
 
 // WORKS-BY-DISCOVERED-ARTIST YES FOLLOW-UP
