@@ -49,10 +49,7 @@ var lineReader = require('readline').createInterface({
 lineReader.on('line', function (line) {
   misspellingSolver.add(line);
 });
-var iter = 0;
-var misspelledStack = [];
 var intentThrowsMisspelled = "";
-var oldNumber = 10;
 
 // FUNCTIONS
 var sendClearContext = function(sessionID) {
@@ -359,7 +356,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments && instruments.size > 0) {
+    if (instruments !== "") {
       
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
@@ -496,9 +493,9 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    console.log(instruments)
+    console.log(instruments[0])
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments && (instruments.size > 0 || instruments != "")) {
+    if (instruments && instruments.size > 0 ) {
       console.log(instruments);
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
@@ -507,12 +504,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
       bot.reply(message, message['fulfillment']['speech']);
     }
-    
-    misspelledStack = [];
-    oldNumber = message.entities["number"];
-    // (sendClearContext(message['nlpResponse']['sessionId']);
-    iter = 0;
-  
+      
 });
 
 // WORKS-BY-DISCOVERED-ARTIST YES FOLLOW-UP
