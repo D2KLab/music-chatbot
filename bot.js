@@ -355,25 +355,20 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
-    var instrument = message.entities["doremus-instrument"];
+    var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instrument != "") {
+    if (instruments && instruments.size > 0) {
       
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instrument, strictly, bot, message);
+      doQuery(artist, number, instruments, strictly, bot, message);
     }
     else {
       
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
       bot.reply(message, message['fulfillment']['speech']);
     }
-    
-    misspelledStack = [];
-    oldNumber = message.entities["number"];
-    // (sendClearContext(message['nlpResponse']['sessionId']);
-    iter = 0;
   }
   
   // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -506,7 +501,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     var strictly = message.entities["doremus-strictly"];
     
     // CHECK IF INSTRUMENT IS PRESENT
-    if (instruments != "") {
+    if (instruments && instruments.size > 0) {
       console.log(instruments);
       // DO THE QUERY (WITH ALL THE INFOS)
       doQuery(artist, number, instruments, strictly, bot, message);
