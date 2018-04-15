@@ -381,9 +381,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // If contains something...
     if (misspelled != '') {
       
-      // ...make prettier the Dialogflow response
-      var response = message['fulfillment']['speech']
-                    + " I didn't found your artist. I give you some hints:\n";
+      // ...make prettier the Dialogflow response ("Who is the artist?")
+      var response = "I didn't found your artist! I give you some hints:\n";
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
