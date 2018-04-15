@@ -397,26 +397,15 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     // If contains something...
     if (misspelled != '') {
+      // make prettier the dialogflow response
+      var response = message['fulfillment']['speech']
+                    + " I didn't found your artist. I give you some hints:\n";
       
-      // Try to solve it and propose the alternatives,
-      // otherwise send the NLP question
+      // get the most 3 similar arist names and propose
       var result = misspellingSolver.get(misspelled);
-      if (result != null) {
-        
-        for (var i = 0; i < 3 && i < result.length; i++)
+      for (var i = 0; i < 3 && i < result.length; i++)
           misspelledStack[i] = result[i][1];
-        
-        // We must clear the context
-        oldNumber = message.entities["number"];
-        intentThrowsMisspelled = "works-by-artist";
-        sendClearContext(message['nlpResponse']['sessionId']);
-        iter = 0;
-        
-        bot.reply(message, "Did you mean " + misspelledStack[iter]+ "?");
-      }
-      else {
-        bot.reply(message, message['fulfillment']['speech']);
-      }
+          response += "- " + result[i][1] + "\n";
     }
     // if the string doesn't contain anything, send the NLP question
     else {
