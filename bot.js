@@ -435,6 +435,8 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   // GET PARAMETERS
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
+  
+  console.log("### " + artist + " #### " + number);
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
   doQuery(artist, number, "", "", bot, message);
