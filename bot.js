@@ -436,12 +436,13 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
 
-  // DO THE QUERY (WITH ALL THE INFOS)
+  // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
   doQuery(artist, number, "", "", bot, message);
 
 });
 
 // YES (CONFIRM) INTENT
+/*
 slackController.hears(['confirm'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   console.log(misspelledStack)
   if (misspelledStack.length > 0) {
@@ -472,7 +473,7 @@ slackController.hears(['confirm'], 'direct_message, direct_mention, mention', di
 
 });
 
-// NO FOLLOW-UP INTENT
+// NO (DECLINE) INTENT
 slackController.hears(['decline'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   if (misspelledStack.length > 0) {
@@ -499,41 +500,47 @@ slackController.hears(['decline'], 'direct_message, direct_mention, mention', di
   }
 
 });
+*/
 
 
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  // ACTION COMPLETE (we have all the required infos)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
+    // SEND THE BIO TO THE USER
     answerBio(bot, message, message.entities["doremus-artist-ext"]);
+  }
+  
+  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
+  else {
     
-  } else {
+    // MISSING ARTIST NAME
+    // -> check for misspelling and ask for the most similar (over threshold)
+    // -> otherwise forward the question sent by DialogFlow ("For which artist?")
+    
+    // Retrieve the misspelled string
     var misspelled = message.entities["any"];
     
     // If contains something...
     if (misspelled != '') {
       
-      // Try to solve it and propose the alternatives,
-      // otherwise send the NLP question
+      // ...make prettier the Dialogflow response ("Who is the artist?")
+      var response = "Sorry, I didn't found him! I give you some hints:\n";
+      
+      // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
-      if (result != null) {
-        
-        for (var i = 0; i < 3 && i < result.length; i++)
-          misspelledStack[i] = result[i][1];
-        
-        // We must clear the context
-        intentThrowsMisspelled = "discover-artist";
-        sendClearContext(message['nlpResponse']['sessionId']);
-        iter = 0;
-        
-        bot.reply(message, "Did you mean " + misspelledStack[iter]+ "?");
-      }
-      else {
-        bot.reply(message, message['fulfillment']['speech']);
-      }
+      for (var i = 0; i < 3 && i < result.length; i++)
+          response += "- " + result[i][1] + "\n";
+      
+      response += "So, for which artist?";
+      
+      bot.reply(message, response);
     }
     // if the string doesn't contain anything, send the NLP question
     else {
+      
       bot.reply(message, message['fulfillment']['speech']);
     }
   }
@@ -543,14 +550,13 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
 
 // HELLO INTENT
 slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  console.log(message);
+  
   bot.reply(message, message['fulfillment']['speech']);
 });
 
 
 // DEFAULT INTENT
 slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
   bot.reply(message, message['fulfillment']['speech']);
 });
-
-// NEW INTENT
