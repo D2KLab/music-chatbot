@@ -382,12 +382,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     if (misspelled != '') {
       
       // ...make prettier the Dialogflow response ("Who is the artist?")
-      var response = "Sorry... I didn't found your artist!\nI give you some hints: for which artists?\n";
+      var response = "Sorry, I didn't found him! I give you some hints:\n";
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
       for (var i = 0; i < 3 && i < result.length; i++)
           response += "- " + result[i][1] + "\n";
+      
+      response += "So, for which artist?";
       
       bot.reply(message, response);
     }
@@ -399,9 +401,10 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   }
 });
 
+// WORKS-BY-ARTIST YES FOLLOW-UP
 slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  
+  // IF YES HAS BEEN WRITTEN, WITH INSTRUMENTS PROVIDED
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     var parentContext = message["nlpResponse"]["result"]["contexts"][0]
@@ -415,13 +418,16 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     // DO THE QUERY (WITH ALL THE INFOS)
     doQuery(artist, number, instrument, strictly, bot, message);
   }
+  
+  // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
   else {
       
-      // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
+      // SEND THE BOT RESPONSE ("Ok! For which instruments?")
       bot.reply(message, message['fulfillment']['speech']);
   }
 });
 
+// WORKS-BY-ARTIST NO FOLLOW-UP
 slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   var parentContext = message["nlpResponse"]["result"]["contexts"][0]
