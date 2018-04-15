@@ -206,7 +206,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
     // RESPONSE
     if (json["results"]["bindings"].length === 0) {
       
-      bot.reply(message, "Sorry! I didn't find anything!");
+      bot.reply(message, "Sorry... I didn't find anything!");
     }
     else {
       var resp = "This is the list:\n";
