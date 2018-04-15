@@ -382,7 +382,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     if (misspelled != '') {
       
       // ...make prettier the Dialogflow response ("Who is the artist?")
-      var response = "I didn't found your artist! I give you some hints:\n";
+      var response = "Sorry... I didn't found your artist!\nI give you some hints: for which artists?\n";
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
@@ -401,6 +401,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
 
 slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     var parentContext = message["nlpResponse"]["result"]["contexts"][0]
@@ -410,8 +411,6 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    
-    console.log(instrument);
     
     // DO THE QUERY (WITH ALL THE INFOS)
     doQuery(artist, number, instrument, strictly, bot, message);
