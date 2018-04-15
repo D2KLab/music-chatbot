@@ -4,31 +4,13 @@
           \ \  __<   \ \ \/\ \  \/_/\ \/ \ \  _"-.  \ \ \  \/_/\ \/
            \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \_\    \ \_\
             \/_____/   \/_____/     \/_/   \/_/\/_/   \/_/     \/_/
-This is a sample Slack bot built with Botkit, using the Dialogflow middleware.
-This bot demonstrates many of the core features of Botkit:
-* Connect to Slack using the real time API
-* Receive messages based on "spoken" patterns
-* Reply to messages
-# RUN THE BOT:
-  Get a Bot token from Slack:
-    -> http://my.slack.com/services/new/bot
-  Get a developer access token from dialogflow
-    -> https://console.dialogflow.com/api-client/#/editAgent/<your-agent-id>
-  Run your bot from the command line:
-    dialogflow=<api-token> token=<token> node example_bot.js
-# USE THE BOT:
-  Train an intent titled "hello-intent" inside Dialogflow.  Give it a bunch of examples
-  of how someone might say "Hello" to your bot.
-  Find your bot inside Slack to send it a direct message.
-  Say: "Hello"
-  The bot should reply "Hello!" If it didn't, your intent hasn't been
-  properly trained - check out the dialogflow console!
-  Make sure to invite your bot into other channels using /invite @<my bot>!
-# EXTEND THE BOT:
-  Botkit is has many features for building cool and useful bots!
-  Read all about it here:
-    -> http://howdy.ai/botkit
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+            
+This is the DOREMUS Slack Bot! Built with Botkit, using the Dialogflow middleware.
+
+Authors:
+  - Luca LOMBARDO
+  - Claudio SCALZO
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
@@ -67,7 +49,6 @@ var lineReader = require('readline').createInterface({
 lineReader.on('line', function (line) {
   misspellingSolver.add(line);
 });
-
 var iter = 0;
 var misspelledStack = [];
 var intentThrowsMisspelled = "";
@@ -143,7 +124,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
   }
 
   // JSON QUERY  
-  // Init query
+  // -> Init query
   var newQuery = 'SELECT DISTINCT ?title \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
@@ -155,7 +136,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
         (<http://data.doremus.org/artist/' + artist + '>) \
       }'
   
-  // Just one instrument
+  // -> Just one instrument
   if (typeof instrument == "string") {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
@@ -167,10 +148,10 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
                ORDER BY rand() \
                LIMIT ' + number
   }
-  // List of instruments
+  // -> List of instruments
   else {
     
-    // And
+    // AND case
     if (strictly === "and") {
       for (var i = 0; i < instrument.length; i++) {
         newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
@@ -184,7 +165,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
                    ORDER BY rand() \
                    LIMIT ' + number
     }
-    // Or
+    // OR case
     else {
       newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
                    ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
@@ -201,12 +182,12 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
     }
   }
   
-  // Finalize the query
+  // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
   
-  // Do the HTTP request
+  // -> Do the HTTP request
   const request = require('request');
   request(finalQuery, (err, res, body) => {
 
@@ -261,6 +242,7 @@ var answerBio = function(bot, message, artist) {
       deathDate = row["death_date"]["value"];
       image = row["image"]["value"];
       
+      // CREATE ATTACHMENT
       var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
       bot.reply(message, attachment);
     });
@@ -359,6 +341,7 @@ slackBot.startRTM();
 // WORKS-BY-ARTIST INTENT
 slackController.hears(['works-by-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // GET PARAMETERS
@@ -384,6 +367,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // (sendClearContext(message['nlpResponse']['sessionId']);
     iter = 0;
   }
+  
+  // ACTION INCOMPLETE (the artist names hasn't been provided
   else {
     
     // MISSING ARTIST NAME
