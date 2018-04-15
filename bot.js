@@ -368,23 +368,24 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     iter = 0;
   }
   
-  // ACTION INCOMPLETE (the artist names hasn't been provided
+  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
   else {
     
     // MISSING ARTIST NAME
-    // - check for misspelling and ask for the most similar (over threshold)
-    // - otherwise forward the question sent by DialogFlow ("for which artist?")
+    // -> check for misspelling and ask for the most similar (over threshold)
+    // -> otherwise forward the question sent by DialogFlow ("For which artist?")
     
     // Retrieve the misspelled string
     var misspelled = message.entities["any"];
     
     // If contains something...
     if (misspelled != '') {
-      // make prettier the dialogflow response
+      
+      // ...make prettier the Dialogflow response
       var response = message['fulfillment']['speech']
                     + " I didn't found your artist. I give you some hints:\n";
       
-      // get the most 3 similar arist names and propose
+      // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
       for (var i = 0; i < 3 && i < result.length; i++)
           response += "- " + result[i][1] + "\n";
