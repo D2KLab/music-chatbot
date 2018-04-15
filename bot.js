@@ -404,8 +404,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       // get the most 3 similar arist names and propose
       var result = misspellingSolver.get(misspelled);
       for (var i = 0; i < 3 && i < result.length; i++)
-          misspelledStack[i] = result[i][1];
           response += "- " + result[i][1] + "\n";
+      
+      bot.reply(message, response);
     }
     // if the string doesn't contain anything, send the NLP question
     else {
