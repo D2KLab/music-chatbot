@@ -371,14 +371,19 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     // IF YEAR IS PRESENT
     if (year !== "") {
-      
+      var startyear = parseInt(year.split("/")[0]);
+      var endyear = parseInt(year.split("/")[1]);
     }
+    
+    console.log(instruments);
+    console.log(year + " ------- " + year.split("/")[0]);
+    console.log(endyear);
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0) {
       
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, bot, message);
+      doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
     }
     else {
       
@@ -435,7 +440,7 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
     var strictly = message.entities["doremus-strictly"];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, bot, message);
+    doQuery(artist, number, instrument, strictly, "", "", bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -456,7 +461,7 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   var number = parentContext["parameters"]["number"];
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", bot, message);
+  doQuery(artist, number, null, "", "", "", bot, message);
 
 });
 
@@ -516,7 +521,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, bot, message);
+      doQuery(artist, number, instruments, strictly, "", "", bot, message);
     }
     else {
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
@@ -540,7 +545,7 @@ slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, dir
     var strictly = message.entities["doremus-strictly"];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, bot, message);
+    doQuery(artist, number, instrument, strictly, "", "", bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -561,7 +566,7 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
   var number = parentContext["parameters"]["number"];
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", bot, message);
+  doQuery(artist, number, null, "", "", "", bot, message);
 
 });
 
