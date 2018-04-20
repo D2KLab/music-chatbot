@@ -113,7 +113,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
+function doQuery(artist, number, instrument, strictly, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   if (isNaN(parseInt(number))) {
@@ -122,7 +122,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?comp) as ?year \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?end) as ?year \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -133,7 +133,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       VALUES(?composer) { \
         (<http://data.doremus.org/artist/' + artist + '>) \
       } \
-      ?ts time:hasEnd / time:inXSDDate ?comp .'
+      ?ts time:hasEnd / time:inXSDDate ?end .'
   
   // -> No instrument
   if (instrument == null) {
