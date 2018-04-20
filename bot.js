@@ -237,22 +237,23 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 function doQueryPerformance(bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT ?performance,?title, ?subtitle, ?actorsName, ?placeName, ?date \
-WHERE { \
-  ?performance a mus:M26_Foreseen_Performance ; \
-    ecrm:P102_has_title ?title ; \
-    ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
-    mus:U67_has_subtitle ?subtitle ; \
-    mus:U7_foresees_place_at ?place ; \
-    mus:U8_foresees_time_span ?ts . \
-  ?place rdfs:label ?placeName . \
-  ?actors rdfs:label ?actorsName . \
-  ?ts time:hasBeginning / time:inXSDDate ?comp ; \
-     rdfs:label ?date . \
-  FILTER ( ?comp >= "2018"^^xsd:gYear AND ?comp >= "2018-05"^^xsd:gYearMonth ) . \
-  FILTER ( contains(lcase(str(?placeName)), "paris") ) \
-} \
-LIMIT 1'
+  var newQuery = 'SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date \
+                  WHERE { \
+                    ?performance a mus:M26_Foreseen_Performance ; \
+                      ecrm:P102_has_title ?title ; \
+                      ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
+                      mus:U67_has_subtitle ?subtitle ; \
+                      mus:U7_foresees_place_at ?place ; \
+                      mus:U8_foresees_time_span ?ts . \
+                    ?place rdfs:label ?placeName . \
+                    ?actors rdfs:label ?actorsName . \
+                    ?ts time:hasBeginning / time:inXSDDate ?comp ; \
+                       rdfs:label ?date . \
+                    FILTER ( ?comp >= "2018"^^xsd:gYear AND ?comp >= "2018-05"^^xsd:gYearMonth ) . \
+                    FILTER ( contains(lcase(str(?placeName)), "paris") ) \
+                  } \
+                  ORDER BY rand() \
+                  LIMIT 1'
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
@@ -276,8 +277,9 @@ LIMIT 1'
     else {
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["title"] + " - " + row["year"]["value"] +
-                 " - " +  "\n");
+        resp += ("  >  " + row["title"]["value"] + " - " + row["subtitle"]["value"] +
+                 " - " +  row["placeName"]["value"] + " - " + row["actorsName"]["value"] +
+                 " - " + row["date"]["value"] + "\n");
       });
 
       bot.reply(message, resp);
