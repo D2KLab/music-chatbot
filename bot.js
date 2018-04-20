@@ -115,9 +115,14 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
+  var num
+  
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   if (isNaN(parseInt(number))) {
-    number = 10;
+    num = 10;
+  }
+  else {
+    num = parseInt(number);
   }
 
   // JSON QUERY  
@@ -151,7 +156,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     
     newQuery += '} \
                  ORDER BY rand() \
-                 LIMIT ' + number
+                 LIMIT ' + num
   }
   // -> Just one instrument
   else if (typeof instrument == "string") {
@@ -163,7 +168,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
                  } \
                } \
                ORDER BY rand() \
-               LIMIT ' + number
+               LIMIT ' + num
   }
   // -> List of instruments
   else {
@@ -180,7 +185,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 
       newQuery += '} \
                    ORDER BY rand() \
-                   LIMIT ' + number
+                   LIMIT ' + num
     }
     // OR case
     else {
@@ -195,7 +200,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       newQuery += '} \
                  } \
                  ORDER BY rand() \
-                 LIMIT ' + number
+                 LIMIT ' + num
     }
   }
   
@@ -374,10 +379,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       var startyear = parseInt(year.split("/")[0]);
       var endyear = parseInt(year.split("/")[1]);
     }
-    
-    console.log(instruments);
-    console.log(year + " ------- " + year.split("/")[0]);
-    console.log(endyear);
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0) {
