@@ -135,6 +135,9 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       } \
       ?ts time:hasEnd / time:inXSDDate ?comp .'
   
+  // -> Year present
+  newQuery += 'FILTER ( ?comp <= "1786"^^xsd:gYear AND ?comp >= "1783"^^xsd:gYear ) .'
+  
   // -> No instrument
   if (instrument == null) {
     
