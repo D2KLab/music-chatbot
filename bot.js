@@ -115,9 +115,8 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
-  var num
-  
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
+  var num;
   if (isNaN(parseInt(number))) {
     num = 10;
   }
@@ -162,7 +161,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
   else if (typeof instrument == "string") {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
                  VALUES(?instrument) { \
                    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
                  } \
@@ -177,7 +176,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     if (strictly === "and") {
       for (var i = 0; i < instrument.length; i++) {
         newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
-                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
+                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument' + i + ' . \
                      VALUES(?instrument' + i + ') { \
                        (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
                      }'
@@ -190,7 +189,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     // OR case
     else {
       newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
+                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
                    VALUES(?instrument) {'
 
       for (var i = 0; i < instrument.length; i++) {
@@ -432,16 +431,29 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
   // IF YES HAS BEEN WRITTEN, WITH INSTRUMENTS PROVIDED
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    var parentContext = message["nlpResponse"]["result"]["contexts"][0]
+    var parentContext = message["nlpResponse"]["result"]["contexts"][0];
+    var startyear;
+    var endyear;
     
     // GET PARAMETERS
     var artist = parentContext["parameters"]["doremus-artist-ext"];
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
+    var year = parentContext["parameters"]["date-period"];
+    
+    // IF YEAR IS PRESENT
+    if (year !== "") {
+      startyear = parseInt(year.split("/")[0]);
+      endyear = parseInt(year.split("/")[1]);
+    }
+    else {
+      startyear = null;
+      endyear = null;
+    }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, "", "", bot, message);
+    doQuery(artist, number, instrument, strictly, startyear, endyear, bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -455,14 +467,27 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
 // WORKS-BY-ARTIST NO FOLLOW-UP
 slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  var parentContext = message["nlpResponse"]["result"]["contexts"][0]
+  var parentContext = message["nlpResponse"]["result"]["contexts"][0];
+  var startyear;
+  var endyear;
 
   // GET PARAMETERS
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
+  var year = parentContext["parameters"]["date-period"];
+    
+  // IF YEAR IS PRESENT
+  if (year !== "") {
+    startyear = parseInt(year.split("/")[0]);
+    endyear = parseInt(year.split("/")[1]);
+  }
+  else {
+    startyear = null;
+    endyear = null;
+  }
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", "", "", bot, message);
+  doQuery(artist, number, null, "", startyear, endyear, bot, message);
 
 });
 
@@ -522,7 +547,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, "", "", bot, message);
+      doQuery(artist, number, instruments, strictly, null, null, bot, message);
     }
     else {
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
@@ -546,7 +571,7 @@ slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, dir
     var strictly = message.entities["doremus-strictly"];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, "", "", bot, message);
+    doQuery(artist, number, instrument, strictly, null, null, bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -567,7 +592,7 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
   var number = parentContext["parameters"]["number"];
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", "", "", bot, message);
+  doQuery(artist, number, null, "", null, null, bot, message);
 
 });
 
