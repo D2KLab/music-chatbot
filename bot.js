@@ -135,8 +135,16 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       } \
       ?ts time:hasEnd / time:inXSDDate ?comp .'
   
-  // -> Year present
-  newQuery += 'FILTER ( ?comp <= "1786"^^xsd:gYear AND ?comp >= "1783"^^xsd:gYear ) .'
+  // -> Start year present
+  if (yearstart != null && yearend != null) {
+    newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear AND ?comp <= "' + yearend + '"^^xsd:gYear ) .'
+  }
+  else if (yearstart != null && yearend == null) {
+    newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear ) .'
+  }
+  else if (yearstart == null && yearend != null) {
+    newQuery += 'FILTER ( ?comp <= "' + yearend + '"^^xsd:gYear ) .'
+  }
   
   // -> No instrument
   if (instrument == null) {
