@@ -123,6 +123,7 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
   // JSON QUERY  
   // -> Init query
   var newQuery = 'SELECT DISTINCT ?title \
+    (GROUP_CONCAT (DISTINCT ?instrumentName; separator="|") as ?instruments) \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -131,7 +132,10 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       VALUES(?composer) { \
         (<http://data.doremus.org/artist/' + artist + '>) \
-      }'
+      } \
+      ?castingL mus:U23_has_casting_detail ?castingDetailL . \
+      ?castingDetailL mus:U2_foresees_use_of_medium_of_performance ?instrumentL . \
+      ?instrumentL rdfs:label ?instrumentName .'
   
   // -> No instrument
   if (instrument == null) {
