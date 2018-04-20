@@ -367,6 +367,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
+    var year = message.entities["date-period"];
+    
+    // IF YEAR IS PRESENT
+    if (year !== "") {
+      
+    }
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0) {
