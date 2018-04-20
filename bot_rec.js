@@ -113,20 +113,16 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
+function doQuery(artist, number, instrument, strictly, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-  var num;
   if (isNaN(parseInt(number))) {
-    num = 10;
-  }
-  else {
-    num = parseInt(number);
+    number = 10;
   }
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?comp) as ?year \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?end) as ?year \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -137,37 +133,26 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       VALUES(?composer) { \
         (<http://data.doremus.org/artist/' + artist + '>) \
       } \
-      ?ts time:hasEnd / time:inXSDDate ?comp .'
-  
-  // -> Start year present
-  if (yearstart != null && yearend != null) {
-    newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear AND ?comp <= "' + yearend + '"^^xsd:gYear ) .'
-  }
-  else if (yearstart != null && yearend == null) {
-    newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear ) .'
-  }
-  else if (yearstart == null && yearend != null) {
-    newQuery += 'FILTER ( ?comp <= "' + yearend + '"^^xsd:gYear ) .'
-  }
+      ?ts time:hasEnd / time:inXSDDate ?end .'
   
   // -> No instrument
   if (instrument == null) {
     
     newQuery += '} \
                  ORDER BY rand() \
-                 LIMIT ' + num
+                 LIMIT ' + number
   }
   // -> Just one instrument
   else if (typeof instrument == "string") {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
+                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
                  VALUES(?instrument) { \
                    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
                  } \
                } \
                ORDER BY rand() \
-               LIMIT ' + num
+               LIMIT ' + number
   }
   // -> List of instruments
   else {
@@ -176,7 +161,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     if (strictly === "and") {
       for (var i = 0; i < instrument.length; i++) {
         newQuery += '?casting mus:U23_has_casting_detail ?castingDetail' + i + ' . \
-                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument' + i + ' . \
+                     ?castingDetail' + i + ' mus:U2_foresees_use_of_medium_of_performance ?instrument' + i + ' . \
                      VALUES(?instrument' + i + ') { \
                        (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument[i] + '>) \
                      }'
@@ -184,12 +169,12 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 
       newQuery += '} \
                    ORDER BY rand() \
-                   LIMIT ' + num
+                   LIMIT ' + number
     }
     // OR case
     else {
       newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
-                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
+                   ?castingDetail mus:U2_foresees_use_of_medium_of_performance ?instrument . \
                    VALUES(?instrument) {'
 
       for (var i = 0; i < instrument.length; i++) {
@@ -199,7 +184,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       newQuery += '} \
                  } \
                  ORDER BY rand() \
-                 LIMIT ' + num
+                 LIMIT ' + number
     }
   }
   
@@ -226,60 +211,6 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         resp += ("  >  " + row["title"]["value"] + " - " + row["year"]["value"] + "\n");
-      });
-
-      bot.reply(message, resp);
-    }
-
-  });
-}
-
-function doQueryPerformance(bot, message) {
-  
-  // JSON QUERY  
-  var newQuery = 'SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date \
-                  WHERE { \
-                    ?performance a mus:M26_Foreseen_Performance ; \
-                      ecrm:P102_has_title ?title ; \
-                      ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
-                      mus:U67_has_subtitle ?subtitle ; \
-                      mus:U7_foresees_place_at ?place ; \
-                      mus:U8_foresees_time_span ?ts . \
-                    ?place rdfs:label ?placeName . \
-                    ?actors rdfs:label ?actorsName . \
-                    ?ts time:hasBeginning / time:inXSDDate ?comp ; \
-                       rdfs:label ?date . \
-                    FILTER ( ?comp >= "2018"^^xsd:gYear AND ?comp >= "2018-05"^^xsd:gYearMonth ) . \
-                    FILTER ( contains(lcase(str(?placeName)), "paris") ) \
-                  } \
-                  ORDER BY rand() \
-                  LIMIT 1'
-  
-  // -> Finalize the query
-  var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
-  var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
-  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
-  
-  // -> Do the HTTP request
-  const request = require('request');
-  request(finalQuery, (err, res, body) => {
-
-    if (err) { return console.log(err); }
-
-    // JSON PARSING
-    var json = JSON.parse(body)
-
-    // RESPONSE
-    if (json["results"]["bindings"].length === 0) {
-      
-      bot.reply(message, "Sorry... I didn't find anything!");
-    }
-    else {
-      var resp = "This is the list:\n";
-      json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["value"] + " - " + row["subtitle"]["value"] +
-                 " - " +  row["placeName"]["value"] + " - " + row["actorsName"]["value"] +
-                 " - " + row["date"]["value"] + "\n");
       });
 
       bot.reply(message, resp);
@@ -425,19 +356,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    var year = message.entities["date-period"];
-    
-    // IF YEAR IS PRESENT
-    if (year !== "") {
-      var startyear = parseInt(year.split("/")[0]);
-      var endyear = parseInt(year.split("/")[1]);
-    }
     
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0) {
       
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
+      doQuery(artist, number, instruments, strictly, bot, message);
     }
     else {
       
@@ -485,29 +409,16 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
   // IF YES HAS BEEN WRITTEN, WITH INSTRUMENTS PROVIDED
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    var parentContext = message["nlpResponse"]["result"]["contexts"][0];
-    var startyear;
-    var endyear;
+    var parentContext = message["nlpResponse"]["result"]["contexts"][0]
     
     // GET PARAMETERS
     var artist = parentContext["parameters"]["doremus-artist-ext"];
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
-    var year = parentContext["parameters"]["date-period"];
-    
-    // IF YEAR IS PRESENT
-    if (year !== "") {
-      startyear = parseInt(year.split("/")[0]);
-      endyear = parseInt(year.split("/")[1]);
-    }
-    else {
-      startyear = null;
-      endyear = null;
-    }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, startyear, endyear, bot, message);
+    doQuery(artist, number, instrument, strictly, bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -521,27 +432,14 @@ slackController.hears(['works-by-artist - yes'], 'direct_message, direct_mention
 // WORKS-BY-ARTIST NO FOLLOW-UP
 slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  var parentContext = message["nlpResponse"]["result"]["contexts"][0];
-  var startyear;
-  var endyear;
+  var parentContext = message["nlpResponse"]["result"]["contexts"][0]
 
   // GET PARAMETERS
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
-  var year = parentContext["parameters"]["date-period"];
-    
-  // IF YEAR IS PRESENT
-  if (year !== "") {
-    startyear = parseInt(year.split("/")[0]);
-    endyear = parseInt(year.split("/")[1]);
-  }
-  else {
-    startyear = null;
-    endyear = null;
-  }
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", startyear, endyear, bot, message);
+  doQuery(artist, number, null, "", bot, message);
 
 });
 
@@ -601,7 +499,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, null, null, bot, message);
+      doQuery(artist, number, instruments, strictly, bot, message);
     }
     else {
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
@@ -625,7 +523,7 @@ slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, dir
     var strictly = message.entities["doremus-strictly"];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, null, null, bot, message);
+    doQuery(artist, number, instrument, strictly, bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -646,29 +544,9 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
   var number = parentContext["parameters"]["number"];
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", null, null, bot, message);
+  doQuery(artist, number, null, "", bot, message);
 
 });
-
-
-// PROPOSE-PERFORMANCE
-slackController.hears(['propose-performance'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  // ACTION COMPLETE (the artist name has been provided)
-  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    
-    
-    // DO THE QUERY (WITH ALL THE INFOS)
-    doQueryPerformance(bot, message);
-  }
-  
-  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled
-  else {
-
-    bot.reply(message, message['fulfillment']['speech']);
-  }
-});
-
 
 
 // HELLO INTENT
