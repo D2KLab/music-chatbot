@@ -119,8 +119,6 @@ function doQuery(artist, number, instrument, strictly, bot, message) {
   if (isNaN(parseInt(number))) {
     number = 10;
   }
-  
-  console.log(artist)
 
   // JSON QUERY  
   // -> Init query
