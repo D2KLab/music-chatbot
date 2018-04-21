@@ -113,6 +113,31 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
+var getWorkCard = function(title, year) {
+  var workAttachment = {
+    "attachments": [{
+        "pretext": "This is what I found:",
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "title" : fullname,
+        "image_url": "https://rsz.io/" + imageURLHTTPDropped + "?mode=crop&width=150&height=150",
+        "fields": [
+            {
+                "title": "Title",
+                "value": title,
+                "short": true
+            },
+            {
+                "title": "Year",
+                "value": year,
+                "short": true
+            }
+        ],
+        "color": "good"
+    }]
+  }
+  return bioAttachment;
+}
+
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
