@@ -346,7 +346,7 @@ var answerBio = function(bot, message, artist) {
       bot.reply(message, attachment);
     });
 }
-
+/*
 var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
   var request = require('request');
   var options = {
@@ -389,6 +389,7 @@ var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
   request(options, callback)
 }
 
+
 var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
   var request = require('request');
   var options = {
@@ -430,7 +431,7 @@ var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
 
   request(options, callback)
 }
-
+*/
 
 // INITs
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
