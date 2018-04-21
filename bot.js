@@ -499,20 +499,38 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
-      console.log(result);
       
       // compute popularity normalization
       var total = 0
-      for (var i = 0; i < 3 && i < result.length; i++)
-          total += popularityDictionary[result[i][1]];
-      
       for (var i = 0; i < 3 && i < result.length; i++) {
-          var score = 0.8 * result[i][0] + 0.2 * popularityDictionary[result[i][1]] / total
-          var artist = {artist: result[i][1], score: 
+          var value = popularityDictionary[result[i][1]];
+          console.log(value);
+          if (Number(value) == value)
+            total += value;
+      }
+      console.log("---" + total)
+      
+      // fill in ranking
+      var ranking = []
+      for (var i = 0; i < 3 && i < result.length; i++) {
+          var value = popularityDictionary[result[i][1]]
+          var scorePopularity = Number(value) == value ? value / total : 0
+          var score = 0.8 * result[i][0] + 0.2 * scorePopularity;
+          var artist = {artist: result[i][1], score: score};
+          ranking.push(artist)
       }
       
+      // order ranking by score
+      ranking.sort(function(a1, a2) {
+        if (a1.score < a2.score) return 1;
+        if (a1.score > a2.score) return -1;
+        return 0;
+      });
+      
+      console.log(ranking)
+      
       for (var i = 0; i < 3 && i < result.length; i++)
-          response += "- " + result[i][1] + "\n";
+          response += "- " + ranking[i].artist + "\n";
       
       response += "So, for which artist?";
       
