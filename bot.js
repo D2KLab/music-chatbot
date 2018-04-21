@@ -500,6 +500,17 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
       console.log(result);
+      
+      // compute popularity normalization
+      var total = 0
+      for (var i = 0; i < 3 && i < result.length; i++)
+          total += popularityDictionary[result[i][1]];
+      
+      for (var i = 0; i < 3 && i < result.length; i++) {
+          var score = 0.8 * result[i][0] + 0.2 * popularityDictionary[result[i][1]] / total
+          var artist = {artist: result[i][1], score: 
+      }
+      
       for (var i = 0; i < 3 && i < result.length; i++)
           response += "- " + result[i][1] + "\n";
       
