@@ -509,10 +509,12 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var strictly = message.entities["doremus-strictly"];
     var year = message.entities["date-period"];
     
+    var startyear = null;
+    var endyear = null;
     // IF YEAR IS PRESENT
     if (year !== "") {
-      var startyear = parseInt(year.split("/")[0]);
-      var endyear = parseInt(year.split("/")[1]);
+      startyear = parseInt(year.split("/")[0]);
+      endyear = parseInt(year.split("/")[1]);
     }
     
     // CHECK IF INSTRUMENT IS PRESENT
@@ -695,11 +697,20 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
+    var year = message.entities["date-period"];
+    
+    var startyear = null;
+    var endyear = null;
+    // IF YEAR IS PRESENT
+    if (year !== "") {
+      startyear = parseInt(year.split("/")[0]);
+      endyear = parseInt(year.split("/")[1]);
+    }
   
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, null, null, bot, message);
+      doQuery(artist, number, instruments, strictly, startyear, en, bot, message);
     }
     else {
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
