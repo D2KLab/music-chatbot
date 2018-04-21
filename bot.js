@@ -116,10 +116,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 var getWorkCard = function(title, year) {
   var workAttachment = {
     "attachments": [{
-        "pretext": "This is what I found:",
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
-        "title" : fullname,
-        "image_url": "https://rsz.io/" + imageURLHTTPDropped + "?mode=crop&width=150&height=150",
         "fields": [
             {
                 "title": "Title",
@@ -132,10 +129,10 @@ var getWorkCard = function(title, year) {
                 "short": true
             }
         ],
-        "color": "good"
+        "color": "#4283f4"
     }]
   }
-  return bioAttachment;
+  return workAttachment;
 }
 
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
@@ -250,10 +247,11 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     else {
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["value"] + " - " + row["year"]["value"] + "\n");
+        //resp += ("  >  " + row["title"]["value"] + " - " + row["year"]["value"] + "\n");
+        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"]));
       });
 
-      bot.reply(message, resp);
+      //bot.reply(message, resp);
     }
 
   });
