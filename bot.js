@@ -57,7 +57,7 @@ var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('popularity.csv')
 });
 lineReader.on('line', function (line) {
-  misspellingSolver.add(line);
+  console.log(line);
 });
 
 // FUNCTIONS
