@@ -496,6 +496,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     
     alreadyAsked = false
     
+    console.log(message.entities)
+    
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
@@ -549,7 +551,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         bot.reply(message, message['fulfillment']['speech']);
         alreadyAsked = true;
       } else {
-        var response = getSimilarArtistNames("artist"); 
+        var response = getSimilarArtistNames(message.text); 
         response += "So, for which artist?";
         bot.reply(message, response);
       }
