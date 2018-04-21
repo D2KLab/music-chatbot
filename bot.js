@@ -91,6 +91,9 @@ var getSimilarArtistNames = function(misspelled) {
   // ...get the 3 most similar artist names and propose them to the user
   var result = misspellingSolver.get(misspelled);
 
+  if (result == null)
+    return "error";
+  
   // compute popularity normalization
   var total = 0
   for (var i = 0; i < 3 && i < result.length; i++) {
@@ -118,7 +121,8 @@ var getSimilarArtistNames = function(misspelled) {
   });
 
   for (var i = 0; i < 3 && i < result.length; i++)
-      response += "- " + ranking[i].artist + "\n"; 
+      response += "- " + ranking[i].artist + "\n";
+  
   return response 
 }
 
@@ -540,9 +544,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       // ...make prettier the Dialogflow response ("Who is the artist?")
       var response = getSimilarArtistNames(misspelled);
       
-      response += "So, for which artist?";
-      
-      bot.reply(message, response);
+      if (response === "error") {
+        bot.reply(message, "Sorry, there was a problem! Retry later.");
+      }
+      else {
+        response += "So, for which artist?";
+        bot.reply(message, response);
+      }
     }
     // if the string doesn't contain anything, send the NLP question
     else {
@@ -552,8 +560,13 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         alreadyAsked = true;
       } else {
         var response = getSimilarArtistNames(message.text); 
-        response += "So, for which artist?";
-        bot.reply(message, response);
+        if (response === "error") {
+          bot.reply(message, "Sorry, there was a problem! Retry later.");
+        }
+        else {
+          response += "So, for which artist?";
+          bot.reply(message, response);
+        }
       }
     }
   }
@@ -653,12 +666,17 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
-      for (var i = 0; i < 3 && i < result.length; i++)
-          response += "- " + result[i][1] + "\n";
-      
-      response += "So, for which artist?";
-      
-      bot.reply(message, response);
+      if (response === "error") {
+        bot.reply(message, "Sorry, there was a problem! Retry later.");
+      }
+      else {
+        for (var i = 0; i < 3 && i < result.length; i++)
+            response += "- " + result[i][1] + "\n";
+
+        response += "So, for which artist?";
+
+        bot.reply(message, response);
+      }
     }
     // if the string doesn't contain anything, send the NLP question
     else {
