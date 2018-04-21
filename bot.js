@@ -506,9 +506,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
           var value = popularityDictionary[result[i][1]];
           console.log(value);
           if (Number(value) == value)
-            total += value;
+            total += Number(value);
       }
-      console.log("---" + total)
       
       // fill in ranking
       var ranking = []
@@ -527,8 +526,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         return 0;
       });
       
-      console.log(ranking)
-      
       for (var i = 0; i < 3 && i < result.length; i++)
           response += "- " + ranking[i].artist + "\n";
       
@@ -538,7 +535,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     }
     // if the string doesn't contain anything, send the NLP question
     else {
-      
+      console.log(message);
       bot.reply(message, message['fulfillment']['speech']);
     }
   }
