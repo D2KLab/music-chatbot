@@ -42,6 +42,8 @@ var slackBot = slackController.spawn({
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
+
+// LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
 var misspellingSolver = FuzzySet();
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('names.txt')
@@ -49,7 +51,14 @@ var lineReader = require('readline').createInterface({
 lineReader.on('line', function (line) {
   misspellingSolver.add(line);
 });
-var intentThrowsMisspelled = "";
+
+// LOAD IN MEMORY POPULARITY INFORMATION 
+var lineReader = require('readline').createInterface({
+  input: require('fs').createReadStream('popularity.csv')
+});
+lineReader.on('line', function (line) {
+  misspellingSolver.add(line);
+});
 
 // FUNCTIONS
 var sendClearContext = function(sessionID) {
