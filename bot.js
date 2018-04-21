@@ -710,7 +710,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
-      doQuery(artist, number, instruments, strictly, startyear, en, bot, message);
+      doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
     }
     else {
       // SEND THE BOT RESPONSE ("Do you want to filter by instruments?")
