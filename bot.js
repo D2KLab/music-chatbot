@@ -42,6 +42,7 @@ var slackBot = slackController.spawn({
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
+var alreadyAsked = false;
 
 // LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
 var misspellingSolver = FuzzySet();
@@ -81,6 +82,44 @@ var sendClearContext = function(sessionID) {
     }
   }
   request(options, callback)
+}
+
+var getSimilarArtistNames = function(misspelled) {
+  // ...make prettier the Dialogflow response ("Who is the artist?")
+  var response = "Sorry, I didn't found him! I give you some hints:\n";
+
+  // ...get the 3 most similar artist names and propose them to the user
+  var result = misspellingSolver.get(misspelled);
+
+  // compute popularity normalization
+  var total = 0
+  for (var i = 0; i < 3 && i < result.length; i++) {
+      var value = popularityDictionary[result[i][1]];
+      console.log(value);
+      if (Number(value) == value)
+        total += Number(value);
+  }
+
+  // fill in ranking
+  var ranking = []
+  for (var i = 0; i < 3 && i < result.length; i++) {
+      var value = popularityDictionary[result[i][1]]
+      var scorePopularity = Number(value) == value ? value / total : 0
+      var score = 0.8 * result[i][0] + 0.2 * scorePopularity;
+      var artist = {artist: result[i][1], score: score};
+      ranking.push(artist)
+  }
+
+  // order ranking by score
+  ranking.sort(function(a1, a2) {
+    if (a1.score < a2.score) return 1;
+    if (a1.score > a2.score) return -1;
+    return 0;
+  });
+
+  for (var i = 0; i < 3 && i < result.length; i++)
+      response += "- " + ranking[i].artist + "\n"; 
+  return response 
 }
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
@@ -455,6 +494,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
+    alreadyAsked = false
+    
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
@@ -495,39 +536,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     if (misspelled != '') {
       
       // ...make prettier the Dialogflow response ("Who is the artist?")
-      var response = "Sorry, I didn't found him! I give you some hints:\n";
-      
-      // ...get the 3 most similar artist names and propose them to the user
-      var result = misspellingSolver.get(misspelled);
-      
-      // compute popularity normalization
-      var total = 0
-      for (var i = 0; i < 3 && i < result.length; i++) {
-          var value = popularityDictionary[result[i][1]];
-          console.log(value);
-          if (Number(value) == value)
-            total += Number(value);
-      }
-      
-      // fill in ranking
-      var ranking = []
-      for (var i = 0; i < 3 && i < result.length; i++) {
-          var value = popularityDictionary[result[i][1]]
-          var scorePopularity = Number(value) == value ? value / total : 0
-          var score = 0.8 * result[i][0] + 0.2 * scorePopularity;
-          var artist = {artist: result[i][1], score: score};
-          ranking.push(artist)
-      }
-      
-      // order ranking by score
-      ranking.sort(function(a1, a2) {
-        if (a1.score < a2.score) return 1;
-        if (a1.score > a2.score) return -1;
-        return 0;
-      });
-      
-      for (var i = 0; i < 3 && i < result.length; i++)
-          response += "- " + ranking[i].artist + "\n";
+      var response = getSimilarArtistNames(misspelled);
       
       response += "So, for which artist?";
       
@@ -536,7 +545,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // if the string doesn't contain anything, send the NLP question
     else {
       console.log(message);
-      bot.reply(message, message['fulfillment']['speech']);
+      if (alreadyAsked == false) {
+        bot.reply(message, message['fulfillment']['speech']);
+        alreadyAsked = true;
+      } else {
+        var response = getSimilarArtistNames("artist"); 
+        response += "So, for which artist?";
+        bot.reply(message, response);
+      }
     }
   }
 });
