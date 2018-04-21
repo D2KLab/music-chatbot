@@ -732,9 +732,18 @@ slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, dir
     var number = parentContext["parameters"]["number"];
     var instrument = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
+    var year = parentContext["parameters"]["date-period"];
+    
+    var startyear = null;
+    var endyear = null;
+    // IF YEAR IS PRESENT
+    if (year !== "") {
+      startyear = parseInt(year.split("/")[0]);
+      endyear = parseInt(year.split("/")[1]);
+    }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, null, null, bot, message);
+    doQuery(artist, number, instrument, strictly, startyear, endyear, bot, message);
   }
   
   // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
@@ -753,9 +762,18 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
   // GET PARAMETERS
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
+  var year = parentContext["parameters"]["date-period"];
+  
+  var startyear = null;
+  var endyear = null;
+  // IF YEAR IS PRESENT
+  if (year !== "") {
+    startyear = parseInt(year.split("/")[0]);
+    endyear = parseInt(year.split("/")[1]);
+  }
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", null, null, bot, message);
+  doQuery(artist, number, null, "", startyear, endyear, bot, message);
 
 });
 
