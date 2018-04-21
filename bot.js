@@ -52,12 +52,14 @@ lineReader.on('line', function (line) {
   misspellingSolver.add(line);
 });
 
-// LOAD IN MEMORY POPULARITY INFORMATION 
+// LOAD IN MEMORY POPULARITY INFORMATION
+var popularityDictionary = {};
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('popularity.csv')
 });
 lineReader.on('line', function (line) {
-  console.log(line);
+  var fields = line.split(','); 
+  popularityDictionary[fields[0]] = fields[1];
 });
 
 // FUNCTIONS
@@ -497,6 +499,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       
       // ...get the 3 most similar artist names and propose them to the user
       var result = misspellingSolver.get(misspelled);
+      console.log(result);
       for (var i = 0; i < 3 && i < result.length; i++)
           response += "- " + result[i][1] + "\n";
       
