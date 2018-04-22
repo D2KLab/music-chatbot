@@ -346,26 +346,29 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     
     var city = "paris";
     if (place !== "") {
-      city = 
+      city = place.toLowerCase();
     }
     
-    var startdate = null;
-    var enddate = null;
-    var startyear = null; var endyear = null;
-    var startmonth = null; var endmonth = null;
-    var startday = null; var endday = null;
+    var startdate, enddate;
+    var startyear = "2018", endyear = "2018";
+    var startmonth = "2018-05", endmonth = "2018-05";
+    var startday = "--05-01", endday = "--05-31";
     if (date !== "") {
       startdate = date.split("/")[0];
       enddate = date.split("/")[1];
       
-      startyear = parseInt(startdate.split("-")[0]);
-      startmonth = parseInt(startdate.split("-")[1]);
-      startday = parseInt(startdate.split("-")[2]);
+      startyear = startdate.split("-")[0];
+      startmonth = startyear + "-" + startdate.split("-")[1];
+      startday = "--" + startdate.split("-")[1] + "-" + startdate.split("-")[2];
       
-      endyear = parseInt(enddate.split("-")[0]);
-      endmonth = parseInt(enddate.split("-")[1]);
-      endday = parseInt(enddate.split("-")[2]);
+      endyear = enddate.split("-")[0];
+      endmonth = endyear + "-" + enddate.split("-")[1];
+      endday = "--" + enddate.split("-")[1] + "-" + enddate.split("-")[2];
     }
+    
+    console.log(startyear);
+    console.log(startmonth);
+    console.log(startday);
     
     // DO THE QUERY (WITH ALL THE INFOS)
     doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message);

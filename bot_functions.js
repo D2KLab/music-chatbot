@@ -269,7 +269,10 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
                     ?actors rdfs:label ?actorsName . \
                     ?ts time:hasBeginning / time:inXSDDate ?time ; \
                        rdfs:label ?date . \
-                    FILTER ( ?time >= ' + startyear + '^^xsd:gYear AND ?time >= "2018-05"^^xsd:gYearMonth ) . \
+                    FILTER ( ?time >= "' + startyear + '"^^xsd:gYear AND ?time >= "' + startmonth + '"^^xsd:gYearMonth AND \
+                             ?time >= "' + startday + '"^^xsd:gMonthDay AND \
+                             ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth AND \
+                             ?time <= "' + endday + '"^^xsd:gMonthDay) . \
                     FILTER ( contains(lcase(str(?placeName)), "' + city + '") ) \
                   } \
                   ORDER BY rand() \
