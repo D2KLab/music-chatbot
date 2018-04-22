@@ -344,9 +344,13 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     var date = message.entities["date-period"];
     var place = message.entities["geo-city"];
     
+    var startdate = null;
+    var enddate = null;
     if (date !== "") {
-      startdate = parseInt(date.split("/")[0]);
-      enddate = parseInt(date.split("/")[1]);
+      startdate = date.split("/")[0];
+      enddate = date.split("/")[1];
+      
+      startyear = parseInt(startdate[
     }
     
     // DO THE QUERY (WITH ALL THE INFOS)
