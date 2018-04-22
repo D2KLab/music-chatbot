@@ -51,7 +51,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    
+    console.log(message);
     alreadyAskedCount = 0;
     
     // GET PARAMETERS

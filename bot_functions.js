@@ -113,13 +113,9 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 var getWorkCard = function(title, year, genre, comment) {
   var workAttachment = {
     "attachments": [{
+        "title": title,
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
         "fields": [
-            {
-                "title": "Title",
-                "value": title,
-                "short": true
-            },
             {
                 "title": "Year",
                 "value": year,
@@ -133,7 +129,7 @@ var getWorkCard = function(title, year, genre, comment) {
             {
                 "title": "Comment",
                 "value": comment,
-                "short": true
+                "short": false
             }
         ],
         "color": "#4283f4"
