@@ -17,6 +17,7 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
 var alreadyAskedCount = 0;
+var alreadyAsked = false;
 
 // LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
 var misspellingSolver = FuzzySet();

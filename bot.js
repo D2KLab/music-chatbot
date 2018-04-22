@@ -17,6 +17,7 @@ var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
+var alreadyAskedCount = botvars.alreadyAskedCount;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -51,8 +52,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    var alreadyAsked = false;
-    var alreadyAskedCount = 0;
+    alreadyAskedCount = 0;
     
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
@@ -109,7 +109,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // if the string doesn't contain anything, send the NLP question
     else {
       
-      /*
       if (alreadyAskedCount == 0) {
         bot.reply(message, message['fulfillment']['speech']);
         alreadyAskedCount++;
@@ -126,41 +125,9 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       }
       else {
         bot.reply(message, "Sorry, I couldn't find your artist.");
+        alreadyAskedCount = 0;
         sendClearContext(message["nlpResponse"]["sessionId"]);
-      }*/
-      
-      // MISSING ARTIST NAME
-    // - check for misspelling and ask for the most similar (over threshold)
-    // - otherwise forward the question sent by DialogFlow ("for which artist?")
-    
-    // Retrieve the misspelled string
-    var misspelled = message.entities["any"];
-    
-    // If contains something...
-    if (misspelled != '') {
-      
-      // Try to solve it and propose the alternatives,
-      // otherwise send the NLP question
-      var result = misspellingSolver.get(misspelled);
-      if (result != null) {
-        
-        var response = getSimilarArtistNames(message.text);
-        if (response === "error") {
-          bot.reply(message, "Sorry, there was a problem! Retry later.");
-        }
-        response += "So, for which artist?";
-        bot.reply(message, response);
       }
-      else {
-        bot.reply(message, message['fulfillment']['speech']);
-      }
-    }
-    // if the string doesn't contain anything, send the NLP question
-    else {
-      
-      bot.reply(message, message['fulfillment']['speech']);
-    }
-      
     }
   }
 });
