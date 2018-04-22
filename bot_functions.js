@@ -41,7 +41,7 @@ var getSimilarArtistNames = function(misspelled) {
   var total = 0
   for (var i = 0; i < 3 && i < result.length; i++) {
       var value = popularityDictionary[result[i][1]];
-      console.log(value);
+
       if (Number(value) == value)
         total += Number(value);
   }

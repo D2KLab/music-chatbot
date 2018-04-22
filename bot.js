@@ -54,8 +54,6 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     var alreadyAsked = false;
     var alreadyAskedCount = 0;
     
-    console.log(message.entities)
-    
     // GET PARAMETERS
     var artist = message.entities["doremus-artist-ext"];
     var number = message.entities["number"];
@@ -110,7 +108,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     }
     // if the string doesn't contain anything, send the NLP question
     else {
-      console.log(message);
+      
       if (alreadyAskedCount == 0) {
         bot.reply(message, message['fulfillment']['speech']);
         alreadyAskedCount++;
@@ -124,7 +122,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         alreadyAskedCount++;
         response += "So, for which artist?";
         bot.reply(message, response);
-      } else {
+      }
+      else {
         bot.reply(message, "Sorry, I couldn't find your artist.");
         sendClearContext(message["nlpResponse"]["sessionId"]);
       }
@@ -264,6 +263,8 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
       startyear = parseInt(year.split("/")[0]);
       endyear = parseInt(year.split("/")[1]);
     }
+  
+    console.log("#WBDA ###########" + startyear + "--" + endyear);
   
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
