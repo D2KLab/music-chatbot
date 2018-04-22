@@ -315,7 +315,7 @@ var answerBio = function(bot, message, artist) {
     const request = require('request');
     request(query, (err, res, body) => {
       if (err) { return console.log(err); }
-
+      
       // JSON PARSING
       var json = JSON.parse(body)
 
@@ -329,6 +329,9 @@ var answerBio = function(bot, message, artist) {
       var image = ""
 
       var row = json["results"]["bindings"][0];
+      if (row == undefined) {
+        bot.reply(message, "S);
+      }
       name = row["name"]["value"];
       bio = row["bio"]["value"];
       if (row["birth_place"])
