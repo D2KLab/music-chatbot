@@ -182,8 +182,6 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
   var year = parentContext["parameters"]["date-period"];
-  
-  console.log("#################" + number);
     
   // IF YEAR IS PRESENT
   if (year !== "") {

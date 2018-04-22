@@ -347,6 +347,7 @@ var answerBio = function(bot, message, artist) {
 
 // EXPORTS
 exports.sendClearContext = sendClearContext;
+exports.getSimilarArtistNames = getSimilarArtistNames;
 exports.getBioCard = getBioCard;
 exports.getWorkCard = getWorkCard;
 exports.doQuery = doQuery;
