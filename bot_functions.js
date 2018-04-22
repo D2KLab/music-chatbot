@@ -138,6 +138,37 @@ var getWorkCard = function(title, year, genre, comment) {
   return workAttachment;
 }
 
+var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) {
+  row["title"]["value"] + " - " + row["subtitle"]["value"] +
+                 " - " +  row["placeName"]["value"] + " - " + row["actorsName"]["value"] +
+                 " - " + row["date"]["value"] 
+  var workAttachment = {
+    "attachments": [{
+        "title": title,
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "fields": [
+            {
+                "title": "Where",
+                "value": placeName,
+                "short": true
+            },
+            {
+                "title": "When",
+                "value": date,
+                "short": true
+            },
+            {
+                "title": "Actors",
+                "value": actorsName,
+                "short": false
+            }
+        ],
+        "color": "#4283f4"
+    }]
+  }
+  return workAttachment;
+}
+
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
