@@ -110,7 +110,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-var getWorkCard = function(title, year, comment) {
+var getWorkCard = function(title, year, genre, comment) {
   var workAttachment = {
     "attachments": [{
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
@@ -123,6 +123,11 @@ var getWorkCard = function(title, year, comment) {
             {
                 "title": "Year",
                 "value": year,
+                "short": true
+            },
+            {
+                "title": "Genre",
+                "value": genre,
                 "short": true
             },
             {
@@ -150,18 +155,20 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, ?comment, year(?comp) as ?year \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?comp) as ?year, ?genre, ?comment \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
         rdfs:comment ?comment ; \
-        mus:U13_has_casting ?casting . \
+        mus:U13_has_casting ?casting ; \
+        mus:U12_has_genre ?gen . \
       ?expCreation efrbroo:R17_created ?expression ; \
         ecrm:P4_has_time-span ?ts ; \
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       VALUES(?composer) { \
         (<http://data.doremus.org/artist/' + artist + '>) \
       } \
+      ?gen skos:prefLabel ?genre . \
       ?ts time:hasEnd / time:inXSDDate ?comp .'
   
   // -> Start year present
@@ -252,7 +259,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       json["results"]["bindings"].forEach(function(row) {
         
         // for comment: row["comment"]["value"]
-        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["comment"]["value"]));
+        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["genre"]["value"], row["comment"]["value"]));
       });
 
       //bot.reply(message, resp);
