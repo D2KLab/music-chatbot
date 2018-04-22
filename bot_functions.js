@@ -145,10 +145,11 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?comp) as ?year \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, ?comment, year(?comp) as ?year \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
+        rdfs:comment ?comment ; \
         mus:U13_has_casting ?casting . \
       ?expCreation efrbroo:R17_created ?expression ; \
         ecrm:P4_has_time-span ?ts ; \
@@ -244,7 +245,8 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
     else {
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
-        //resp += ("  >  " + row["title"]["value"] + " - " + row["year"]["value"] + "\n");
+        
+        // for comment: row["title"]["comment"]
         bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"]));
       });
 
