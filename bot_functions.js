@@ -110,7 +110,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   return bioAttachment;
 }
 
-var getWorkCard = function(title, year) {
+var getWorkCard = function(title, year, comment) {
   var workAttachment = {
     "attachments": [{
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
@@ -123,6 +123,11 @@ var getWorkCard = function(title, year) {
             {
                 "title": "Year",
                 "value": year,
+                "short": true
+            },
+            {
+                "title": "Comment",
+                "value": comment,
                 "short": true
             }
         ],
@@ -246,8 +251,8 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
-        // for comment: row["title"]["comment"]
-        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"]));
+        // for comment: row["comment"]["value"]
+        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["comment"]["value"]));
       });
 
       //bot.reply(message, resp);
