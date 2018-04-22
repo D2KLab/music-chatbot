@@ -270,13 +270,15 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
                     ?ts time:hasBeginning / time:inXSDDate ?time ; \
                        rdfs:label ?date . \
                     FILTER ( ?time >= "' + startyear + '"^^xsd:gYear AND ?time >= "' + startmonth + '"^^xsd:gYearMonth AND \
-                             ?time >= "' + startday + '"^^xsd:gMonthDay AND \
-                             ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth AND \
-                             ?time <= "' + endday + '"^^xsd:gMonthDay) . \
-                    FILTER ( contains(lcase(str(?placeName)), "' + city + '") ) \
-                  } \
-                  ORDER BY rand() \
-                  LIMIT 1'
+                             ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth ) .'
+  
+  if (city !== "") {
+    newQuery += 'FILTER ( contains(lcase(str(?placeName)), "' + city + '") )'
+  }
+  
+  newQuery += '} \
+               ORDER BY rand() \
+               LIMIT 1'
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='

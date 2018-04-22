@@ -344,7 +344,7 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     var date = message.entities["date-period"];
     var place = message.entities["geo-city"];
     
-    var city = "paris";
+    var city = "";
     if (place !== "") {
       city = place.toLowerCase();
     }
@@ -365,10 +365,6 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
       endmonth = endyear + "-" + enddate.split("-")[1];
       endday = "--" + enddate.split("-")[1] + "-" + enddate.split("-")[2];
     }
-    
-    console.log(startyear);
-    console.log(startmonth);
-    console.log(startday);
     
     // DO THE QUERY (WITH ALL THE INFOS)
     doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
