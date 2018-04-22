@@ -22,6 +22,10 @@ var slackBot = botvars.slackBot;
 var botfunctions = require("./bot_functions.js");
 var doQuery = botfunctions.doQuery;
 var doQueryPerformance = botfunctions.doQueryPerformance;
+var getSimilarArtistNames = botfunctions.getSimilarArtistNames;
+var sendClearContext = botfunctions.sendClearContext;
+var answerBio = botfunctions.answerBio;
+var misspellingSolver = botfunctions.misspellingSolver;
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
