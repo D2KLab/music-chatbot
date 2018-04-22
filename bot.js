@@ -366,11 +366,14 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
       endday = "--" + enddate.split("-")[1] + "-" + enddate.split("-")[2];
     }
     
+    console.log(startyear + "..." + startmonth);
+    console.log(endyear + "..." + endmonth);
+    
     // DO THE QUERY (WITH ALL THE INFOS)
     doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
   }
   
-  // ACTION INCOMPLETE (missing place or date)
+  // ACTION INCOMPLETE (missing date)
   else {
 
     bot.reply(message, message['fulfillment']['speech']);

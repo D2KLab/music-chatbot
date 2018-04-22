@@ -269,8 +269,8 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
                     ?actors rdfs:label ?actorsName . \
                     ?ts time:hasBeginning / time:inXSDDate ?time ; \
                        rdfs:label ?date . \
-                    FILTER ( ?time >= "' + startyear + '"^^xsd:gYear AND ?time >= "' + startmonth + '"^^xsd:gYearMonth AND \
-                             ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth ) .'
+                    FILTER ( ?time >= "' + startyear + '"^^xsd:gYear AND ?time >= "' + startmonth + '"^^xsd:gYearMonth ) .'
+                             // ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth ) .'
   
   if (city !== "") {
     newQuery += 'FILTER ( contains(lcase(str(?placeName)), "' + city + '") )'
