@@ -344,6 +344,11 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     var date = message.entities["date-period"];
     var place = message.entities["geo-city"];
     
+    var city = "paris";
+    if (place !== "") {
+      city = 
+    }
+    
     var startdate = null;
     var enddate = null;
     var startyear = null; var endyear = null;
@@ -363,7 +368,7 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQueryPerformance(startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
+    doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
   }
   
   // ACTION INCOMPLETE (missing place or date)
