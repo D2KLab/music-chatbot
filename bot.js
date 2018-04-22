@@ -114,13 +114,14 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       if (alreadyAskedCount == 0) {
         bot.reply(message, message['fulfillment']['speech']);
         alreadyAskedCount++;
-      } else if (alreadyAskedCount == 1) {
+      }
+      else if (alreadyAskedCount == 1) {
         var response = getSimilarArtistNames(message.text);
-        /*
         if (response === "error") {
           bot.reply(message, "Sorry, there was a problem! Retry later.");
-        }*/
-        alreadyAskedCount++
+        }
+        
+        alreadyAskedCount++;
         response += "So, for which artist?";
         bot.reply(message, response);
       } else {
@@ -181,6 +182,8 @@ slackController.hears(['works-by-artist - no'], 'direct_message, direct_mention,
   var artist = parentContext["parameters"]["doremus-artist-ext"];
   var number = parentContext["parameters"]["number"];
   var year = parentContext["parameters"]["date-period"];
+  
+  console.log("#################" + number);
     
   // IF YEAR IS PRESENT
   if (year !== "") {

@@ -345,6 +345,14 @@ var answerBio = function(bot, message, artist) {
     });
 }
 
+// EXPORTS
+exports.sendClearContext = sendClearContext;
+exports.getBioCard = getBioCard;
+exports.getWorkCard = getWorkCard;
+exports.doQuery = doQuery;
+exports.doQueryPerformance = doQueryPerformance;
+exports.answerBio = answerBio;
+
 // DEPRECATED
 /*
 var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
