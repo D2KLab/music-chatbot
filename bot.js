@@ -264,9 +264,6 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
       endyear = parseInt(year.split("/")[1]);
     }
   
-    console.log("#WBDA ###########" + year);
-    console.log(" WBDA ###########" + startyear + "--" + endyear);
-  
     // CHECK IF INSTRUMENT IS PRESENT
     if (instruments && instruments.length > 0 ) {
       // DO THE QUERY (WITH ALL THE INFOS)
@@ -302,8 +299,6 @@ slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, dir
       endyear = parseInt(year.split("/")[1]);
     }
     
-    console.log("#WBDA-YES ###########" + startyear + "--" + endyear);
-    
     // DO THE QUERY (WITH ALL THE INFOS)
     doQuery(artist, number, instrument, strictly, startyear, endyear, bot, message);
   }
@@ -333,8 +328,6 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
     startyear = parseInt(year.split("/")[0]);
     endyear = parseInt(year.split("/")[1]);
   }
-  
-  console.log("#WBDA-NO ###########" + startyear + "--" + endyear);
 
   // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
   doQuery(artist, number, null, "", startyear, endyear, bot, message);
@@ -348,12 +341,19 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
+    var date = message.entities["date-period"];
+    var place = message.entities["geo-city"];
+    
+    if (date !== "") {
+      startdate = parseInt(date.split("/")[0]);
+      enddate = parseInt(date.split("/")[1]);
+    }
     
     // DO THE QUERY (WITH ALL THE INFOS)
     doQueryPerformance(bot, message);
   }
   
-  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled
+  // ACTION INCOMPLETE (missing place or date)
   else {
 
     bot.reply(message, message['fulfillment']['speech']);
