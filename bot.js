@@ -42,7 +42,7 @@ var slackBot = slackController.spawn({
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
-var alreadyAsked = false;
+var alreadyAskedCount = 0
 
 // LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
 var misspellingSolver = FuzzySet();
@@ -499,6 +499,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     alreadyAsked = false
+    alreadyAskedCount = 0
     
     console.log(message.entities)
     
@@ -557,18 +558,21 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
     // if the string doesn't contain anything, send the NLP question
     else {
       console.log(message);
-      if (alreadyAsked == false) {
+      if (alreadyAskedCount == 0) {
         bot.reply(message, message['fulfillment']['speech']);
-        alreadyAsked = true;
-      } else {
-        var response = getSimilarArtistNames(message.text); 
+        alreadyAskedCount++;
+      } else if (alreadyAskedCount == 1) {
+        var response = getSimilarArtistNames(message.text);
+        /*
         if (response === "error") {
           bot.reply(message, "Sorry, there was a problem! Retry later.");
-        }
-        else {
-          response += "So, for which artist?";
-          bot.reply(message, response);
-        }
+        }*/
+        alreadyAskedCount++
+        response += "So, for which artist?";
+        bot.reply(message, response);
+      } else {
+        bot.reply(message, "Sorry, I couldn't find your artist.");
+        sendClearContext(message["nlpResponse"]["sessionId"]);
       }
     }
   }
