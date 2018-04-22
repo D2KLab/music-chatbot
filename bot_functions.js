@@ -330,21 +330,23 @@ var answerBio = function(bot, message, artist) {
 
       var row = json["results"]["bindings"][0];
       if (row == undefined) {
-        bot.reply(message, "S);
+        bot.reply(message, "Sorry, there was an error! Retry later.");
       }
-      name = row["name"]["value"];
-      bio = row["bio"]["value"];
-      if (row["birth_place"])
-        birthPlace = row["birth_place"]["value"];
-      birthDate = row["birth_date"]["value"];
-      if (row["death_place"])
-        deathPlace = row["death_place"]["value"];
-      deathDate = row["death_date"]["value"];
-      image = row["image"]["value"];
-      
-      // CREATE ATTACHMENT
-      var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
-      bot.reply(message, attachment);
+      else {
+        name = row["name"]["value"];
+        bio = row["bio"]["value"];
+        if (row["birth_place"])
+          birthPlace = row["birth_place"]["value"];
+        birthDate = row["birth_date"]["value"];
+        if (row["death_place"])
+          deathPlace = row["death_place"]["value"];
+        deathDate = row["death_date"]["value"];
+        image = row["image"]["value"];
+
+        // CREATE ATTACHMENT
+        var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
+        bot.reply(message, attachment);
+      }
     });
 }
 
