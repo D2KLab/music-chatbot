@@ -1,4 +1,8 @@
-var botjs = require(
+// LOAD VARIABLES
+var botvars = require("./bot_vars.js");
+var misspellingSolver = botvars.misspellingSolver;
+var popularityDictionary = botvars.popularityDictionary;
+var slackBot = botvars.slackBot;
 
 
 // FUNCTIONS
@@ -338,6 +342,8 @@ var answerBio = function(bot, message, artist) {
       bot.reply(message, attachment);
     });
 }
+
+// DEPRECATED
 /*
 var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
   var request = require('request');

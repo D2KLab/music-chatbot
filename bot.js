@@ -12,6 +12,18 @@ Authors:
   - Claudio SCALZO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+// LOAD VARIABLES
+var botvars = require("./bot_vars.js");
+var slackController = botvars.slackController;
+var dialogflowMiddleware = botvars.dialogflowMiddleware;
+var slackBot = botvars.slackBot;
+
+// LOAD FUNCTIONS
+var botfunctions = require("./bot_functions.js");
+var doQuery = botfunctions.doQuery;
+var doQueryPerformance = botfunctions.doQueryPerformance;
+
+
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
     console.log('Error: Specify token in environment');
@@ -24,45 +36,6 @@ if (!process.env.dialogflow) {
 }
 
 
-// VARIABLES DECLARATION
-var Botkit = require('botkit');
-var FuzzySet = require('fuzzyset.js');
-var request = require('request');
-var http = require('http');
-var bot_options = {
-    clientId: process.env.clientId,
-    clientSecret: process.env.clientSecret,
-    //debug: true,
-    scopes: ['bot'],
-};
-var slackController = Botkit.slackbot(bot_options);
-var slackBot = slackController.spawn({
-    token: process.env.token,
-});
-var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
-    token: process.env.dialogflow,
-});
-var alreadyAskedCount = 0
-
-// LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
-var misspellingSolver = FuzzySet();
-var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('names.txt')
-});
-lineReader.on('line', function (line) {
-  misspellingSolver.add(line);
-});
-
-// LOAD IN MEMORY POPULARITY INFORMATION
-var popularityDictionary = {};
-var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('popularity.csv')
-});
-lineReader.on('line', function (line) {
-  var fields = line.split(','); 
-  popularityDictionary[fields[0]] = fields[1];
-});
-
 // INITs
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
@@ -74,8 +47,8 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
-    alreadyAsked = false
-    alreadyAskedCount = 0
+    var alreadyAsked = false;
+    var alreadyAskedCount = 0;
     
     console.log(message.entities)
     
