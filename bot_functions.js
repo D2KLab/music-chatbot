@@ -139,12 +139,10 @@ var getWorkCard = function(title, year, genre, comment) {
 }
 
 var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) {
-  row["title"]["value"] + " - " + row["subtitle"]["value"] +
-                 " - " +  row["placeName"]["value"] + " - " + row["actorsName"]["value"] +
-                 " - " + row["date"]["value"] 
-  var workAttachment = {
+  var performanceAttachment = {
     "attachments": [{
         "title": title,
+        "text": subtitle,
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
         "fields": [
             {
@@ -163,10 +161,10 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
                 "short": false
             }
         ],
-        "color": "#4283f4"
+        "color": "#f4b042"
     }]
   }
-  return workAttachment;
+  return performanceAttachment;
 }
 
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
@@ -343,14 +341,14 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
     else {
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
-        resp += ("  >  " + row["title"]["value"] + " - " + row["subtitle"]["value"] +
-                 " - " +  row["placeName"]["value"] + " - " + row["actorsName"]["value"] +
-                 " - " + row["date"]["value"] + "\n");
+        var title = row["title"]["value"];
+        var subtitle = row["subtitle"]["value"];
+        var placeName = row["placeName"]["value"];
+        var actorsName = row["actorsName"]["value"];
+        var date = row["date"]["value"];
+        bot.reply(message, getPerformanceCard(title, subtitle, placeName, actorsName, date));
       });
-
-      bot.reply(message, resp);
     }
-
   });
 }
 
