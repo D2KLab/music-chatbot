@@ -346,15 +346,24 @@ slackController.hears(['propose-performance'], 'direct_message, direct_mention, 
     
     var startdate = null;
     var enddate = null;
+    var startyear = null; var endyear = null;
+    var startmonth = null; var endmonth = null;
+    var startday = null; var endday = null;
     if (date !== "") {
       startdate = date.split("/")[0];
       enddate = date.split("/")[1];
       
-      startyear = parseInt(startdate[
+      startyear = parseInt(startdate.split("-")[0]);
+      startmonth = parseInt(startdate.split("-")[1]);
+      startday = parseInt(startdate.split("-")[2]);
+      
+      endyear = parseInt(enddate.split("-")[0]);
+      endmonth = parseInt(enddate.split("-")[1]);
+      endday = parseInt(enddate.split("-")[2]);
     }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQueryPerformance(bot, message);
+    doQueryPerformance(startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
   }
   
   // ACTION INCOMPLETE (missing place or date)

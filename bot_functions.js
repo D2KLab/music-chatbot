@@ -254,7 +254,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
   });
 }
 
-function doQueryPerformance(bot, message) {
+function doQueryPerformance(startyear, startmonth, startday, endyear, endmonth, endday, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date \
@@ -267,9 +267,18 @@ function doQueryPerformance(bot, message) {
                       mus:U8_foresees_time_span ?ts . \
                     ?place rdfs:label ?placeName . \
                     ?actors rdfs:label ?actorsName . \
-                    ?ts time:hasBeginning / time:inXSDDate ?comp ; \
-                       rdfs:label ?date . \
-                    FILTER ( ?comp >= "2018"^^xsd:gYear AND ?comp >= "2018-05"^^xsd:gYearMonth ) . \
+                    ?ts time:hasBeginning / time:inXSDDate ?time ; \
+                       rdfs:label ?date .'
+  
+  var sy = 2018, sm = 5, sd = 1;
+  var ey = 2018, em = 5, ed = 31;
+  if (startyear != null)
+    sy = startyear;
+  if (startmonth != null)
+    s
+  if (startyear != null)
+    sy += (startyear - sy);
+                    FILTER ( ?time >= "2018"^^xsd:gYear AND ?time >= "2018-05"^^xsd:gYearMonth ) . \
                     FILTER ( contains(lcase(str(?placeName)), "paris") ) \
                   } \
                   ORDER BY rand() \
