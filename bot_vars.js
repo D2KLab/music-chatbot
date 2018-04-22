@@ -19,7 +19,7 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 var alreadyAskedCount = 0;
 
 // LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
-var misspellingSolver = FuzzySet(); exports.misspellingSolver = misspellingSolver;
+var misspellingSolver = FuzzySet();
 var lineReader = require('readline').createInterface({
   input: require('fs').createReadStream('names.txt')
 });
@@ -38,12 +38,10 @@ lineReader.on('line', function (line) {
 });
 
 // EXPORTS
-exports.FuzzySet = FuzzySet;
+exports.misspellingSolver = misspellingSolver;
 exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.alreadyAskedCount = alreadyAskedCount;
-exports.lineReader = lineReader;
-exports.lineReader = lineReader;
 exports.popularityDictionary = popularityDictionary;
 exports.lineReader = lineReader;
