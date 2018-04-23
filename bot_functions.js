@@ -31,15 +31,14 @@ var getSimilarArtistNames = function(misspelled) {
 
   // ...get the 3 most similar artist names and propose them to the user
   var result = misspellingSolver.get(misspelled);
+
+  if (result == null)
+    return null;
   
   // throw away those with similarity index below 0.35
   result = result.filter( function(artist) {
     return artist[0] >= 0.35;
   });
-  console.log(result);
-
-  if (result == null)
-    return "error";
   
   // compute popularity normalization
   var total = 0
@@ -75,7 +74,7 @@ var getSimilarArtistNames = function(misspelled) {
         response += "- " + ranking[i].artist + "\n";
 
     return response
-  } else return ranking;
+  } else return null;
 }
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
