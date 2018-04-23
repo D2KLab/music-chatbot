@@ -28,11 +28,15 @@ var sendClearContext = function(sessionID) {
 }
 
 var getSimilarArtistNames = function(misspelled) {
-  // ...make prettier the Dialogflow response ("Who is the artist?")
-  var response = "Sorry, I didn't found him! I give you some hints:\n";
 
   // ...get the 3 most similar artist names and propose them to the user
   var result = misspellingSolver.get(misspelled);
+  
+  // throw away those with similarity index below 0.35
+  result = result.filter( function(artist) {
+    return artist[0] >= 0.35;
+  });
+  console.log(result);
 
   if (result == null)
     return "error";
@@ -62,11 +66,16 @@ var getSimilarArtistNames = function(misspelled) {
     if (a1.score > a2.score) return -1;
     return 0;
   });
-
-  for (var i = 0; i < 3 && i < result.length; i++)
-      response += "- " + ranking[i].artist + "\n";
   
-  return response 
+  if (ranking.length > 0) {
+    // ...make prettier the Dialogflow response ("Who is the artist?")
+    var response = "Sorry, I didn't found him! I give you some hints:\n";
+
+    for (var i = 0; i < 3 && i < ranking.length; i++)
+        response += "- " + ranking[i].artist + "\n";
+
+    return response
+  } else return ranking;
 }
 
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
