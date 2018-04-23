@@ -97,7 +97,7 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
       
       // ...make prettier the Dialogflow response ("Who is the artist?")
       var response = getSimilarArtistNames(misspelled);
-      console.log("----" + response);
+
       if (response == null) {
         bot.reply(message, "Sorry, I couldn't find your artist.");
         sendClearContext(message["nlpResponse"]["sessionId"]);
@@ -119,11 +119,11 @@ slackController.hears(['works-by-artist'], 'direct_message, direct_mention, ment
         if (response == null) {
           bot.reply(message, "Sorry, I couldn't find your artist.");
           sendClearContext(message["nlpResponse"]["sessionId"]);
+        } else {
+          alreadyAskedCount++;
+          response += "So, for which artist?";
+          bot.reply(message, response);
         }
-        
-        alreadyAskedCount++;
-        response += "So, for which artist?";
-        bot.reply(message, response);
       }
       else {
         bot.reply(message, "Sorry, I couldn't find your artist.");
