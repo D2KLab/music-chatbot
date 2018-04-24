@@ -339,7 +339,7 @@ slackController.hears(['works-by-discovered-artist - no'], 'direct_message, dire
 
 
 // PROPOSE-PERFORMANCE
-slackController.hears(['propose-performance'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
