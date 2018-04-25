@@ -12,6 +12,7 @@ Authors:
   - Claudio SCALZO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
+
 // LOAD VARIABLES
 var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
