@@ -6,6 +6,7 @@ var slackBot = botvars.slackBot;
 
 
 // FUNCTIONS
+/*******************************************************************************/
 var sendClearContext = function(sessionID) {
   
   var request = require('request');
@@ -20,63 +21,16 @@ var sendClearContext = function(sessionID) {
   
   function callback(error, response, body) {
     if (!error && response.statusCode == 200) {
-      // console.log(body);
-      // console.log(response);
+      console.log(body);
+      console.log(response);
     }
   }
   request(options, callback)
 }
+/*******************************************************************************/
 
-var getSimilarArtistNames = function(misspelled) {
 
-  // ...get the 3 most similar artist names and propose them to the user
-  var result = misspellingSolver.get(misspelled);
-
-  if (result == null)
-    return null;
-  
-  // throw away those with similarity index below 0.35
-  result = result.filter( function(artist) {
-    return artist[0] >= 0.35;
-  });
-  
-  // compute popularity normalization
-  var total = 0
-  for (var i = 0; i < 3 && i < result.length; i++) {
-      var value = popularityDictionary[result[i][1]];
-
-      if (Number(value) == value)
-        total += Number(value);
-  }
-
-  // fill in ranking
-  var ranking = []
-  for (var i = 0; i < 3 && i < result.length; i++) {
-      var value = popularityDictionary[result[i][1]]
-      var scorePopularity = Number(value) == value ? value / total : 0
-      var score = 0.8 * result[i][0] + 0.2 * scorePopularity;
-      var artist = {artist: result[i][1], score: score};
-      ranking.push(artist)
-  }
-
-  // order ranking by score
-  ranking.sort(function(a1, a2) {
-    if (a1.score < a2.score) return 1;
-    if (a1.score > a2.score) return -1;
-    return 0;
-  });
-  
-  if (ranking.length > 0) {
-    // ...make prettier the Dialogflow response ("Who is the artist?")
-    var response = "Sorry, I didn't found him! I give you some hints:\n";
-
-    for (var i = 0; i < 3 && i < ranking.length; i++)
-        response += "- " + ranking[i].artist + "\n";
-
-    return response
-  } else return null;
-}
-
+/*******************************************************************************/
 var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
@@ -117,7 +71,10 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
   }
   return bioAttachment;
 }
+/*******************************************************************************/
 
+
+/*******************************************************************************/
 var getWorkCard = function(title, year, genre, comment) {
   var workAttachment = {
     "attachments": [{
@@ -145,7 +102,10 @@ var getWorkCard = function(title, year, genre, comment) {
   }
   return workAttachment;
 }
+/*******************************************************************************/
 
+
+/*******************************************************************************/
 var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) {
   var performanceAttachment = {
     "attachments": [{
@@ -174,15 +134,15 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
   }
   return performanceAttachment;
 }
+/*******************************************************************************/
 
+
+/*******************************************************************************/
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-  var num;
-  if (isNaN(parseInt(number))) {
-    num = 10;
-  }
-  else {
+  var num = 5;
+  if (!isNaN(parseInt(number))) {
     num = parseInt(number);
   }
 
@@ -198,11 +158,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       ?expCreation efrbroo:R17_created ?expression ; \
         ecrm:P4_has_time-span ?ts ; \
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
-      VALUES(?composer) { \
-        (<http://data.doremus.org/artist/' + artist + '>) \
-      } \
       ?gen skos:prefLabel ?genre . \
       ?ts time:hasEnd / time:inXSDDate ?comp .'
+  
+  if (artist !== "") {
+    newQuery += 'VALUES(?composer) { \
+                   (<http://data.doremus.org/artist/' + artist + '>) \
+                 }';
+  } 
   
   // -> Start year present
   if (yearstart != null && yearend != null) {
@@ -216,14 +179,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
   }
   
   // -> No instrument
-  if (instrument == null) {
+  if (instrument.length == 0) {
     
     newQuery += '} \
                  ORDER BY rand() \
                  LIMIT ' + num
   }
   // -> Just one instrument
-  else if (typeof instrument == "string") {
+  else if (instrument.length == 1) {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
                  ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
@@ -288,19 +251,19 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       bot.reply(message, "Sorry... I didn't find anything!");
     }
     else {
+      
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
-        // for comment: row["comment"]["value"]
         bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["genre"]["value"], row["comment"]["value"]));
       });
-
-      //bot.reply(message, resp);
     }
 
   });
 }
+/*******************************************************************************/
 
+/*******************************************************************************/
 function doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message) {
   
   // JSON QUERY  
@@ -359,7 +322,9 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
     }
   });
 }
+/*******************************************************************************/
 
+/*******************************************************************************/
 var answerBio = function(bot, message, artist) {
   
     var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
@@ -401,100 +366,12 @@ var answerBio = function(bot, message, artist) {
       }
     });
 }
+/*******************************************************************************/
 
 // EXPORTS
 exports.sendClearContext = sendClearContext;
-exports.getSimilarArtistNames = getSimilarArtistNames;
 exports.getBioCard = getBioCard;
 exports.getWorkCard = getWorkCard;
 exports.doQuery = doQuery;
 exports.doQueryPerformance = doQueryPerformance;
 exports.answerBio = answerBio;
-
-// DEPRECATED
-/*
-var getUriAndAnswerBio = function(sessionID, resolvedName, bot, message) {
-  var request = require('request');
-  var options = {
-    method: 'GET',
-    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-
-  function callback(error, response, body) {
-
-    // JSON PARSING
-    var json = JSON.parse(body)
-    var found = false
-
-    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
-    for(var i = 0; i < json["entries"].length; i++) {
-      var entry = json["entries"][i]      
-      for(var j = 0; j < entry["synonyms"].length; j++) {
-        if(entry["synonyms"][j] === resolvedName) {
-
-          // GET PARAMETERS
-          var artist = entry["value"];
-          // var number = message.entities["number"];
-
-          found = true;
-          break;
-        }
-      }
-
-      if (found) {
-        answerBio(bot, message, artist);
-        break;
-      }
-    }
-  };
-
-  request(options, callback)
-}
-
-
-var getUriAndQuery = function(sessionID, resolvedName, number, bot, message) {
-  var request = require('request');
-  var options = {
-    method: 'GET',
-    uri: 'https://api.dialogflow.com/v1/entities/ebf4cca4-ea6b-4e55-a901-03338ea5691e?sessionId=' + sessionID,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + process.env.dialogflow
-    }
-  };
-
-  function callback(error, response, body) {
-
-    // JSON PARSING
-    var json = JSON.parse(body)
-    var found = false
-
-    // NO forEach CONSTRUCT, BECAUSE OF UNIQUENESS!
-    for(var i = 0; i < json["entries"].length; i++) {
-      var entry = json["entries"][i]      
-      for(var j = 0; j < entry["synonyms"].length; j++) {
-        if(entry["synonyms"][j] === resolvedName) {
-
-          // GET PARAMETERS
-          var artist = entry["value"];
-          // var number = message.entities["number"];
-
-          found = true;
-          break;
-        }
-      }
-
-      if (found) {
-        doQuery(artist, number, bot, message);
-        break;
-      }
-    }
-  };
-
-  request(options, callback)
-}
-*/
