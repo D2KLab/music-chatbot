@@ -141,11 +141,8 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
 function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
-  var num;
-  if (isNaN(parseInt(number))) {
-    num = 10;
-  }
-  else {
+  var num = 5;
+  if (!isNaN(parseInt(number))) {
     num = parseInt(number);
   }
 
@@ -161,11 +158,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       ?expCreation efrbroo:R17_created ?expression ; \
         ecrm:P4_has_time-span ?ts ; \
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
-      VALUES(?composer) { \
-        (<http://data.doremus.org/artist/' + artist + '>) \
-      } \
       ?gen skos:prefLabel ?genre . \
-      ?ts time:hasEnd / time:inXSDDate ?comp .'
+      ?ts time:hasEnd / time:inXSDDate ?comp'
+  
+  if (artist !== "") {
+    newQuery += 'VALUES(?composer) { \
+                   (<http://data.doremus.org/artist/' + artist + '>) \
+                 }';
+  } 
   
   // -> Start year present
   if (yearstart != null && yearend != null) {
@@ -251,14 +251,12 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
       bot.reply(message, "Sorry... I didn't find anything!");
     }
     else {
+      
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
-        // for comment: row["comment"]["value"]
         bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["genre"]["value"], row["comment"]["value"]));
       });
-
-      //bot.reply(message, resp);
     }
 
   });
