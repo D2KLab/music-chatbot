@@ -176,7 +176,7 @@ slackController.hears(['find-performance'], 'direct_message, direct_mention, men
 
 
 // HELLO INTENT
-slackController.hears(['hello-intent'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+slackController.hears(['hello'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   bot.reply(message, message['fulfillment']['speech']);
 });

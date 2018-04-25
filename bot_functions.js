@@ -159,7 +159,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
         ecrm:P4_has_time-span ?ts ; \
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       ?gen skos:prefLabel ?genre . \
-      ?ts time:hasEnd / time:inXSDDate ?comp'
+      ?ts time:hasEnd / time:inXSDDate ?comp .'
   
   if (artist !== "") {
     newQuery += 'VALUES(?composer) { \
