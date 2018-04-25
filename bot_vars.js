@@ -16,33 +16,8 @@ var slackBot = slackController.spawn({
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
-var alreadyAskedCount = 0;
-var alreadyAsked = false;
-
-// LOAD IN MEMORY ORIGINAL NAMES TO HANDLE MISSPELLED ONES
-var misspellingSolver = FuzzySet();
-var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('names.txt')
-});
-lineReader.on('line', function (line) {
-  misspellingSolver.add(line);
-});
-
-// LOAD IN MEMORY POPULARITY INFORMATION
-var popularityDictionary = {};
-var lineReader = require('readline').createInterface({
-  input: require('fs').createReadStream('popularity.csv')
-});
-lineReader.on('line', function (line) {
-  var fields = line.split(','); 
-  popularityDictionary[fields[0]] = fields[1];
-});
 
 // EXPORTS
-exports.misspellingSolver = misspellingSolver;
 exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
-exports.alreadyAskedCount = alreadyAskedCount;
-exports.popularityDictionary = popularityDictionary;
-exports.lineReader = lineReader;

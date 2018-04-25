@@ -18,7 +18,6 @@ var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
-var alreadyAskedCount = botvars.alreadyAskedCount;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -50,8 +49,6 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-
-    alreadyAskedCount = 0;
     
     // GET PARAMETERS
     var artist = message.entities["doremus-artist"];
