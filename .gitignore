@@ -1,8 +1,7 @@
 .db
 .env
-!node_modules
 node_modules/*
-!node_modules/botkit-middleware-dialogflow/src/
+!node_modules/botkit-middleware-dialogflow
 components/routes/_*
 .sass-cache/*
 
