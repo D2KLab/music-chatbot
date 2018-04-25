@@ -24,10 +24,8 @@ var alreadyAskedCount = botvars.alreadyAskedCount;
 var botfunctions = require("./bot_functions.js");
 var doQuery = botfunctions.doQuery;
 var doQueryPerformance = botfunctions.doQueryPerformance;
-var getSimilarArtistNames = botfunctions.getSimilarArtistNames;
 var sendClearContext = botfunctions.sendClearContext;
 var answerBio = botfunctions.answerBio;
-var misspellingSolver = botfunctions.misspellingSolver;
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -83,6 +81,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   
 });
 
+
 // DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
@@ -100,6 +99,7 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
   }
   
 });
+
 
 // WORKS-BY-DISCOVERED-ARTIST INTENT
 slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
@@ -129,64 +129,6 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     // DO THE QUERY (WITH ALL THE INFOS)
     doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
       
-});
-
-// WORKS-BY-DISCOVERED-ARTIST YES FOLLOW-UP
-slackController.hears(['works-by-discovered-artist - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  // IF YES HAS BEEN WRITTEN, WITH INSTRUMENTS PROVIDED
-  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
-    
-    var parentContext = message["nlpResponse"]["result"]["contexts"][0]
-    
-    // GET PARAMETERS
-    var artist = parentContext["parameters"]["doremus-artist-ext"];
-    var number = parentContext["parameters"]["number"];
-    var instrument = message.entities["doremus-instrument"];
-    var strictly = message.entities["doremus-strictly"];
-    var year = parentContext["parameters"]["date-period"];
-    
-    var startyear = null;
-    var endyear = null;
-    // IF YEAR IS PRESENT
-    if (year !== "") {
-      startyear = parseInt(year.split("/")[0]);
-      endyear = parseInt(year.split("/")[1]);
-    }
-    
-    // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instrument, strictly, startyear, endyear, bot, message);
-  }
-  
-  // IF YES HAS BEEN SAID, BUT NO INSTRUMENTS PROVIDED
-  else {
-      
-      // SEND THE BOT RESPONSE ("Ok! For which instruments?")
-      bot.reply(message, message['fulfillment']['speech']);
-  }
-});
-
-// WORKS-BY-DISCOVERED-ARTIST NO FOLLOW-UP
-slackController.hears(['works-by-discovered-artist - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-  var parentContext = message["nlpResponse"]["result"]["contexts"][0]
-
-  // GET PARAMETERS
-  var artist = parentContext["parameters"]["doremus-artist-ext"];
-  var number = parentContext["parameters"]["number"];
-  var year = parentContext["parameters"]["date-period"];
-  
-  var startyear = null;
-  var endyear = null;
-  // IF YEAR IS PRESENT
-  if (year !== "") {
-    startyear = parseInt(year.split("/")[0]);
-    endyear = parseInt(year.split("/")[1]);
-  }
-
-  // DO THE QUERY (WITH ALL THE INFOS EXCEPT INSTRUMENTS)
-  doQuery(artist, number, null, "", startyear, endyear, bot, message);
-
 });
 
 
@@ -221,9 +163,6 @@ slackController.hears(['find-performance'], 'direct_message, direct_mention, men
       endday = "--" + enddate.split("-")[1] + "-" + enddate.split("-")[2];
     }
     
-    console.log(startyear + "..." + startmonth);
-    console.log(endyear + "..." + endmonth);
-    
     // DO THE QUERY (WITH ALL THE INFOS)
     doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message);
   }
@@ -234,7 +173,6 @@ slackController.hears(['find-performance'], 'direct_message, direct_mention, men
     bot.reply(message, message['fulfillment']['speech']);
   }
 });
-
 
 
 // HELLO INTENT
