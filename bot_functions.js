@@ -179,14 +179,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
   }
   
   // -> No instrument
-  if (instrument == null) {
+  if (instrument.length == 0) {
     
     newQuery += '} \
                  ORDER BY rand() \
                  LIMIT ' + num
   }
   // -> Just one instrument
-  else if (typeof instrument == "string") {
+  else if (instrument.length == 1) {
   
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
                  ?castingDetail mus:U2_foresees_use_of_medium_of_performance / skos:exactMatch* ?instrument . \
