@@ -56,6 +56,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
     var year = message.entities["date-period"];
+    var genre = message.entities["doremus-genre"];
     
     // YEAR CHECK AND PARSING
     var startyear = null;
@@ -73,7 +74,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     }
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
+    doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
   }
   
 });
@@ -107,6 +108,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
     var year = message.entities["date-period"];
+    var genre = message.entities["doremus-genre"];
     
     // YEAR CHECK AND PARSING
     var startyear = null;
@@ -124,7 +126,7 @@ slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_me
     }
 
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instruments, strictly, startyear, endyear, bot, message);
+    doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
       
 });
 

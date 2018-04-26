@@ -138,7 +138,7 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
 
 
 /*******************************************************************************/
-function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, message) {
+function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -160,6 +160,12 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, bot, 
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       ?gen skos:prefLabel ?genre . \
       ?ts time:hasEnd / time:inXSDDate ?comp .'
+  
+  if (genre !== "") {
+   newQuery += 'VALUES(?gen) { \
+                   (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
+                 }';
+  }
   
   if (artist !== "") {
     newQuery += 'VALUES(?composer) { \
