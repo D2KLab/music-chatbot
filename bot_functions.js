@@ -165,7 +165,10 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       ?gen skos:prefLabel ?genre . \
       ?ts time:hasEnd / time:inXSDDate ?comp . \
-      OPTIONAL { ?expression mus:U11_has_key ?key } . '
+      OPTIONAL { \
+        ?expression mus:U11_has_key ?k . \
+        ?k skos:prefLabel ?key \
+      } . '
   
   if (genre !== "") {
    newQuery += 'VALUES(?gen) { \
@@ -264,17 +267,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
     }
     else {
       
-      console.log(json["results"]["bindings"]);
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
-        var tile = row["title"]["value"];
+        var title = row["title"]["value"];
         var year = row["year"]["value"];
         var genre = row["genre"]["value"];
         var comment = row["comment"]["value"];
-        var key = row["key"]["value"];
-        
-        if (key == undefined
+        var key = row["key"] !== undefined ? row["key"]["value"]: '';
         
         bot.reply(message, getWorkCard(title, year, genre, comment, key));
       });
