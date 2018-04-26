@@ -47,13 +47,12 @@ slackBot.startRTM();
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  console.log(message['nlpResponse']['result']['contexts']);
-  
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // GET PARAMETERS
     var artist = message.entities["doremus-artist"];
+    var prevArtist = message.entities["doremus-artist-prev"];
     var number = message.entities["number"];
     var instruments = message.entities["doremus-instrument"];
     var strictly = message.entities["doremus-strictly"];
@@ -73,6 +72,11 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
         startyear = endyear;
         endyear = tmp;
       }
+    }
+    
+    // ARTIST PARSING
+    if (artist === "" && prevArtist !== "") {
+      artist = prevArtist;
     }
     
     // DO THE QUERY (WITH ALL THE INFOS)
@@ -98,38 +102,6 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
     bot.reply(message, message['fulfillment']['speech']);
   }
   
-});
-
-
-// WORKS-BY-DISCOVERED-ARTIST INTENT
-slackController.hears(['works-by-discovered-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-  
-    // GET PARAMETERS
-    var artist = message.entities["doremus-artist"];
-    var number = message.entities["number"];
-    var instruments = message.entities["doremus-instrument"];
-    var strictly = message.entities["doremus-strictly"];
-    var year = message.entities["date-period"];
-    var genre = message.entities["doremus-genre"];
-    
-    // YEAR CHECK AND PARSING
-    var startyear = null;
-    var endyear = null;
-    if (year !== "") {
-      startyear = parseInt(year.split("/")[0]);
-      endyear = parseInt(year.split("/")[1]);
-      
-      // SWAP IF PROVIDED IN THE INVERSE ORDER
-      if (startyear > endyear) {
-        var tmp = startyear;
-        startyear = endyear;
-        endyear = tmp;
-      }
-    }
-
-    // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
-      
 });
 
 
