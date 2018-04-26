@@ -92,13 +92,13 @@ var getWorkCard = function(title, year, genre, comment, key) {
                 "short": true
             },
             {
-                "title": "Comment",
-                "value": comment,
-                "short": false
-            },
-            {
                 "title": "Key",
                 "value": key,
+                "short": true
+            },
+            {
+                "title": "Comment",
+                "value": comment,
                 "short": false
             }
         ],
@@ -274,7 +274,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
         var year = row["year"]["value"];
         var genre = row["genre"]["value"];
         var comment = row["comment"]["value"];
-        var key = row["key"] !== undefined ? row["key"]["value"]: '';
+        var key = row["key"] !== undefined ? row["key"]["value"]: '-';
         
         bot.reply(message, getWorkCard(title, year, genre, comment, key));
       });
