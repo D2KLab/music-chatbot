@@ -47,6 +47,8 @@ slackBot.startRTM();
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
+  
+  
   // ACTION COMPLETE (the artist name has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
