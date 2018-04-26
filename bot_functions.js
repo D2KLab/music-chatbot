@@ -75,7 +75,7 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 
 
 /*******************************************************************************/
-var getWorkCard = function(title, year, genre, comment) {
+var getWorkCard = function(title, year, genre, comment, key) {
   var workAttachment = {
     "attachments": [{
         "title": title,
@@ -94,6 +94,11 @@ var getWorkCard = function(title, year, genre, comment) {
             {
                 "title": "Comment",
                 "value": comment,
+                "short": false
+            },
+            {
+                "title": "Key",
+                "value": key,
                 "short": false
             }
         ],
@@ -259,10 +264,19 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
     }
     else {
       
+      console.log(json["results"]["bindings"]);
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
-        bot.reply(message, getWorkCard(row["title"]["value"], row["year"]["value"], row["genre"]["value"], row["comment"]["value"]));
+        var tile = row["title"]["value"];
+        var year = row["year"]["value"];
+        var genre = row["genre"]["value"];
+        var comment = row["comment"]["value"];
+        var key = row["key"]["value"];
+        
+        if (key == undefined
+        
+        bot.reply(message, getWorkCard(title, year, genre, comment, key));
       });
     }
 
