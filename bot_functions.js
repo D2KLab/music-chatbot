@@ -75,12 +75,17 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 
 
 /*******************************************************************************/
-var getWorkCard = function(title, year, genre, comment, key) {
+var getWorkCard = function(title, artist, year, genre, comment, key) {
   var workAttachment = {
     "attachments": [{
         "title": title,
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
         "fields": [
+            {
+                "title": "Artist",
+                "value": artist,
+                "short": true
+            },
             {
                 "title": "Year",
                 "value": year,
@@ -153,7 +158,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, year(?comp) as ?year, ?genre, ?comment, ?key \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, ?artist, year(?comp) as ?year, ?genre, ?comment, ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -163,6 +168,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
       ?expCreation efrbroo:R17_created ?expression ; \
         ecrm:P4_has_time-span ?ts ; \
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+      
       ?gen skos:prefLabel ?genre . \
       ?ts time:hasEnd / time:inXSDDate ?comp . \
       OPTIONAL { \
@@ -270,13 +276,14 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
         
+        var artist = row["artist"]["value"];
         var title = row["title"]["value"];
         var year = row["year"]["value"];
         var genre = row["genre"]["value"];
         var comment = row["comment"]["value"];
         var key = row["key"] !== undefined ? row["key"]["value"]: '-';
         
-        bot.reply(message, getWorkCard(title, year, genre, comment, key));
+        bot.reply(message, getWorkCard(title, artist, year, genre, comment, key));
       });
     }
 

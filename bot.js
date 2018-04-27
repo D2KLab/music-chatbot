@@ -104,16 +104,16 @@ slackController.hears(['works-by - yes'], 'direct_message, direct_mention, menti
 // WORKS-BY - NO
 slackController.hears(['works-by - no'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-  console.log(message.entities["nlpResponse"]);
+  var context = message["nlpResponse"]["result"]["contexts"][0];
   
   // GET PARAMETERS
-  var artist = message.entities["doremus-artist"];
-  var prevArtist = message.entities["doremus-artist-prev"];
-  var number = message.entities["number"];
-  var instruments = message.entities["doremus-instrument"];
-  var strictly = message.entities["doremus-strictly"];
-  var year = message.entities["date-period"];
-  var genre = message.entities["doremus-genre"];
+  var artist = context["parameters"]["doremus-artist"];
+  var prevArtist = context["parameters"]["doremus-artist-prev"];
+  var number = context["parameters"]["number"];
+  var instruments = context["parameters"]["doremus-instrument"];
+  var strictly = context["parameters"]["doremus-strictly"];
+  var year = context["parameters"]["date-period"];
+  var genre = context["parameters"]["doremus-genre"];
 
   // YEAR CHECK AND PARSING
   var startyear = null;
