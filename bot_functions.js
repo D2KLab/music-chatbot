@@ -143,7 +143,7 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
 
 
 /*******************************************************************************/
-function doQuery(artist, number, instrument, strictly, startdate, enddate, genre, bot, message) {
+function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -183,7 +183,7 @@ function doQuery(artist, number, instrument, strictly, startdate, enddate, genre
   } 
   
   // -> Start year present
-  if (startdate !== "" && enddate !== "") {
+  if (yearstart != null && yearend != null) {
     newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear AND ?comp <= "' + yearend + '"^^xsd:gYear ) .'
   }
   else if (yearstart != null && yearend == null) {
@@ -285,7 +285,7 @@ function doQuery(artist, number, instrument, strictly, startdate, enddate, genre
 /*******************************************************************************/
 
 /*******************************************************************************/
-function doQueryPerformance(city, startyear, startmonth, startday, endyear, endmonth, endday, bot, message) {
+function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date \
@@ -300,8 +300,7 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
                     ?actors rdfs:label ?actorsName . \
                     ?ts time:hasBeginning / time:inXSDDate ?time ; \
                        rdfs:label ?date . \
-                    FILTER ( ?time >= "' + startyear + '"^^xsd:gYear AND ?time >= "' + startmonth + '"^^xsd:gYearMonth ) .'
-                             // ?time <= "' + endyear + '"^^xsd:gYear AND ?time <= "' + endmonth + '"^^xsd:gYearMonth ) .'
+                    FILTER ( ?time >= "' + startdate + '"^^xsd:date AND ?time <= "' + enddate + '"^^xsd:date ) .'
   
   if (city !== "") {
     newQuery += 'FILTER ( contains(lcase(str(?placeName)), "' + city + '") )'
@@ -309,7 +308,7 @@ function doQueryPerformance(city, startyear, startmonth, startday, endyear, endm
   
   newQuery += '} \
                ORDER BY rand() \
-               LIMIT 1'
+               LIMIT ' + number
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='

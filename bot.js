@@ -113,17 +113,23 @@ slackController.hears(['find-performance'], 'direct_message, direct_mention, men
     
     var date = message.entities["date-period"];
     var place = message.entities["geo-city"];
+    var number = message.entities["number"];
     
     var city = "";
     if (place !== "") {
       city = place.toLowerCase();
     }
     
+    var num = 1;
+    if (number !== "") {
+      num = parseInt(number);
+    }
+    
     var startdate = date.split("/")[0];
     var enddate = date.split("/")[1];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQueryPerformance(city, startdate, enddate, bot, message);
+    doQueryPerformance(num, city, startdate, enddate, bot, message);
   }
   
   // ACTION INCOMPLETE (missing date)
