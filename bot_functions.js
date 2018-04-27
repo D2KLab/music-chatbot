@@ -143,7 +143,7 @@ var getPerformanceCard = function(title, subtitle, placeName, actorsName, date) 
 
 
 /*******************************************************************************/
-function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
+function doQuery(artist, number, instrument, strictly, startdate, enddate, genre, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -183,7 +183,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
   } 
   
   // -> Start year present
-  if (yearstart != null && yearend != null) {
+  if (startdate !== "" && enddate !== "") {
     newQuery += 'FILTER ( ?comp >= "' + yearstart + '"^^xsd:gYear AND ?comp <= "' + yearend + '"^^xsd:gYear ) .'
   }
   else if (yearstart != null && yearend == null) {
