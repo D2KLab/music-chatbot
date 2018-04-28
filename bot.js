@@ -89,12 +89,6 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   
 });
 
-// WORKS-BY-INSTRUMENT INTENT
-slackController.hears(['works-by-instrument'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-   
-  bot.reply(message, message['fulfillment']['speech']);
-});
-
 // WORKS-BY - YES INTENT
 slackController.hears(['works-by - yes'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
    
@@ -137,6 +131,39 @@ slackController.hears(['works-by - no'], 'direct_message, direct_mention, mentio
 
   // DO THE QUERY (WITH ALL THE INFOS)
   doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
+  
+});
+
+
+// WORKS-BY-INSTRUMENT INTENT
+slackController.hears(['works-by-instrument'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+   
+  bot.reply(message, message['fulfillment']['speech']);
+});
+
+
+// WORKS-BY-INSTRUMENT INTENT
+slackController.hears(['works-by-genre'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+   
+  bot.reply(message, message['fulfillment']['speech']);
+});
+
+
+// DISCOVER ARTIST
+slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+  
+  // ACTION COMPLETE (we have all the required infos)
+  if (message['nlpResponse']['result']['actionIncomplete'] == false) {
+    
+    // SEND THE BIO TO THE USER
+    answerBio(bot, message, message.entities["doremus-artist"]);
+  }
+  
+  // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
+  else {
+      
+    bot.reply(message, message['fulfillment']['speech']);
+  }
   
 });
 
