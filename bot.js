@@ -136,7 +136,7 @@ slackController.hears(['works-by - no'], 'direct_message, direct_mention, mentio
 
 
 // WORKS-BY-SOMETHING INTENT
-slackController.hears(['works-by-artist','works-by-instrument','works-by-genre'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+slackController.hears(['works-by-artist','works-by-instrument','works-by-genre','works-by-years'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
    
   bot.reply(message, message['fulfillment']['speech']);
 });
