@@ -135,15 +135,8 @@ slackController.hears(['works-by - no'], 'direct_message, direct_mention, mentio
 });
 
 
-// WORKS-BY-INSTRUMENT INTENT
-slackController.hears(['works-by-instrument'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-   
-  bot.reply(message, message['fulfillment']['speech']);
-});
-
-
-// WORKS-BY-INSTRUMENT INTENT
-slackController.hears(['works-by-genre'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+// WORKS-BY-SOMETHING INTENT
+slackController.hears(['works-by-artist','works-by-instrument','works-by-genre'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
    
   bot.reply(message, message['fulfillment']['speech']);
 });
