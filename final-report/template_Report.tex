@@ -240,7 +240,6 @@
 	LIMIT ' + num '
 	\end{lstlisting}
 	It's important to notice the particularity of the instrument information because, as previously said, it can be a list of instrument connected by an \texttt{and/or} logic operator. In the query implemented inside the \texttt{works-by} intent, this doesn't mean only to create dynamically the query (like for the other informations) but also to differentiate the code between a single-instrument filter, an "and" multi-instrument filter and an "or" multi-instrument filter. The differences are shown here:
-	
 	\begin{lstlisting}
 	
 	---- AND CASE
@@ -270,10 +269,37 @@
 	}
 	\end{lstlisting}
 	In the \texttt{and} case we add (with a \texttt{for} operator that loops through the \texttt{instr} array) a \texttt{castingDetail} for each instrument, forcing its value to that specific instrument. In the \texttt{or} case, instead, the \texttt{castingDetail} is just one and can assume a set of values filled with the \texttt{for} operator that loops through the \texttt{instr} array. 
-	
+
 	\subsection{Finding some artists}
-	
 	\subsection{Finding some future and past performances}
+	The bot is also capable of giving the user some future and past performances and events. The place and the time period can be, of course, specified in the query. The query is the following:
+	\begin{lstlisting}
+	
+	SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date
+	WHERE {
+	  ?performance a mus:M26_Foreseen_Performance ;
+	    ecrm:P102_has_title ?title ;
+	    ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ;
+	    mus:U67_has_subtitle ?subtitle ;
+	    mus:U7_foresees_place_at ?place ;
+	    mus:U8_foresees_time_span ?ts .
+	  ?place rdfs:label ?placeName .
+	  ?actors rdfs:label ?actorsName .
+	  ?ts time:hasBeginning / time:inXSDDate ?time ;
+ 	    rdfs:label ?date .
+	  FILTER ( ?time >= "' + startdate + '"^^xsd:date AND
+	           ?time <= "' + enddate + '"^^xsd:date ) .
+	  FILTER ( contains(lcase(str(?placeName)), "' + city + '") )
+	}
+	ORDER BY rand()
+	LIMIT ' + number '
+	\end{lstlisting}
+	And here there is an example:
+	\begin{verse}
+		\textit{Tell me one event in Paris!} - \textbf{User}\\
+		\textit{In which period?} - \textbf{Bot}\\
+		\textit{Next month} - \textbf{User}\\
+	\end{verse}
 	\subsection{Know more about an artist}
 	
 	\section{The flow}
