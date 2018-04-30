@@ -301,7 +301,35 @@
 		\textit{Next month} - \textbf{User}\\
 	\end{verse}
 	\subsection{Know more about an artist}
+	The last intent of the bot is \texttt{discover-artist}. This is the richest intent in terms of informations provided: it returns the artist summary in a \textit{Slack card}, with a picture, a short bio, the birth/date places and dates.
+	The query is the following:
+	\begin{lstlisting}
 	
+	SELECT DISTINCT ?composer, ?name, ?bio, xsd:date(?d_date) as ?death_date,
+	                ?death_place, xsd:date(?b_date) as ?birth_date, ?birth_place, ?image
+	WHERE {
+	  VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} .
+	  ?composer rdfs:comment ?bio .
+	  ?composer foaf:depiction ?image .
+	  ?composer schema:deathDate ?d_date .
+	  ?composer foaf:name ?name .
+	  ?composer dbpprop:deathPlace ?d_place .
+	  OPTIONAL { ?d_place rdfs:label ?death_place } .
+	  ?composer schema:birthDate ?b_date .
+	  ?composer dbpprop:birthPlace ?b_place .
+	  OPTIONAL { ?b_place rdfs:label ?birth_place } .
+	  FILTER (lang(?bio) = "en")
+	}
+	\end{lstlisting}
+	And here there is an example:
+	\begin{verse}
+		\textit{Tell me something about Mozart} - \textbf{User}\\
+	\end{verse}
+	or...
+	\begin{verse}
+		\textit{What do you know about Beethoven?} - \textbf{User}\\
+	\end{verse}
+
 	\section{The flow}
 	\section{The spell checker}
 	
