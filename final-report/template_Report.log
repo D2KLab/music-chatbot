@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  30 APR 2018 17:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  30 APR 2018 19:37
 entering extended mode
 **./template_Report.tex
 (template_Report.tex
@@ -340,13 +340,40 @@ Now handling font encoding U ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+("C:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 )
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifvtex.sty"
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+("C:\Program Files\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count88
+\Gm@cntv=\count89
+\c@Gm@tempcnt=\count90
+\Gm@bindingoffset=\dimen103
+\Gm@wd@mp=\dimen104
+\Gm@odd@mp=\dimen105
+\Gm@even@mp=\dimen106
+\Gm@layoutwidth=\dimen107
+\Gm@layoutheight=\dimen108
+\Gm@layouthoffset=\dimen109
+\Gm@layoutvoffset=\dimen110
+\Gm@dimlist=\toks17
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
+("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
 
@@ -361,20 +388,20 @@ Package graphics Info: Driver file: pdftex.def on input line 99.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen103
-\Gin@req@width=\dimen104
+\Gin@req@height=\dimen111
+\Gin@req@width=\dimen112
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\titlesec\titlesec.sty"
 Package: titlesec 2016/03/21 v2.10.2 Sectioning titles
 \ttl@box=\box26
 \beforetitleunit=\skip43
 \aftertitleunit=\skip44
-\ttl@plus=\dimen105
-\ttl@minus=\dimen106
-\ttl@toksa=\toks17
-\titlewidth=\dimen107
-\titlewidthlast=\dimen108
-\titlewidthfirst=\dimen109
+\ttl@plus=\dimen113
+\ttl@minus=\dimen114
+\ttl@toksa=\toks18
+\titlewidth=\dimen115
+\titlewidthlast=\dimen116
+\titlewidthfirst=\dimen117
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\adjustbox.sty"
 Package: adjustbox 2018/04/08 v1.1 Adjusting TeX boxes (trim, clip, ...)
@@ -384,10 +411,10 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
 ("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkeyval.tex"
 ("C:\Program Files\MiKTeX 2.9\tex\generic\xkeyval\xkvutils.tex"
-\XKV@toks=\toks18
-\XKV@tempa@toks=\toks19
+\XKV@toks=\toks19
+\XKV@tempa@toks=\toks20
 )
-\XKV@depth=\count88
+\XKV@depth=\count91
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
 ("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\adjcalc.sty"
@@ -401,34 +428,34 @@ Package: trimclip 2018/04/08 v1.1 Trim and clip general TeX material
 Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
 \collectedbox=\box27
 )
-\tc@llx=\dimen110
-\tc@lly=\dimen111
-\tc@urx=\dimen112
-\tc@ury=\dimen113
+\tc@llx=\dimen118
+\tc@lly=\dimen119
+\tc@urx=\dimen120
+\tc@ury=\dimen121
 Package trimclip Info: Using driver 'tc-pdftex.def'.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\adjustbox\tc-pdftex.def"
 File: tc-pdftex.def 2018/04/08 v2.1 Clipping driver for pdftex
 ))
-\adjbox@Width=\dimen114
-\adjbox@Height=\dimen115
-\adjbox@Depth=\dimen116
-\adjbox@Totalheight=\dimen117
-\adjbox@pwidth=\dimen118
-\adjbox@pheight=\dimen119
-\adjbox@pdepth=\dimen120
-\adjbox@ptotalheight=\dimen121
+\adjbox@Width=\dimen122
+\adjbox@Height=\dimen123
+\adjbox@Depth=\dimen124
+\adjbox@Totalheight=\dimen125
+\adjbox@pwidth=\dimen126
+\adjbox@pheight=\dimen127
+\adjbox@pdepth=\dimen128
+\adjbox@ptotalheight=\dimen129
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\ifoddpage\ifoddpage.sty"
 Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
-\c@checkoddpage=\count89
+\c@checkoddpage=\count92
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\varwidth.sty"
 Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \@vwid@box=\box28
-\sift@deathcycles=\count90
-\@vwid@loff=\dimen122
-\@vwid@roff=\dimen123
+\sift@deathcycles=\count93
+\@vwid@loff=\dimen130
+\@vwid@roff=\dimen131
 ))
 ("C:\Program Files\MiKTeX 2.9\tex\latex\epigraph\epigraph.sty"
 Package: epigraph 2009/09/02 v1.5c typesetting epigraphs
@@ -438,23 +465,23 @@ Package: epigraph 2009/09/02 v1.5c typesetting epigraphs
 \epigraphrule=\skip48
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.sty"
-\lst@mode=\count91
+\lst@mode=\count94
 \lst@gtempboxa=\box29
-\lst@token=\toks20
-\lst@length=\count92
-\lst@currlwidth=\dimen124
-\lst@column=\count93
-\lst@pos=\count94
-\lst@lostspace=\dimen125
-\lst@width=\dimen126
-\lst@newlines=\count95
-\lst@lineno=\count96
-\lst@maxwidth=\dimen127
+\lst@token=\toks21
+\lst@length=\count95
+\lst@currlwidth=\dimen132
+\lst@column=\count96
+\lst@pos=\count97
+\lst@lostspace=\dimen133
+\lst@width=\dimen134
+\lst@newlines=\count98
+\lst@lineno=\count99
+\lst@maxwidth=\dimen135
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count97
-\lst@skipnumbers=\count98
+\c@lstnumber=\count100
+\lst@skipnumbers=\count101
 \lst@framebox=\box30
 )
 ("C:\Program Files\MiKTeX 2.9\tex\latex\listings\listings.cfg"
@@ -485,32 +512,66 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 (template_Report.aux)
 \openout1 = `template_Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
-LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(90.3375pt, 416.83289pt, 90.3375pt)
+* v-part:(T,H,B)=(101.40665pt, 591.5302pt, 152.11pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=416.83289pt
+* \textheight=591.5302pt
+* \oddsidemargin=18.0675pt
+* \evensidemargin=18.0675pt
+* \topmargin=-7.86334pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=35.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count99
-\scratchdimen=\dimen128
+\scratchcounter=\count102
+\scratchdimen=\dimen136
 \scratchbox=\box31
-\nofMPsegments=\count100
-\nofMParguments=\count101
-\everyMPshowfont=\toks21
-\MPscratchCnt=\count102
-\MPscratchDim=\dimen129
-\MPnumerator=\count103
-\makeMPintoPDFobject=\count104
-\everyMPtoPDFconversion=\toks22
+\nofMPsegments=\count103
+\nofMParguments=\count104
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count105
+\MPscratchDim=\dimen137
+\MPnumerator=\count106
+\makeMPintoPDFobject=\count107
+\everyMPtoPDFconversion=\toks23
 ) ("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
@@ -547,10 +608,6 @@ Package etexcmds Info: Could not find \expanded.
 ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
 Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
 )
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
-Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
-)
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
@@ -563,15 +620,15 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 )
-\c@lstlisting=\count105
+\c@lstlisting=\count108
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 44.
+(Font)              <14.4> on input line 46.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 44.
+(Font)              <7> on input line 46.
  [1
 
-{C:/Users/Claudio/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] (template
-_Report.toc
+{C:/Users/Claudio/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
+(template_Report.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 2.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -582,7 +639,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write3
 \openout3 = `template_Report.toc'.
 
-[1
+ [1
 
 ]
 Chapter 1.
@@ -605,76 +662,72 @@ Chapter 5.
 <images/architecture.png, id=23, 963.6pt x 542.025pt>
 File: images/architecture.png Graphic file (type png)
 <use images/architecture.png>
-Package pdftex.def Info: images/architecture.png  used on input line 71.
+Package pdftex.def Info: images/architecture.png  used on input line 73.
 (pdftex.def)             Requested size: 385.43317pt x 216.80615pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--77
+Underfull \hbox (badness 10000) in paragraph at lines 75--79
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--77
+Underfull \hbox (badness 10000) in paragraph at lines 75--79
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--77
+Underfull \hbox (badness 10000) in paragraph at lines 75--79
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--77
+Underfull \hbox (badness 10000) in paragraph at lines 75--79
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--77
+Underfull \hbox (badness 10000) in paragraph at lines 75--79
 
  []
 
 [6
 
  <./images/architecture.png (PNG copy)>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 81.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 83.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 81.
- [7] [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 149--151
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 83.
+ [7] [8]
+Underfull \hbox (badness 10000) in paragraph at lines 151--153
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 170--172
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 173--175
 
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 172.
-[10] [11] [12] (template_Report.aux) ) 
+[10] [11] [12] [13] (template_Report.aux) ) 
 Here is how much of TeX's memory you used:
- 5426 strings out of 493305
- 73421 string characters out of 3138868
- 260848 words of memory out of 3000000
- 8896 multiletter control sequences out of 15000+200000
- 11658 words of font info for 41 fonts, out of 3000000 for 9000
+ 5936 strings out of 493305
+ 80909 string characters out of 3138868
+ 350217 words of memory out of 3000000
+ 9395 multiletter control sequences out of 15000+200000
+ 10098 words of font info for 36 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,6n,72p,745b,1882s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/
-public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
-msfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.p
-fb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program Files/MiKTeX 2.9/
-fonts/type1/public/amsfonts/cm/cmtt9.pfb>
-Output written on template_Report.pdf (13 pages, 194876 bytes).
+ 41i,6n,72p,745b,1886s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/t
+ype1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb
+><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Pro
+gram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on template_Report.pdf (14 pages, 173775 bytes).
 PDF statistics:
- 82 PDF objects out of 1000 (max. 8388607)
+ 77 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
