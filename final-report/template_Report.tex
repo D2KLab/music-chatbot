@@ -3,7 +3,10 @@
 \usepackage{graphicx}
 \usepackage{titlesec}
 \usepackage{adjustbox}
+\usepackage{epigraph}
+
 \graphicspath{ {images/} }
+\setlength\epigraphwidth{0.7\textwidth}
 
 \title{Developing a virtual assistant for answering music related questions}
 \author{Claudio SCALZO \and Luca LOMBARDO}
@@ -54,11 +57,44 @@
 		\item \texttt{find-performance}\\
 		Propose to the user a future performance (that can be filtered by city and/or date period), or shows to the user the details of a past performance.
 		\item \texttt{discover-artist}\\
-		Shows a card with a summary of an artist, with its birth/death place and date, a picture and a little bio. After the card visualization, a set of works of the artist (connection with the \ttfamily{works-by} intent) can be asked.
+		Shows a card with a summary of an artist, with its birth/death place and date, a picture and a little bio. After the card visualization, a set of works of the artist (connection with the \texttt{works-by} intent) can be asked.
 	\end{itemize}
 	Now we're going to go deeper in the intent descriptions.
 	\subsection{Retrieving a set of works}
-	The \texttt{works-by} intent is the most complex one in the entire bot's intents set.
+	The \texttt{works-by} intent is the most complex one in the entire bot's intents set. It can retrieve a certain number of works from 1 to \textit{L}, where \textit{L} is the number specified by the user if it's smaller than the number of available works. Otherwise, if it's greater, all the avilable works are returned. Its default value (if not specified by the user) is 5.\\\\
+	The filters can be various:
+	\begin{itemize}
+		\item \textbf{Artist:}\\
+		the artist name (full or surname).\\
+		\textit{"Give me 2 works composed by Bach"}
+		
+		\item \textbf{Instruments:}\\
+		the instrument(s) (in \texttt{and}/\texttt{or} relation).\\
+		\textit{"Give me 2 works for violin, clarinet and piano"}\\
+		\textit{"Give me 2 works for violin or piano"}
+		
+		\item \textbf{Genre:}\\
+		the music genre.\\
+		\textit{"Give me 2 works of genre concerto"}
+		
+		\item \textbf{Composition period:}\\
+		the artist name (full or surname).\\
+		\textit{"Give me 2 works composed during 1811"}
+		
+	\end{itemize}
+	The filters can be specified in every way: this means that the user can specify all the available filters, some of them and even none. If the number of filters in the first query is smaller than two, the bot asks the user if he wants to apply other filters. The user can answer positively or negatively, and then decide which kind of filter (and the value) to apply. It's important to notice that the kind of filter and the value can be specified together or not; let's see an example to make it more clear.\\\\
+	First of all, we are in the context in which the bot asks the users if he wants to apply some filters:
+	\epigraph{\textit{Please give me 3 works by Beethoven!}}{User}
+	\epigraph{\textit{You told me few filters. Do you want to add something?}}{DOREMUS Bot}
+	\epigraph{\textit{Yes!}}{User}
+	\epigraph{\textit{Ok, tell me what}}{DOREMUS Bot}
+	In this case, two scenarios can happen:
+	\epigraph{\textit{The composition year}}{User}
+	\epigraph{\textit{Of course! Tell me the time period.}}{DOREMUS Bot}
+	\epigraph{\textit{Between 1787 and 1812}}{User}
+	
+	or directly...
+	\epigraph{\textit{Only works composed between 1787 and 1812}}{User}
 	\subsection{Finding some artists}
 	\subsection{Finding some future and past performances}
 	\subsection{Know more about an artist}
