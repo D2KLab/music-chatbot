@@ -3,10 +3,12 @@
 \usepackage[left=1.25in, right=1.25in]{geometry}
 \usepackage{graphicx}
 \usepackage{titlesec}
+\usepackage{hyperref}
 \usepackage{adjustbox}
 \usepackage{epigraph}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage[super, numbers, square]{natbib}
 
 \definecolor{lightgray}{rgb}{0.97,0.97,0.97}
 \definecolor{darkgreen}{rgb}{0.2,0.5,0.2}
@@ -38,9 +40,8 @@
 
 \graphicspath{ {images/} }
 \setlength\epigraphwidth{0.7\textwidth}
-
 \title{Developing a virtual assistant for answering music related questions}
-\author{Claudio SCALZO \and Luca LOMBARDO}
+\author{Claudio SCALZO \\ (\href{mailto:scalzo@eurecom.fr}{scalzo@eurecom.fr}) \and Luca LOMBARDO \\ (\href{mailto:lombardo@eurecom.fr}{lombardo@eurecom.fr}) }
 
 \begin{document}
 \maketitle
@@ -48,23 +49,25 @@
 
 \chapter{Introduction}
 	\section{Why a virtual assistant?}
+	In these years we're assisting to a huge development of virtual assistants, mainly in two different shapes: vocal assistant and chat bots. Usually, each of the tasks that the user asks to the virtual assistant are tasks that can be done in other ways; we can think about a user asking for directions to \textit{Siri} or a user who tells his \textit{Google Assistant} to schedule an appointment in his calendar. Each of these are tasks that can be done without the help of an assistant! So, why they are becoming so popular? The reason is of course related to the ease of use. There are tasks which are, even if easy, boring or annoying to do, and we can take as example the scheduling of an appointment: we can unlock the phone, open an app, write the name of the appointment, select the start date and the end date, select the reminder scheduling, select the option to keep it private or make it public, and select other options depending on which calendar app we're using. Easy of course, but way more complicated than saying: \textit{"Hey Google, set me an appointment with Luca for tomorrow afternoon at 5pm, and please remind me 2 hours before"}.\\\\
+	Having said that, the reason behind the development of our virtual assistant should be clear: simplify the user's life when he wants to access some informations about classical music.
+	
 	\section{Scope of the project}
-	\section{Expected results}
+	Our project puts down its root into \textit{DOREMUS}\cite{doremus}, a classical music knowledge base, mainly composed by an ontology of 64 classes and 250 properties, and a set of 17 vocabularies. The informations contained inside \textit{DOREMUS} can be accessed thanks to a SPARQL endpoint, that lets users write queries to retrieve the set of data they want to achieve.\\\\
+	Our project starts from this difficulty: how many people know SPARQL? And inside the set of people who know it, how many problems can rise using the SPARQL language? Using the right properties, checking the exact domain and ranges for each property and other annoying problems just to obtain simple results. Our bot faces this issue, making simple to obtain the most common informations the users want.
+	
+	\section{Aim and expected results}
+	The real aim of the virtual assistant so, is to make simpler the use of the \textit{DOREMUS} knowledge base and the retrieval of its data. But which will be our, concrete, final results? First of all, the shape of the virtual assistant is originally a chat bot. The queries are textually written and the responses are visually seen on the display of each device running a client with the bot installed. This, of course, is not the only shape the bot can have. It can be a vocal assistant, and the query can be done by voice. In each of the cases, the bot will extract the informations from the \textit{DOREMUS} knowledge base using SPARQL queries, answering to the user's requests and without letting them know a single detail about the SPARQL query that is using or other technical details. It will also help the user to make a more detailed and precise query (guiding him with some questions), and will correct the users sentences when he does some typos or when he's wrong in writing some precise words (like artist names, instruments or musical genres).
 
 \chapter{Natural Language Understanding}
 	\section{What is NLU?}
 	\section{How it works? (Papers)}
-	\section{State of art}
+	\section{State of art (1st meeting slides)}
 
 \chapter{Dialogflow}
 	\section{What is Dialogflow}
 	\section{Why Dialogflow}
 	\section{How it works?}
-
-\chapter{DOREMUS}
-	\section{What is DOREMUS}
-	\section{How is organized}
-	\section{How to integrate it in our project}
 
 \chapter{The bot}
 	\section{The architecture}
@@ -333,4 +336,7 @@
 	\section{The flow}
 	\section{The spell checker}
 	
+	\begin{thebibliography}{9}
+		\bibitem{doremus} \href{http://www.doremus.org/}{http://www.doremus.org/} | DOREMUS: DOing REusable MUSical data.
+	\end{thebibliography}
 \end{document}          
