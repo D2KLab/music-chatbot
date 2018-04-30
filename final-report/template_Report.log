@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  30 APR 2018 13:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  30 APR 2018 13:47
 entering extended mode
 **./template_Report.tex
 (template_Report.tex
@@ -549,7 +549,7 @@ Chapter 4.
 
 ]
 Chapter 5.
-<images/architecture.png, id=23, 963.6pt x 542.025pt>
+<images/architecture.png, id=24, 963.6pt x 542.025pt>
 File: images/architecture.png Graphic file (type png)
 <use images/architecture.png>
 Package pdftex.def Info: images/architecture.png  used on input line 41.
@@ -569,25 +569,45 @@ Underfull \hbox (badness 10000) in paragraph at lines 43--47
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--47
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 43--47
+
+ []
+
 [6
 
- <./images/architecture.png (PNG copy)>] [7] (template_Report.aux) ) 
+ <./images/architecture.png (PNG copy)>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 50.
+
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 50.
+ [7] [8]
+(template_Report.aux) ) 
 Here is how much of TeX's memory you used:
- 2980 strings out of 493305
- 42329 string characters out of 3138868
- 103836 words of memory out of 3000000
- 6483 multiletter control sequences out of 15000+200000
- 9454 words of font info for 33 fonts, out of 3000000 for 9000
+ 3006 strings out of 493305
+ 42755 string characters out of 3138868
+ 104836 words of memory out of 3000000
+ 6505 multiletter control sequences out of 15000+200000
+ 9930 words of font info for 35 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,6n,37p,745b,226s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program
- Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmti12.pfb>
-Output written on template_Report.pdf (8 pages, 118476 bytes).
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts
+/cm/cmbx12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr1
+2.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on template_Report.pdf (9 pages, 134974 bytes).
 PDF statistics:
- 46 PDF objects out of 1000 (max. 8388607)
+ 57 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
