@@ -56,6 +56,9 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   var year = message.entities["date-period"];
   var genre = message.entities["doremus-genre"];
   
+  // COUNT OF THE FILTER SET BY THE USER
+  
+  
   // CHECK IF THE MAX AMOUNT OF FILTERS IS APPLIED
   if (instruments.length > 0) {
 
