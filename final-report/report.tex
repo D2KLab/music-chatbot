@@ -8,6 +8,7 @@
 \usepackage{epigraph}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{float}
 \usepackage[super, numbers, square]{natbib}
 
 \definecolor{lightgray}{rgb}{0.97,0.97,0.97}
@@ -37,7 +38,7 @@
 	stringstyle=\color{darkgreen},
 	tabsize=2
 }
-
+\renewcommand{\bibname}{References}
 \graphicspath{ {images/} }
 \setlength\epigraphwidth{0.7\textwidth}
 \title{Developing a virtual assistant for answering music related questions}
@@ -61,7 +62,17 @@
 
 \chapter{Natural Language Understanding}
 	\section{What is NLU?}
-	\section{How it works? (Papers)}
+	Natural language understanding \textit{(NLU)} is an artificial intelligence technique that deals with the automatic treatment of informations provided in a given natural language. It puts its roots into the first works by Daniel Bobrow\cite{bobrow} in 1964 and the \textit{ELIZA}\cite{eliza} project in 1965, by Joseph Weizenbaum. The interest in \textit{NLU} has become in the years bigger and bigger, and after some interesting works like the one of William Woods\cite{woods}, who introduced the \textit{ATN (Augmented Transition Network)} in the natural language processing field, the research focused (in the 70s and 80s) in using machine learning techniques to fulfill natural language processing tasks.
+	\section{NLP, NLU and NLG}
+	\textit{Natural Language Processing (NLP)}, \textit{Natural Language Understanding (NLU)} and \textit{Natural Languange Generation (NLG)} are similar terms that doesn't share the same meaning. 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.2]{nlschema}
+		\caption{NLP, NLU, NLG and how Chatbots work\cite{nlpnlunlg}}
+	\end{figure}
+	
+	\section{How machine learning can help NLU?}
+	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. For what regards the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}. Attention-based models are capable...
 	\section{State of art (1st meeting slides)}
 
 \chapter{Dialogflow}
@@ -72,9 +83,11 @@
 \chapter{The bot}
 	\section{The architecture}
 	The architecture of the bot is divided in four categories:
-	\begin{center}
-		\includegraphics[scale=0.4]{architecture}
-	\end{center}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.2]{architecture}
+		\caption{The high-level architecture of DOREMUS Bot}
+	\end{figure}
 	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand in a glance. A set of examples will be provided in the last chapter.\\\\
 	The second part of the architecture is represented by the NLP. In this case, as told in the previous chapter, we used \textit{Dialogflow}, to exploit its advanced slot-filling techniques and its NLU power.\\\\
 	However, we didn't use \textit{Dialogflow} on its own, exploiting the direct integration with \textit{Slack}, but we used something that we placed in the middle of the two: \textit{BotKit}. \textit{BotKit} is a bot-making toolkit that aims to ease the building process of a bot, potentially exploiting different NLPs and/or different clients. In our case, \textit{BotKit} has been deployed on a web server, and thanks to the \textit{NodeJS} code we were able to come up with a series of features (like the spell checker) that would have been impossible to reach with a simple (direct) integration between \textit{Slack} and \textit{Dialogflow}. We'll talk more about that in the following paragraphs.\\\\
@@ -338,5 +351,10 @@
 	
 	\begin{thebibliography}{9}
 		\bibitem{doremus} \href{http://www.doremus.org/}{http://www.doremus.org/} | DOREMUS: DOing REusable MUSical data.
+		\bibitem{bobrow} \href{http://dspace.mit.edu/handle/1721.1/5922}{http://dspace.mit.edu/handle/1721.1/5922} | Natural Language Input for a Computer Problem Solving System. 1964. Bobrow, Daniel.
+		\bibitem{eliza} \href{https://dl.acm.org/citation.cfm?id=365168}{https://dl.acm.org/citation.cfm?id=365168} | ELIZA: A computer program for the study of natural language communication between man and machine. 1966. Weizenbaum, Joseph.
+		\bibitem{woods} \href{https://eric.ed.gov/?id=ED037733}{https://eric.ed.gov/?id=ED037733} | Augmented Transition Networks for Natural Language Analysis. 1969. Woods, William.
+		\bibitem{nlpnlunlg} \href{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df} | NLP, NLU, NLG and how Chatbots work.
+		\bibitem{rnn} \href{https://arxiv.org/abs/1609.01454}{https://arxiv.org/abs/1609.01454} | Attention-Based Recurrent Neural Network Models for Joint Intent Detection and Slot Filling. 2016. Liu, Bing and Lane, Ian.
 	\end{thebibliography}
 \end{document}          
