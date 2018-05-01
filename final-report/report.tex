@@ -68,11 +68,51 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.2]{nlschema}
-		\caption{NLP, NLU, NLG and how Chatbots work\cite{nlpnlunlg}}
+		\caption{NLP, NLU, NLG and how Chatbots work.\cite{nlpnlunlg}}
 	\end{figure}
+	\begin{itemize}
+	\item \textit{NLP} is the biggest set between the three, because it's a term which indicates the capability of a software to ingest an input sentence, split it in pieces (entities), understand the entities and thei relationship, and give the an answer to the user.
+	
+	\item \textit{NLU} is a subset of \textit{NLP}. It deals with understanding a natural language input (totally or partially unstructured) and convert it into a structured form that the machine can process and understand. Is a small yet critical task to achieve.
+	
+	\item \textit{NLG} can be seen as the dual phase of \textit{NLU}: turning structured data into natural language, to give the user the answer he wants.
+	\end{itemize}
 	
 	\section{How machine learning can help NLU?}
-	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. For what regards the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}. Attention-based models are capable...
+	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. For what regards the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}.\\\\
+	Is fundamental in this case, to understand the concept of alignment:
+	\begin{itemize}
+		\item Alignment is present when the output of the encoder is the same input given to the decoder. Is the case of slot-filling, where the entire set of entities is aligned (when processed with the encoder, can be directly given to the decoder).
+		
+		\item Alignment is not present when the output of the encoder can't be directly given in input to the decoder. An additional processing phase is needed before feeding the decoder with the informations it needs as input. is the case of the intent detection, where the decoder needs the information of all the words to detect the intent.
+	\end{itemize}
+	In both intent detection and slot-filling tasks, \textit{RNNs (Recurrent Neural Networks)} can be (and have been) applied:\\\\
+	In the case of slot-filling, the input-output sequence is explicitly aligned, with a "slot" to fill for each single information extracted from the sentence. The models used in the years, in this case, have the aim to maximize the likelihood:
+	\begin{equation}
+	\arg \max_{\theta} \prod_{t=1}^{T} P(y\textsubscript{t}|y\textsubscript{1}\textsuperscript{t-1},x;\theta)
+	\end{equation}
+	Another structure exploiting RNNs can be instead the RNN Encoder-Decoder framework: in this case the input-output sequence is not aligned, and this structure is of course better for an intent detection task. In this case, the encoder and the decoder are separated entities: the encoder reads a sequence of inputs into a context vector \textit{c}, which is used from the decoder as source of informations for fulfilling its task. The probability of the output sequence of the decoder is:
+	\begin{equation}
+	P(y) = \prod_{t=1}^{T} P(y\textsubscript{t}|y\textsubscript{1}\textsuperscript{t-1},c)
+	\end{equation}
+	The work conducted by Liu and Lane aims to propose two different alternatives to be able to work well in joint intent detection and slot-filling tasks.
+	\subsection{Attention-Based RNN model for joint intent detection and slot-filling}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.4]{alt1}
+		\caption{The three alternatives using the Encoder/Decoder model.}
+	\end{figure}
+	In this case, as the figure shows, the encoder and the decoder phase are separated. In the encoder phase we can find the \textit{bidirectional RNNs}: each of them produces an hidden "forward" state \textit{fh\textsubscript{i}} and an hidden "backward" state \textit{bh\textsubscript{i}}. The output of the last \textit{RNN} is used for the intent detection and to initialize the decoder \textit{RNN} state.\\\\
+	In the subfigure \textit{(a)}, we can find an example of non-aligned inputs. Indeed, the input given to the decoder phase is the context vector \textit{c}, produced by a weighted sum of all components of the \textit{h} vector produced by the encoder phase.\\
+	In the subfigure \textit{(b)}, the inputs are aligned. The input vector of the decoder phase is just the \textit{h} array.\\
+	The last subfigure \textit{(c)} shows a situation with aligned inputs and also the addition of attention. This is useful for the joint intent classification and slot-filling task: both the \textit{h} and the \textit{c} vectors are used in the decoder phase, that shows also an intent detection taking as input the output of the last \textit{RNN} and also the \textit{c} context vector.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.4]{alt2}
+		\caption{Attention-based RNN model for joint intent detection
+			and slot filling.}
+	\end{figure}
+	The attention-based model proposed by Liu and Lane shows a clear structure: each bidirectional \textit{RNN} produces a forward and a backward hidden state, useful for predicting the slot label (the core of the slot-filling task). At the same time, these outputs \textit{h\textsubscript{i}} are merged with the context vector \textit{c} to predict the final intent label.
 	\section{State of art (1st meeting slides)}
 
 \chapter{Dialogflow}
@@ -86,7 +126,7 @@
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.2]{architecture}
-		\caption{The high-level architecture of DOREMUS Bot}
+		\caption{The high-level architecture of DOREMUS Bot.}
 	\end{figure}
 	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand in a glance. A set of examples will be provided in the last chapter.\\\\
 	The second part of the architecture is represented by the NLP. In this case, as told in the previous chapter, we used \textit{Dialogflow}, to exploit its advanced slot-filling techniques and its NLU power.\\\\

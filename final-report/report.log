@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  1 MAY 2018 15:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6630 64-bit) (preloaded format=pdflatex 2018.4.30)  1 MAY 2018 17:48
 entering extended mode
 **./report.tex
 (report.tex
@@ -773,113 +773,154 @@ Underfull \hbox (badness 10000) in paragraph at lines 57--59
 
 ] [3]
 Chapter 2.
-<images/nlschema.png, id=147, 1505.625pt x 898.35625pt>
+<images/nlschema.png, id=153, 1505.625pt x 898.35625pt>
 File: images/nlschema.png Graphic file (type png)
 <use images/nlschema.png>
 Package pdftex.def Info: images/nlschema.png  used on input line 70.
 (pdftex.def)             Requested size: 301.11966pt x 179.66806pt.
 [4
 
-] [5pdfTeX warning (ext4): destination with the same identifier (name{figure.2.
-1}) has been already used, duplicate ignored
+]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 74.
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 74.
+
+Underfull \hbox (badness 10000) in paragraph at lines 82--84
+
+ []
+
+[5pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1}
+) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.78 \chapter
-             {Dialogflow} <./images/nlschema.png>]
+l.84 	\begin{itemize}
+                      <./images/nlschema.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 89--91
+
+ []
+
+<images/alt1.png, id=173, 500.46976pt x 542.62724pt>
+File: images/alt1.png Graphic file (type png)
+<use images/alt1.png>
+Package pdftex.def Info: images/alt1.png  used on input line 102.
+(pdftex.def)             Requested size: 200.18434pt x 217.04704pt.
+[6]
+<images/alt2.png, id=184, 490.83376pt x 350.5095pt>
+File: images/alt2.png Graphic file (type png)
+<use images/alt2.png>
+Package pdftex.def Info: images/alt2.png  used on input line 111.
+(pdftex.def)             Requested size: 196.33002pt x 140.20131pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--114
+
+ []
+
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.2.2}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.115 	T
+        he attention-based model proposed by Liu and Lane shows a clear stru...
+ <./images/alt1.png>] [8pdfTeX warning (ext4): destination with the same identi
+fier (name{figure.2.3}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.118 \chapter
+              {Dialogflow} <./images/alt2.png>]
 Chapter 3.
-[6
+[9
 
 ]
 Chapter 4.
-<images/architecture.png, id=171, 1860.9525pt x 794.97pt>
+<images/architecture.png, id=200, 1860.9525pt x 794.97pt>
 File: images/architecture.png Graphic file (type png)
 <use images/architecture.png>
-Package pdftex.def Info: images/architecture.png  used on input line 88.
+Package pdftex.def Info: images/architecture.png  used on input line 128.
 (pdftex.def)             Requested size: 372.18391pt x 158.99118pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 91--95
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
-[7
+[10
 
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.1}) 
 has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.95 	
-       <./images/architecture.png>]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 99.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
-File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 99.
- [8] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 167--169
+l.135 	
+        <./images/architecture.png>] [11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 207--209
 
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 189--191
+[13]
+Underfull \hbox (badness 10000) in paragraph at lines 229--231
 
  []
 
-[11] [12] [13] [14] [15]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 360.
- [16
+[14] [15] [16] [17] [18]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 400.
+ [19
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 360.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 400.
  (report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 360.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 360.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 400.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 400.
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 4C7A8496DEF93E6E09B3C6BA3E5496F6;1515.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 360.
+(rerunfilecheck)             Checksum: 5A9A4BE16675E85C3244C5317C192B76;1639.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 400.
  ) 
 Here is how much of TeX's memory you used:
- 10080 strings out of 493305
- 142263 string characters out of 3138868
+ 10101 strings out of 493305
+ 142559 string characters out of 3138868
  444394 words of memory out of 3000000
- 13305 multiletter control sequences out of 15000+200000
- 10098 words of font info for 36 fonts, out of 3000000 for 9000
+ 13315 multiletter control sequences out of 15000+200000
+ 10450 words of font info for 37 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  35i,8n,72p,1187b,2091s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Fil
-es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/am
-sfonts/cm/cmtt12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/c
-m/cmtt8.pfb>
-Output written on report.pdf (17 pages, 475736 bytes).
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
+/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.
+pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti8.pfb><C:/P
+rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb><C:/Program F
+iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
+Output written on report.pdf (20 pages, 589868 bytes).
 PDF statistics:
- 453 PDF objects out of 1000 (max. 8388607)
- 208 named destinations out of 1000 (max. 500000)
- 195 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 495 PDF objects out of 1000 (max. 8388607)
+ 216 named destinations out of 1000 (max. 500000)
+ 213 words of extra memory for PDF output out of 10000 (max. 10000000)
 
