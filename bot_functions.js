@@ -158,11 +158,12 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?title, \
+  var newQuery = 'SELECT DISTINCT ?expression, \
+    sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
     sql:BEST_LANGMATCH(?artist,"en","en") AS ?artist, \
     year(?comp) as ?year, \
     sql:BEST_LANGMATCH(?genre,"en","en") AS ?genre, \
-    ?comment, \
+    sql:BEST_LANGMATCH(?comment,"en","en") AS ?comment, \
     sql:BEST_LANGMATCH(?key,"en","en") AS ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
@@ -300,7 +301,8 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT DISTINCT sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
+  var newQuery = 'SELECT DISTINCT ?performance, \
+                  sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
                   sql:BEST_LANGMATCH(?subtitle,"en","en") AS ?subtitle, \
                   sql:BEST_LANGMATCH(?actorsName,"en","en") AS ?actorsName, \
                   sql:BEST_LANGMATCH(?placeName,"en","en") AS ?placeName, \
