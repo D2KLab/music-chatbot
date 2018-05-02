@@ -187,6 +187,31 @@ slackController.hears(['works-by-artist','works-by-instrument','works-by-genre',
 
 
 // DISCOVER ARTIST
+slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+    
+    // GET ENTITIES
+    var date = message.entities["date-period"];
+    var number = message.entities["number"];
+  
+    // PARSE ENTITIES
+    var startdate = "";
+    var enddate = "";
+    if (date !== "") {
+      startdate = date.split("/")[0];
+      enddate = date.split("/")[1];
+    }
+  
+    var num = 5;
+    if (number !== "") {
+      num = parseInt(number);
+    }
+  
+    // SEND THE BIO TO THE USER
+    doQueryFindArtist();
+});
+
+
+// DISCOVER ARTIST
 slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
   // ACTION COMPLETE (we have all the required infos)
