@@ -3,6 +3,7 @@ var Botkit = require('botkit');
 var FuzzySet = require('fuzzyset.js');
 var request = require('request');
 var http = require('http');
+var SpellChecker = require('spellchecker')
 var bot_options = {
     clientId: process.env.clientId,
     clientSecret: process.env.clientSecret,
@@ -21,3 +22,4 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
+exports.SpellChecker = SpellChecker

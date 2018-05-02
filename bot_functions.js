@@ -158,7 +158,12 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?title, sql:BEST_LANGMATCH(?artist, "en", "en") AS ?artist, year(?comp) as ?year, ?genre, ?comment, ?key \
+  var newQuery = 'SELECT DISTINCT ?title, \
+    sql:BEST_LANGMATCH(?artist,"en","en") AS ?artist, \
+    year(?comp) as ?year, \
+    sql:BEST_LANGMATCH(?genre,"en","en") AS ?genre, \
+    ?comment, \
+    sql:BEST_LANGMATCH(?key,"en","en") AS ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -295,13 +300,17 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date \
+  var newQuery = 'SELECT DISTINCT sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
+                  sql:BEST_LANGMATCH(?subtitle,"en","en") AS ?subtitle, \
+                  sql:BEST_LANGMATCH(?actorsName,"en","en") AS ?actorsName, \
+                  sql:BEST_LANGMATCH(?placeName,"en","en") AS ?placeName, \
+                  ?date \
                   WHERE { \
                     ?performance a mus:M26_Foreseen_Performance ; \
                       ecrm:P102_has_title ?title ; \
                       ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
                       mus:U67_has_subtitle ?subtitle ; \
-                      mus:U7_foresees_place_at ?place ; \
+                      mus:U7_foresees_place_at / ecrm:P89_falls_within* ?place ; \
                       mus:U8_foresees_time_span ?ts . \
                     ?place rdfs:label ?placeName . \
                     ?actors rdfs:label ?actorsName . \
@@ -356,7 +365,14 @@ var answerBio = function(bot, message, artist) {
   
     // var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
 
-    var newQuery = 'SELECT DISTINCT ?composer, ?name, ?bio, xsd:date(?d_date) as ?death_date, ?death_place, xsd:date(?b_date) as ?birth_date, ?birth_place, ?image \
+    var newQuery = 'SELECT DISTINCT ?composer, \
+                    sql:BEST_LANGMATCH(?name,"en","en") AS ?name, \
+                    sql:BEST_LANGMATCH(?bio,"en","en") AS ?bio, \
+                    xsd:date(?d_date) AS ?death_date, \
+                    sql:BEST_LANGMATCH(?death_place,"en","en") AS ?death_place, \
+                    xsd:date(?b_date) AS ?birth_date, \
+                    sql:BEST_LANGMATCH(?birth_place,"en","en") AS ?birth_place, \
+                    ?image \
                     WHERE { \
                       VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} . \
                       ?composer rdfs:comment ?bio . \
