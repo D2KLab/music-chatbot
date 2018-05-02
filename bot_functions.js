@@ -337,11 +337,11 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT DISTINCT ?performance, \
-                  ?title, \
-                  ?subtitle, \
-                  ?actorsName, \
-                  ?placeName, \
-                  ?date \
+                    ?title, \
+                    ?subtitle, \
+                    ?actorsName, \
+                    ?placeName, \
+                    ?date \
                   WHERE { \
                     ?performance a mus:M26_Foreseen_Performance ; \
                       ecrm:P102_has_title ?title ; \
@@ -402,7 +402,42 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
   
   // JSON QUERY  
-  var newQuery = ''
+  var newQuery = 'SELECT DISTINCT ?composer, \
+                    ?name, (count(?expr) AS ?count), \
+                    xsd:date(?d_date) AS ?death_date, ?death_place, \
+                    xsd:date(?b_date) AS ?birth_date, ?birth_place \
+                  WHERE { \
+                    ?composer foaf:name ?name . \
+                    ?composer schema:deathDate ?d_date . \
+                    ?composer dbpprop:deathPlace ?d_place . \
+                    OPTIONAL { ?d_place rdfs:label ?death_place } . \
+                    ?composer schema:birthDate ?b_date . \
+                    ?composer dbpprop:birthPlace ?b_place . \
+                    OPTIONAL { ?b_place rdfs:label ?birth_place } . \
+
+                    ?exprCreation efrbroo:R17_created ?expr ; \
+                      ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+                    ?expr mus:U12_has_genre ?gen ; \
+                      mus:U13_has_casting ?casting .'
+
+  VALUES(?gen) {
+     (<http://data.doremus.org/vocabulary/iaml/genre/sn>)
+  }
+
+  ?casting mus:U23_has_casting_detail ?castingDetail .
+  ?castingDetail mus:U2_foresees_use_of_medium_of_performance
+		 / skos:exactMatch* ?instrument .
+
+  VALUES(?instrument) {
+    (<http://data.doremus.org/vocabulary/iaml/mop/wcl>)
+  }
+
+  FILTER ( ?b_date >= "1740-01-01"^^xsd:date AND ?b_date <= "1780-12-31"^^xsd:date )
+  FILTER ( contains(lcase(str(?birth_place)), "lausanne") )
+}
+GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place
+ORDER BY DESC(?count)
+LIMIT 5'
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
