@@ -69,7 +69,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
-  next()
+  next();
   return;
 });
 
@@ -95,7 +95,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   
   // COUNT OF THE FILTER SET BY THE USER
   var filterCounter = 0;
-  for(var key in parameters) {
+  for (var key in parameters) {
     if (parameters[key] != "") filterCounter++; 
   }
   
