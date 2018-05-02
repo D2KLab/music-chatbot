@@ -17,8 +17,8 @@
 \contentsline {section}{\numberline {4.2}Entities}{11}{section.4.2}
 \contentsline {section}{\numberline {4.3}Intents}{13}{section.4.3}
 \contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{13}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{16}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{16}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{17}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}The flow}{18}{section.4.4}
-\contentsline {section}{\numberline {4.5}The spell checker}{18}{section.4.5}
+\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{17}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{18}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{19}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}The flow}{20}{section.4.4}
+\contentsline {section}{\numberline {4.5}The spell checker}{20}{section.4.5}

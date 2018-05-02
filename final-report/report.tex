@@ -277,27 +277,30 @@
 		?castingDetail mus:U2_foresees_use_of_medium_of_performance
 		               / skos:exactMatch* ?instrument .
 		VALUES(?instrument) {
-		  (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>)
+		  (<http://data.doremus.org/vocabulary/iaml/mop/' <instrument> '>)
 		}
 		
 		------------- Genre
 		VALUES(?gen) {
-		  (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>)
+		  (<http://data.doremus.org/vocabulary/iaml/genre/' <genre> '>)
 		}
 		
 		------------- Artist
 		VALUES(?composer) {
-		  (<http://data.doremus.org/artist/' + artist + '>)
+		  (<http://data.doremus.org/artist/' <artist> '>)
 		}
 		
 		------------- Composition Year
-		FILTER (?comp >= "' + yearstart + '"^^xsd:gYear AND
-		        ?comp <= "' + yearend + '"^^xsd:gYear)
+		FILTER (?comp >= "' <yearstart> '"^^xsd:gYear AND
+		        ?comp <= "' <yearend> '"^^xsd:gYear)
 	}
 	ORDER BY rand()
-	LIMIT ' + num '
+	LIMIT ' <num> '
 	\end{lstlisting}
-	It's important to notice the particularity of the instrument information because, as previously said, it can be a list of instrument connected by an \texttt{and/or} logic operator. In the query implemented inside the \texttt{works-by} intent, this doesn't mean only to create dynamically the query (like for the other informations) but also to differentiate the code between a single-instrument filter, an "and" multi-instrument filter and an "or" multi-instrument filter. The differences are shown here:
+	Some particularities: first of all, the property that let us obtain the instrument:\\ \texttt{mus:U2\_foresees\_use\_of\_medium\_of\_performance
+		/ skos:exactMatch*}.\\
+	The "\texttt{mus:U2\_foresees\_use\_of\_medium\_of\_performance}" is a property of the \textit{DOREMUS} ontology that allows to connect a generic \textit{castingDetail} to a specific \textit{instrument}. The "\texttt{skos:exactMatch*}" is instead a way to allow the query to search not only in the actual vocabulary used by us (\texttt{iaml/mop/}) but also in other vocabularies that contains an \textit{equivalent} of that instrument. The "\texttt{*}" symbol means \textit{"one or more"}.
+	It's also important to notice the particularity of the instrument information because, as previously said, it can be a list of instrument connected by an \texttt{and/or} logic operator. In the query implemented inside the \texttt{works-by} intent, this doesn't mean only to create dynamically the query (like for the other informations) but also to differentiate the code between a single-instrument filter, an "\texttt{and}" multi-instrument filter and an "\texttt{or}" multi-instrument filter. The differences are shown here:
 	\begin{lstlisting}
 	
 	---- AND CASE
@@ -322,13 +325,73 @@
 	            VALUES(?instr) {'
 	
 	  for (var i = 0; i < instr.length; i++) {
-	    query += '(<http://data.doremus.org/vocabulary/iaml/mop/' +instr[i] + '>)'
+	    query += '(<http://data.doremus.org/vocabulary/iaml/mop/' + instr[i] + '>)'
 	  }
 	}
 	\end{lstlisting}
 	In the \texttt{and} case we add (with a \texttt{for} operator that loops through the \texttt{instr} array) a \texttt{castingDetail} for each instrument, forcing its value to that specific instrument. In the \texttt{or} case, instead, the \texttt{castingDetail} is just one and can assume a set of values filled with the \texttt{for} operator that loops through the \texttt{instr} array. 
 
 	\subsection{Finding some artists}
+	One powerful intent of the bot is \texttt{find-artist}, that can retrieve a set of artists given some filters. The filters can be for example the birth date or the birth city but the interesting functionality comes thanks to the sorting of the result: having a descending filter, the artists with more works comes first; so, we made the assistant answer questions like:
+	\begin{verse}
+	\textit{Find the five artists who composed more concerto works} - \textbf{User}\\
+	\end{verse}
+	or,
+	\begin{verse}
+	\textit{Find the 3 artists, born between 1752 and 1772, who composed more works} - \textbf{User}\\
+	\end{verse}
+	or,
+	\begin{verse}
+	\textit{Find one artist, born between 1752 and 1772, who wrote more works for clarinet} - \textbf{User}\\
+	\end{verse}
+	and so on.\\\\
+	The query of the intent is the following:
+	\begin{lstlisting}
+	
+	SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count,
+	       SAMPLE(xsd:date(?d_date)) AS ?death_date,
+	       SAMPLE(?death_place) AS ?death_place,
+	       SAMPLE(xsd:date(?b_date)) AS ?birth_date,
+	       SAMPLE(?birth_place) AS ?birth_place
+	WHERE {
+	  ?composer foaf:name ?name .
+	  ?composer schema:deathDate ?d_date .
+	  ?composer dbpprop:deathPlace ?d_place .
+	  OPTIONAL { ?d_place rdfs:label ?death_place } .
+	  ?composer schema:birthDate ?b_date .
+	  ?composer dbpprop:birthPlace ?b_place .
+	  OPTIONAL { ?b_place rdfs:label ?birth_place } .
+	  ?exprCreation efrbroo:R17_created ?expr ;
+	    ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer .
+	  ?expr mus:U12_has_genre ?gen ;
+	    mus:U13_has_casting ?casting .
+	
+	  ------------- Genre
+	  VALUES(?gen) {
+	    (<http://data.doremus.org/vocabulary/iaml/genre/' <genre> '>)
+	  } .
+		
+	  ------------- Instrument
+	  ?casting mus:U23_has_casting_detail ?castingDetail .
+	  ?castingDetail mus:U2_foresees_use_of_medium_of_performance
+	                 / skos:exactMatch* ?instrument .
+	  VALUES(?instrument) {
+	    (<http://data.doremus.org/vocabulary/iaml/mop/' <instrument> '>)
+	  } .
+		
+	  ------------- Birth date
+	  FILTER ( ?b_date >= "' <startdate> '"^^xsd:date AND
+	           ?b_date <= "' <enddate> '"^^xsd:date ) .
+		
+	  ------------- Birth city
+	  FILTER ( contains(lcase(str(?birth_place)), "' <city> '") ) .
+		
+	}
+	GROUP BY ?composer
+	ORDER BY DESC(?count)
+	LIMIT ' <num> '
+	\end{lstlisting}
+	
 	\subsection{Finding some future and past performances}
 	The bot is also capable of giving the user some future and past performances and events. The place and the time period can be, of course, specified in the query. The query is the following:
 	\begin{lstlisting}
@@ -346,14 +409,14 @@
 	  ?actors rdfs:label ?actorsName .
 	  ?ts time:hasBeginning / time:inXSDDate ?time ;
  	    rdfs:label ?date .
-	  FILTER ( ?time >= "' + startdate + '"^^xsd:date AND
-	           ?time <= "' + enddate + '"^^xsd:date ) .
-	  FILTER ( contains(lcase(str(?placeName)), "' + city + '") )
+	  FILTER ( ?time >= "' <startdate> '"^^xsd:date AND
+	           ?time <= "' <enddate> '"^^xsd:date ) .
+	  FILTER ( contains(lcase(str(?placeName)), "' <city> '") )
 	}
 	ORDER BY rand()
-	LIMIT ' + number '
+	LIMIT ' <number> '
 	\end{lstlisting}
-	It's important to notice the \texttt{ecrm:P89_falls_within*} property. It selects not only the place where the event is foreseen, but also the places where that place is contained (so, for example, a city). And here there is an example:
+	It's important to notice the \texttt{ecrm:P89\_falls\_within*} property. It selects not only the place where the event is foreseen, but also the places where that place is contained (so, for example, a city). The "\texttt{*}" means, as usual, \textit{"one or more"}. And here there is an example:
 	\begin{verse}
 		\textit{Tell me one event in Paris!} - \textbf{User}\\
 		\textit{In which period?} - \textbf{Bot}\\
@@ -368,7 +431,7 @@
 	  xsd:date(?d_date) AS ?death_date, ?death_place,
 	  xsd:date(?b_date) AS ?birth_date, ?birth_place
 	WHERE {
-	  VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} .
+	  VALUES(?composer) {(<http://data.doremus.org/artist/' <artist> '>)} .
 	  ?composer rdfs:comment ?bio .
 	  ?composer foaf:depiction ?image .
 	  ?composer schema:deathDate ?d_date .
