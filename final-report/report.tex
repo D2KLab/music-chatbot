@@ -71,7 +71,7 @@
 		\caption{NLP, NLU, NLG and how Chatbots work.\cite{nlpnlunlg}}
 	\end{figure}
 	\begin{itemize}
-	\item \textit{NLP} is the biggest set between the three, because it's a term which indicates the capability of a software to ingest an input sentence, split it in pieces (entities), understand the entities and thei relationship, and give the an answer to the user.
+	\item \textit{NLP} is the biggest set between the three, because it's a term which indicates the capability of a software to ingest an input sentence, split it in pieces (entities), understand the entities and their relationship, and give the answer to the user.
 	
 	\item \textit{NLU} is a subset of \textit{NLP}. It deals with understanding a natural language input (totally or partially unstructured) and convert it into a structured form that the machine can process and understand. Is a small yet critical task to achieve.
 	
@@ -248,7 +248,8 @@
 	The \textbf{dynamic} query used for the works by artist intent is the following:
 	\begin{lstlisting}
 	
-	SELECT DISTINCT ?title, ?artist, year(?comp) AS ?year, ?genre, ?comment, ?key
+	SELECT DISTINCT ?expression, ?title, ?artist, ?year,
+	                ?genre, ?comment, ?key
 	WHERE {
 	
 		------------------------------------------------------------ STATIC SECTION
@@ -262,10 +263,11 @@
 		  ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer .
 		?composer foaf:name ?artist .
 		?gen skos:prefLabel ?genre .
-		?ts time:hasEnd / time:inXSDDate ?comp .
 		OPTIONAL {
-			?expression mus:U11_has_key ?k .
-			?k skos:prefLabel ?key
+		  ?ts time:hasEnd / time:inXSDDate ?comp .
+		  BIND (year(?comp) AS ?year) .
+		  ?expression mus:U11_has_key ?k .
+		  ?k skos:prefLabel ?key
 		} .
 		
 		------------------------------------------------------------ DYNAMIC SECTION
@@ -331,13 +333,14 @@
 	The bot is also capable of giving the user some future and past performances and events. The place and the time period can be, of course, specified in the query. The query is the following:
 	\begin{lstlisting}
 	
-	SELECT ?title, ?subtitle, ?actorsName, ?placeName, ?date
+	SELECT DISTINCT ?performance, ?title, ?subtitle,
+	                ?actorsName, ?placeName, ?date
 	WHERE {
 	  ?performance a mus:M26_Foreseen_Performance ;
 	    ecrm:P102_has_title ?title ;
 	    ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ;
 	    mus:U67_has_subtitle ?subtitle ;
-	    mus:U7_foresees_place_at ?place ;
+	    mus:U7_foresees_place_at / ecrm:P89_falls_within* ?place ;
 	    mus:U8_foresees_time_span ?ts .
 	  ?place rdfs:label ?placeName .
 	  ?actors rdfs:label ?actorsName .
@@ -350,7 +353,7 @@
 	ORDER BY rand()
 	LIMIT ' + number '
 	\end{lstlisting}
-	And here there is an example:
+	It's important to notice the \texttt{ecrm:P89_falls_within*} property. It selects not only the place where the event is foreseen, but also the places where that place is contained (so, for example, a city). And here there is an example:
 	\begin{verse}
 		\textit{Tell me one event in Paris!} - \textbf{User}\\
 		\textit{In which period?} - \textbf{Bot}\\
@@ -361,8 +364,9 @@
 	The query is the following:
 	\begin{lstlisting}
 	
-	SELECT DISTINCT ?composer, ?name, ?bio, xsd:date(?d_date) as ?death_date,
-	                ?death_place, xsd:date(?b_date) as ?birth_date, ?birth_place, ?image
+	SELECT DISTINCT ?composer, ?name, ?bio, ?image,
+	  xsd:date(?d_date) AS ?death_date, ?death_place,
+	  xsd:date(?b_date) AS ?birth_date, ?birth_place
 	WHERE {
 	  VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} .
 	  ?composer rdfs:comment ?bio .
