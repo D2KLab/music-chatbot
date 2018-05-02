@@ -357,6 +357,73 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 }
 /*******************************************************************************/
 
+
+/*******************************************************************************/
+function doQueryFindArtist(number, city, startdate, enddate, bot, message) {
+  
+  // JSON QUERY  
+  var newQuery = 'SELECT DISTINCT ?performance, \
+                  ?title, \
+                  ?subtitle, \
+                  ?actorsName, \
+                  ?placeName, \
+                  ?date \
+                  WHERE { \
+                    ?performance a mus:M26_Foreseen_Performance ; \
+                      ecrm:P102_has_title ?title ; \
+                      ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
+                      mus:U67_has_subtitle ?subtitle ; \
+                      mus:U7_foresees_place_at / ecrm:P89_falls_within* ?place ; \
+                      mus:U8_foresees_time_span ?ts . \
+                    ?place rdfs:label ?placeName . \
+                    ?actors rdfs:label ?actorsName . \
+                    ?ts time:hasBeginning / time:inXSDDate ?time ; \
+                       rdfs:label ?date . \
+                    FILTER ( ?time >= "' + startdate + '"^^xsd:date AND ?time <= "' + enddate + '"^^xsd:date ) .'
+  
+  if (city !== "") {
+    newQuery += 'FILTER ( contains(lcase(str(?placeName)), "' + city + '") )'
+  }
+  
+  newQuery += '} \
+               ORDER BY rand() \
+               LIMIT ' + number
+  
+  // -> Finalize the query
+  var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
+  var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
+  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
+  
+  // -> Do the HTTP request
+  const request = require('request');
+  request(finalQuery, (err, res, body) => {
+
+    if (err) { return console.log(err); }
+
+    // JSON PARSING
+    var json = JSON.parse(body)
+
+    // RESPONSE
+    if (json["results"]["bindings"].length === 0) {
+      
+      bot.reply(message, "Sorry... I didn't find anything!");
+    }
+    else {
+      var resp = "This is the list:\n";
+      json["results"]["bindings"].forEach(function(row) {
+        var title = row["title"]["value"];
+        var subtitle = row["subtitle"]["value"];
+        var placeName = row["placeName"]["value"];
+        var actorsName = row["actorsName"]["value"];
+        var date = row["date"]["value"];
+        bot.reply(message, getPerformanceCard(title, subtitle, placeName, actorsName, date));
+      });
+    }
+  });
+}
+/*******************************************************************************/
+
+
 /*******************************************************************************/
 var answerBio = function(bot, message, artist) {
   
