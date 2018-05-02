@@ -73,6 +73,46 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 }
 /*******************************************************************************/
 
+/*******************************************************************************/
+var getArtistCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
+
+  var artistAttachment = {
+    "attachments": [{
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "title" : fullname,
+        "fields": [
+            {
+                "title": "Born in",
+                "value": birthPlace,
+                "short": true
+            },
+            {
+                "title": "Birthdate",
+                "value": birthDate,
+                "short": true
+            },
+            {
+                "title": "Dead in",
+                "value": deathPlace,
+                "short": true
+            },
+            {
+                "title": "Death date",
+                "value": deathDate,
+                "short": true
+            },
+            {
+                "title": "Number of works",
+                "value": count,
+                "short": true
+            }
+        ],
+        "color": "good"
+    }]
+  }
+  return artistAttachment;
+}
+/*******************************************************************************/
 
 /*******************************************************************************/
 var getWorkCard = function(title, artist, year, genre, comment, key) {
@@ -359,35 +399,10 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 
 
 /*******************************************************************************/
-function doQueryFindArtist(number, city, startdate, enddate, bot, message) {
+function doQueryFindArtist(num, startdate, enddate, country, instrument, genre, bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT DISTINCT ?performance, \
-                  ?title, \
-                  ?subtitle, \
-                  ?actorsName, \
-                  ?placeName, \
-                  ?date \
-                  WHERE { \
-                    ?performance a mus:M26_Foreseen_Performance ; \
-                      ecrm:P102_has_title ?title ; \
-                      ecrm:P69_has_association_with / mus:U6_foresees_actor ?actors ; \
-                      mus:U67_has_subtitle ?subtitle ; \
-                      mus:U7_foresees_place_at / ecrm:P89_falls_within* ?place ; \
-                      mus:U8_foresees_time_span ?ts . \
-                    ?place rdfs:label ?placeName . \
-                    ?actors rdfs:label ?actorsName . \
-                    ?ts time:hasBeginning / time:inXSDDate ?time ; \
-                       rdfs:label ?date . \
-                    FILTER ( ?time >= "' + startdate + '"^^xsd:date AND ?time <= "' + enddate + '"^^xsd:date ) .'
-  
-  if (city !== "") {
-    newQuery += 'FILTER ( contains(lcase(str(?placeName)), "' + city + '") )'
-  }
-  
-  newQuery += '} \
-               ORDER BY rand() \
-               LIMIT ' + number
+  var newQuery = ''
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
@@ -464,9 +479,9 @@ var answerBio = function(bot, message, artist) {
       // RESPONSE
       var name = "";
       var bio = "";
-      var birthPlace = "";
+      var birthPlace = "-";
       var birthDate = "";
-      var deathPlace = "";
+      var deathPlace = "-";
       var deathDate = "";
       var image = ""
 
@@ -500,3 +515,4 @@ exports.getWorkCard = getWorkCard;
 exports.doQuery = doQuery;
 exports.doQueryPerformance = doQueryPerformance;
 exports.answerBio = answerBio;
+exports.doQueryFindArtist = doQueryFindArtist;

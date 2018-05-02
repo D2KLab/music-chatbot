@@ -18,7 +18,7 @@ var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
-var SpellChecker = botvars.SpellChecker
+var SpellChecker = botvars.SpellChecker;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -26,6 +26,7 @@ var doQuery = botfunctions.doQuery;
 var doQueryPerformance = botfunctions.doQueryPerformance;
 var sendClearContext = botfunctions.sendClearContext;
 var answerBio = botfunctions.answerBio;
+var doQueryFindArtist = botfunctions.doQueryFindArtist;
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -192,6 +193,9 @@ slackController.hears(['find-artist'], 'direct_message, direct_mention, mention'
     // GET ENTITIES
     var date = message.entities["date-period"];
     var number = message.entities["number"];
+    var place = message.entities["geo-country"];
+    var instrument = message.entities["doremus-instrument"];
+    var genre = message.entities["doremus-genre"];
   
     // PARSE ENTITIES
     var startdate = "";
@@ -206,8 +210,13 @@ slackController.hears(['find-artist'], 'direct_message, direct_mention, mention'
       num = parseInt(number);
     }
   
+    var country = "";
+    if (place !== "") {
+      country = place.toLowerCase();
+    } 
+  
     // SEND THE BIO TO THE USER
-    doQueryFindArtist();
+    doQueryFindArtist(num, startdate, enddate, country, instrument, genre, bot, message);
 });
 
 
