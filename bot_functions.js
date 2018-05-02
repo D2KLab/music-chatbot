@@ -414,25 +414,28 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
                     ?composer schema:birthDate ?b_date . \
                     ?composer dbpprop:birthPlace ?b_place . \
                     OPTIONAL { ?b_place rdfs:label ?birth_place } . \
-
                     ?exprCreation efrbroo:R17_created ?expr ; \
                       ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
                     ?expr mus:U12_has_genre ?gen ; \
                       mus:U13_has_casting ?casting .'
 
-  VALUES(?gen) {
-     (<http://data.doremus.org/vocabulary/iaml/genre/sn>)
+  if (genre !== "") {
+    newQuery += 'VALUES(?gen) { \
+                   (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
+                 }'
   }
-
-  ?casting mus:U23_has_casting_detail ?castingDetail .
-  ?castingDetail mus:U2_foresees_use_of_medium_of_performance
-		 / skos:exactMatch* ?instrument .
-
-  VALUES(?instrument) {
-    (<http://data.doremus.org/vocabulary/iaml/mop/wcl>)
+  
+  if (instrument !== "") {
+    newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
+                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance \
+		                            / skos:exactMatch* ?instrument . \
+                 VALUES(?instrument) { \
+                   (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
+                 }'
   }
-
-  FILTER ( ?b_date >= "1740-01-01"^^xsd:date AND ?b_date <= "1780-12-31"^^xsd:date )
+  
+  
+  FILTER ( ?b_date >= "1740-01-01"^^xsd:date)?b_date <= "1780-12-31"^^xsd:date )
   FILTER ( contains(lcase(str(?birth_place)), "lausanne") )
 }
 GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place
