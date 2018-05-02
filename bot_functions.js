@@ -402,10 +402,9 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT DISTINCT ?composer, \
-                    ?name, (count(distinct ?expr) AS ?count), \
-                    xsd:date(?d_date) AS ?death_date, ?death_place, \
-                    xsd:date(?b_date) AS ?birth_date, ?birth_place \
+  var newQuery = 'SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count, \
+                    SAMPLE(xsd:date(?d_date)) AS ?death_date, SAMPLE(?death_place) AS ?death_place, \
+                    SAMPLE(xsd:date(?b_date)) AS ?birth_date, SAMPLE(?birth_place) AS ?birth_place \
                   WHERE { \
                     ?composer foaf:name ?name . \
                     ?composer schema:deathDate ?d_date . \
@@ -435,7 +434,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
   }
   
   if (startdate !== "" && enddate !== "") {
-    newQuery += 'FILTER ( ?b_date >= "' + startdate + '"^^xsd:date) AND ?b_date <= "' + enddate + '"^^xsd:date ) .'
+    newQuery += 'FILTER ( ?b_date >= "' + startdate + '"^^xsd:date AND ?b_date <= "' + enddate + '"^^xsd:date ) .'
   }
   
   if (city !== "") {
@@ -443,7 +442,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
   }
 
   newQuery += '} \
-               GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place \
+               GROUP BY ?composer \
                ORDER BY DESC(?count) \
                LIMIT ' + num
   
