@@ -158,7 +158,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?title, ?artist, year(?comp) as ?year, ?genre, ?comment, ?key \
+  var newQuery = 'SELECT DISTINCT ?title, sql:BEST_LANGMATCH(?artist, "en", "en") AS ?artist, year(?comp) as ?year, ?genre, ?comment, ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
