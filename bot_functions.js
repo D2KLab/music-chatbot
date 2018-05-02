@@ -73,6 +73,46 @@ var getBioCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate
 }
 /*******************************************************************************/
 
+/*******************************************************************************/
+var getArtistCard = function(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
+
+  var artistAttachment = {
+    "attachments": [{
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "title" : fullname,
+        "fields": [
+            {
+                "title": "Born in",
+                "value": birthPlace,
+                "short": true
+            },
+            {
+                "title": "Birthdate",
+                "value": birthDate,
+                "short": true
+            },
+            {
+                "title": "Dead in",
+                "value": deathPlace,
+                "short": true
+            },
+            {
+                "title": "Death date",
+                "value": deathDate,
+                "short": true
+            },
+            {
+                "title": "Number of works",
+                "value": count,
+                "short": true
+            }
+        ],
+        "color": "good"
+    }]
+  }
+  return artistAttachment;
+}
+/*******************************************************************************/
 
 /*******************************************************************************/
 var getWorkCard = function(title, artist, year, genre, comment, key) {
@@ -158,13 +198,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?expression, \
-    sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
-    sql:BEST_LANGMATCH(?artist,"en","en") AS ?artist, \
-    year(?comp) as ?year, \
-    sql:BEST_LANGMATCH(?genre,"en","en") AS ?genre, \
-    sql:BEST_LANGMATCH(?comment,"en","en") AS ?comment, \
-    sql:BEST_LANGMATCH(?key,"en","en") AS ?key \
+  var newQuery = 'SELECT DISTINCT ?expression, ?title, ?artist, ?year, ?genre, ?comment, ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -176,8 +210,9 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       ?composer foaf:name ?artist . \
       ?gen skos:prefLabel ?genre . \
-      ?ts time:hasEnd / time:inXSDDate ?comp . \
       OPTIONAL { \
+        ?ts time:hasEnd / time:inXSDDate ?comp . \
+        BIND (year(?comp) AS ?year) . \
         ?expression mus:U11_has_key ?k . \
         ?k skos:prefLabel ?key \
       } . '
@@ -302,11 +337,11 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT DISTINCT ?performance, \
-                  sql:BEST_LANGMATCH(?title,"en","en") AS ?title, \
-                  sql:BEST_LANGMATCH(?subtitle,"en","en") AS ?subtitle, \
-                  sql:BEST_LANGMATCH(?actorsName,"en","en") AS ?actorsName, \
-                  sql:BEST_LANGMATCH(?placeName,"en","en") AS ?placeName, \
-                  ?date \
+                    ?title, \
+                    ?subtitle, \
+                    ?actorsName, \
+                    ?placeName, \
+                    ?date \
                   WHERE { \
                     ?performance a mus:M26_Foreseen_Performance ; \
                       ecrm:P102_has_title ?title ; \
@@ -362,18 +397,105 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 }
 /*******************************************************************************/
 
+
+/*******************************************************************************/
+function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
+  
+  // JSON QUERY  
+  var newQuery = 'SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count, \
+                    SAMPLE(xsd:date(?d_date)) AS ?death_date, SAMPLE(?death_place) AS ?death_place, \
+                    SAMPLE(xsd:date(?b_date)) AS ?birth_date, SAMPLE(?birth_place) AS ?birth_place \
+                  WHERE { \
+                    ?composer foaf:name ?name . \
+                    ?composer schema:deathDate ?d_date . \
+                    ?composer dbpprop:deathPlace ?d_place . \
+                    OPTIONAL { ?d_place rdfs:label ?death_place } . \
+                    ?composer schema:birthDate ?b_date . \
+                    ?composer dbpprop:birthPlace ?b_place . \
+                    OPTIONAL { ?b_place rdfs:label ?birth_place } . \
+                    ?exprCreation efrbroo:R17_created ?expr ; \
+                      ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+                    ?expr mus:U12_has_genre ?gen ; \
+                      mus:U13_has_casting ?casting .'
+
+  if (genre !== "") {
+    newQuery += 'VALUES(?gen) { \
+                   (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
+                 } .'
+  }
+  
+  if (instrument !== "") {
+    newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
+                 ?castingDetail mus:U2_foresees_use_of_medium_of_performance \
+		                            / skos:exactMatch* ?instrument . \
+                 VALUES(?instrument) { \
+                   (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
+                 } .'
+  }
+  
+  if (startdate !== "" && enddate !== "") {
+    newQuery += 'FILTER ( ?b_date >= "' + startdate + '"^^xsd:date AND ?b_date <= "' + enddate + '"^^xsd:date ) .'
+  }
+  
+  if (city !== "") {
+    newQuery += 'FILTER ( contains(lcase(str(?birth_place)), "' + city + '") ) .'
+  }
+
+  newQuery += '} \
+               GROUP BY ?composer \
+               ORDER BY DESC(?count) \
+               LIMIT ' + num
+  
+  // -> Finalize the query
+  var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
+  var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
+  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
+  
+  // -> Do the HTTP request
+  const request = require('request');
+  request(finalQuery, (err, res, body) => {
+
+    if (err) { return console.log(err); }
+
+    // JSON PARSING
+    var json = JSON.parse(body)
+
+    // RESPONSE
+    if (json["results"]["bindings"].length === 0) {
+      
+      bot.reply(message, "Sorry... I didn't find anything!");
+    }
+    else {
+      var resp = "This is the list:\n";
+      json["results"]["bindings"].forEach(function(row) {
+        
+        var name = row["name"]["value"];
+        var birthPlace = row["birth_place"] !== undefined ? row["birth_place"]["value"]: '-';
+        var birthDate = row["birth_date"]["value"];
+        var deathPlace = row["death_place"] !== undefined ? row["death_place"]["value"]: '-';
+        var deathDate = row["death_date"]["value"];
+        var count = row["count"]["value"];
+        
+        // CREATE ATTACHMENT
+        var attachment = getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
+        bot.reply(message, attachment);
+      });
+    }
+  });
+}
+/*******************************************************************************/
+
+
 /*******************************************************************************/
 var answerBio = function(bot, message, artist) {
   
-    // var query = "http://data.doremus.org/sparql?default-graph-uri=&query=SELECT+DISTINCT+%3Fcomposer%2C+%3Fname%2C+%3Fbio%2C+xsd%3Adate%28%3Fd_date%29+as+%3Fdeath_date%2C+%3Fdeath_place%2C+xsd%3Adate%28%3Fb_date%29+as+%3Fbirth_date%2C+%3Fbirth_place%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++VALUES%28%3Fcomposer%29+%7B%28%3Chttp%3A%2F%2Fdata.doremus.org%2Fartist%2F" + artist +"%3E%29%7D+.%0D%0A++%3Fcomposer+foaf%3Aname+%3Fname+.%0D%0A++%3Fcomposer+rdfs%3Acomment+%3Fbio+.%0D%0A++%3Fcomposer+foaf%3Adepiction+%3Fimage+.%0D%0A++%3Fcomposer+schema%3AdeathDate+%3Fd_date+.%0D%0A++%3Fcomposer+dbpprop%3AdeathPlace+%3Fd_place+.%0D%0A++OPTIONAL+%7B+%3Fd_place+rdfs%3Alabel+%3Fdeath_place+%7D+.%0D%0A++%3Fcomposer+schema%3AbirthDate+%3Fb_date+.%0D%0A++%3Fcomposer+dbpprop%3AbirthPlace+%3Fb_place++.%0D%0A++OPTIONAL+%7B+%3Fb_place+rdfs%3Alabel+%3Fbirth_place+%7D+.%0D%0A++FILTER+%28lang%28%3Fbio%29+%3D+%27en%27%29%0D%0A%7D&format=json"
-
     var newQuery = 'SELECT DISTINCT ?composer, \
-                    sql:BEST_LANGMATCH(?name,"en","en") AS ?name, \
-                    sql:BEST_LANGMATCH(?bio,"en","en") AS ?bio, \
+                    ?name, \
+                    ?bio, \
                     xsd:date(?d_date) AS ?death_date, \
-                    sql:BEST_LANGMATCH(?death_place,"en","en") AS ?death_place, \
+                    ?death_place, \
                     xsd:date(?b_date) AS ?birth_date, \
-                    sql:BEST_LANGMATCH(?birth_place,"en","en") AS ?birth_place, \
+                    ?birth_place, \
                     ?image \
                     WHERE { \
                       VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} . \
@@ -404,9 +526,9 @@ var answerBio = function(bot, message, artist) {
       // RESPONSE
       var name = "";
       var bio = "";
-      var birthPlace = "";
+      var birthPlace = "-";
       var birthDate = "";
-      var deathPlace = "";
+      var deathPlace = "-";
       var deathDate = "";
       var image = ""
 
@@ -440,3 +562,4 @@ exports.getWorkCard = getWorkCard;
 exports.doQuery = doQuery;
 exports.doQueryPerformance = doQueryPerformance;
 exports.answerBio = answerBio;
+exports.doQueryFindArtist = doQueryFindArtist;

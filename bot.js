@@ -18,7 +18,7 @@ var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
-var SpellChecker = botvars.SpellChecker
+var SpellChecker = botvars.SpellChecker;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -26,6 +26,7 @@ var doQuery = botfunctions.doQuery;
 var doQueryPerformance = botfunctions.doQueryPerformance;
 var sendClearContext = botfunctions.sendClearContext;
 var answerBio = botfunctions.answerBio;
+var doQueryFindArtist = botfunctions.doQueryFindArtist;
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -68,7 +69,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
-  next()
+  next();
   return;
 });
 
@@ -78,7 +79,8 @@ slackBot.startRTM();
 
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-      
+  
+
   // GET PARAMETERS
   var parameters = {
    artist: message.entities["doremus-artist"],
@@ -93,7 +95,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   
   // COUNT OF THE FILTER SET BY THE USER
   var filterCounter = 0;
-  for(var key in parameters) {
+  for (var key in parameters) {
     if (parameters[key] != "") filterCounter++; 
   }
   
@@ -180,8 +182,41 @@ slackController.hears(['works-by - no'], 'direct_message, direct_mention, mentio
 
 // WORKS-BY-SOMETHING INTENT
 slackController.hears(['works-by-artist','works-by-instrument','works-by-genre','works-by-years'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-   
+
   bot.reply(message, message['fulfillment']['speech']);
+});
+
+
+// DISCOVER ARTIST
+slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
+    
+    // GET ENTITIES
+    var date = message.entities["date-period"];
+    var number = message.entities["number"];
+    var place = message.entities["geo-city"];
+    var instrument = message.entities["doremus-instrument"];
+    var genre = message.entities["doremus-genre"];
+  
+    // PARSE ENTITIES
+    var startdate = "";
+    var enddate = "";
+    if (date !== "") {
+      startdate = date.split("/")[0];
+      enddate = date.split("/")[1];
+    }
+  
+    var num = 5;
+    if (number !== "") {
+      num = parseInt(number);
+    }
+  
+    var city = "";
+    if (place !== "") {
+      city = place.toLowerCase();
+    } 
+  
+    // SEND THE BIO TO THE USER
+    doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
 });
 
 
