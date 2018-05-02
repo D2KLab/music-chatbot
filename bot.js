@@ -56,8 +56,10 @@ slackController.middleware.receive.use((bot, message, next) => {
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
   for (var i = 0; i < words.length; i++) {
+    console.log("---", words[i]);
     if (SpellChecker.isMisspelled(words[i])) {
       var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
+      console.log("---", corrections);
       if (corrections.length > 0) {
         messageMisspelledFree += corrections[0] + ' ';
       } else {
