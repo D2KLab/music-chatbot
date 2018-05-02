@@ -426,12 +426,17 @@ function doQueryFindArtist(num, startdate, enddate, country, instrument, genre, 
     else {
       var resp = "This is the list:\n";
       json["results"]["bindings"].forEach(function(row) {
-        var title = row["title"]["value"];
-        var subtitle = row["subtitle"]["value"];
-        var placeName = row["placeName"]["value"];
-        var actorsName = row["actorsName"]["value"];
-        var date = row["date"]["value"];
-        bot.reply(message, getPerformanceCard(title, subtitle, placeName, actorsName, date));
+        
+        var name = row["name"]["value"];
+        var birthPlace = row["birth_place"] !== undefined ? row["birth_place"]["value"]: '-';
+        var birthDate = row["birth_date"]["value"];
+        var deathPlace = row["death_place"] !== undefined ? row["death_place"]["value"]: '-';
+        var deathDate = row["death_date"]["value"];
+        var count = row["count"]["value"];
+        
+        // CREATE ATTACHMENT
+        var attachment = getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
+        bot.reply(message, attachment);
       });
     }
   });
