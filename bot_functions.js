@@ -399,7 +399,7 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 
 
 /*******************************************************************************/
-function doQueryFindArtist(num, startdate, enddate, country, instrument, genre, bot, message) {
+function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
   
   // JSON QUERY  
   var newQuery = ''

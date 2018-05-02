@@ -193,7 +193,7 @@ slackController.hears(['find-artist'], 'direct_message, direct_mention, mention'
     // GET ENTITIES
     var date = message.entities["date-period"];
     var number = message.entities["number"];
-    var place = message.entities["geo-country"];
+    var place = message.entities["geo-city"];
     var instrument = message.entities["doremus-instrument"];
     var genre = message.entities["doremus-genre"];
   
@@ -210,13 +210,13 @@ slackController.hears(['find-artist'], 'direct_message, direct_mention, mention'
       num = parseInt(number);
     }
   
-    var country = "";
+    var city = "";
     if (place !== "") {
-      country = place.toLowerCase();
+      city = place.toLowerCase();
     } 
   
     // SEND THE BIO TO THE USER
-    doQueryFindArtist(num, startdate, enddate, country, instrument, genre, bot, message);
+    doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
 });
 
 
