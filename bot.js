@@ -18,6 +18,7 @@ var botvars = require("./bot_vars.js");
 var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
+var SpellChecker = botvars.SpellChecker
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -40,6 +41,37 @@ if (!process.env.dialogflow) {
 
 
 // INITs
+slackController.middleware.receive.use((bot, message, next) => {
+  if (!message.text) {
+    next();
+    return;
+  }
+
+  if (message.is_echo || message.type === 'self_message') {
+    next();
+    return;
+  }
+
+  //apply spell checking for each word of the text before sending dialogflow
+  var messageMisspelledFree = "";
+  var words = message.text.split(" ");
+  for (var i = 0; i < words.length; i++) {
+    if (SpellChecker.isMisspelled(words[i])) {
+      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
+      if (corrections.length > 0) {
+        messageMisspelledFree += corrections[0] + ' ';
+      } else {
+        messageMisspelledFree += words[i] + ' ';
+      }
+    } else {
+      messageMisspelledFree += words[i] + ' ';
+    }
+  }
+  message.text = messageMisspelledFree;
+  next()
+  return;
+});
+
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
 
@@ -48,23 +80,33 @@ slackBot.startRTM();
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
       
   // GET PARAMETERS
-  var artist = message.entities["doremus-artist"];
-  var prevArtist = message.entities["doremus-artist-prev"];
-  var number = message.entities["number"];
-  var instruments = message.entities["doremus-instrument"];
-  var strictly = message.entities["doremus-strictly"];
-  var year = message.entities["date-period"];
-  var genre = message.entities["doremus-genre"];
+  var parameters = {
+   artist: message.entities["doremus-artist"],
+   prevArtist: message.entities["doremus-artist-prev"],
+   number: message.entities["number"],
+   instruments: message.entities["doremus-instrument"],
+   strictly: message.entities["doremus-strictly"],
+   year: message.entities["date-period"],
+   genre: message.entities["doremus-genre"]
+  }
+  
+  
+  // COUNT OF THE FILTER SET BY THE USER
+  var filterCounter = 0;
+  for(var key in parameters) {
+    if (parameters[key] != "") filterCounter++; 
+  }
+  
   
   // CHECK IF THE MAX AMOUNT OF FILTERS IS APPLIED
-  if (instruments.length > 0) {
+  if (filterCounter > 2) {
 
     // YEAR CHECK AND PARSING
     var startyear = null;
     var endyear = null;
-    if (year !== "") {
-      startyear = parseInt(year.split("/")[0]);
-      endyear = parseInt(year.split("/")[1]);
+    if (parameters.year !== "") {
+      startyear = parseInt(parameters.year.split("/")[0]);
+      endyear = parseInt(parameters.year.split("/")[1]);
 
       // SWAP IF PROVIDED IN THE INVERSE ORDER
       if (startyear > endyear) {
@@ -75,12 +117,13 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     }
 
     // ARTIST PARSING
-    if (artist === "" && prevArtist !== "") {
-      artist = prevArtist;
+    if (parameters.artist === "" && parameters.prevArtist !== "") {
+      parameters.artist = parameters.prevArtist;
     }
 
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
+    doQuery(parameters.artist, parameters.number, parameters.instruments, 
+            parameters.strictly, startyear, endyear, parameters.genre, bot, message);
   }
   else {
     
