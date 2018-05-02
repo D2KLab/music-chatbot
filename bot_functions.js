@@ -158,7 +158,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?expression, sql:BEST_LANGMATCH(?title, "en, en-gb;q=0.8, fr=0.6; *;q=0.1", "en") as ?title, sql:BEST_LANGMATCH(?artist, "en", "en") AS ?artist, year(?comp) as ?year, sql:BEST_LANGMATCH(?genre,"en","en") AS ?genre, ?comment, sql:BEST_LANGMATCH(?key,"en","en") AS ?key \
+  var newQuery = 'SELECT DISTINCT ?expression, ?title, ?artist, ?year, ?genre, ?comment, ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -170,8 +170,9 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
         ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
       ?composer foaf:name ?artist . \
       ?gen skos:prefLabel ?genre . \
-      ?ts time:hasEnd / time:inXSDDate ?comp . \
       OPTIONAL { \
+        ?ts time:hasEnd / time:inXSDDate ?comp . \
+        BIND (year(?comp) AS ?year) . \
         ?expression mus:U11_has_key ?k . \
         ?k skos:prefLabel ?key \
       } . '
