@@ -422,7 +422,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
   if (genre !== "") {
     newQuery += 'VALUES(?gen) { \
                    (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
-                 }'
+                 } .'
   }
   
   if (instrument !== "") {
@@ -431,16 +431,20 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
 		                            / skos:exactMatch* ?instrument . \
                  VALUES(?instrument) { \
                    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
-                 }'
+                 } .'
   }
   
+  if (startdate !== "" && enddate !== "") {
+    newQuery += 'FILTER ( ?b_date >= "' + startdate + '"^^xsd:date) AND ?b_date <= "' + enddate + '"^^xsd:date ) .'
+  }
   
-  FILTER ( ?b_date >= "1740-01-01"^^xsd:date)?b_date <= "1780-12-31"^^xsd:date )
-  FILTER ( contains(lcase(str(?birth_place)), "lausanne") )
-}
-GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place
-ORDER BY DESC(?count)
-LIMIT 5'
+  if (city !== "") {
+    newQuery += 'FILTER ( contains(lcase(str(?birth_place)), "' + city + '") ) .'
+  }
+
+  newQuery += 'GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place \
+               ORDER BY DESC(?count) \
+               LIMIT ' + num
   
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
