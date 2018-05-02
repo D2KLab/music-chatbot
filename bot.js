@@ -68,6 +68,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
+  console.log("---", messageMisspelledFree);
   next()
   return;
 });
@@ -78,7 +79,8 @@ slackBot.startRTM();
 
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
-      
+  
+  console.log(message);
   // GET PARAMETERS
   var parameters = {
    artist: message.entities["doremus-artist"],
