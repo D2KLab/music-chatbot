@@ -403,7 +403,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
   
   // JSON QUERY  
   var newQuery = 'SELECT DISTINCT ?composer, \
-                    ?name, (count(?expr) AS ?count), \
+                    ?name, (count(distinct ?expr) AS ?count), \
                     xsd:date(?d_date) AS ?death_date, ?death_place, \
                     xsd:date(?b_date) AS ?birth_date, ?birth_place \
                   WHERE { \
@@ -442,7 +442,8 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
     newQuery += 'FILTER ( contains(lcase(str(?birth_place)), "' + city + '") ) .'
   }
 
-  newQuery += 'GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place \
+  newQuery += '} \
+               GROUP BY ?composer ?name ?d_date ?death_place ?b_date ?birth_place \
                ORDER BY DESC(?count) \
                LIMIT ' + num
   
