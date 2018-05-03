@@ -111,16 +111,13 @@ fbController.middleware.receive.use((bot, message, next) => {
 
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
-fbController.hears('(.*)', 'facebook_postback', function(bot, message) {
-        if (message.text) {
-            console.log(message)
-        }
+fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
+    bot.reply(message, "Ma che davero?");
 });
 
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
   
-
   // GET PARAMETERS
   var parameters = {
    artist: message.entities["doremus-artist"],
