@@ -1,8 +1,5 @@
 // LOAD VARIABLES AND FUNCTIONS
-var botvars = require("./bot_vars.js");
 var slackCards = require("./slack_cards.js");
-var slackBot = botvars.slackBot;
-
 
 // FUNCTIONS
 /*******************************************************************************/
