@@ -248,8 +248,9 @@
 	The \textbf{dynamic} query used for the works by artist intent is the following:
 	\begin{lstlisting}
 	
-	SELECT DISTINCT ?expression, ?title, ?artist, ?year,
-	                ?genre, ?comment, ?key
+	SELECT SAMPLE(?title) AS ?title, SAMPLE(?artist) AS ?artist,
+	       SAMPLE(?year) AS ?year, SAMPLE(?genre) AS ?genre,
+	       SAMPLE(?comment) AS ?comment, SAMPLE(?key) AS ?key
 	WHERE {
 	
 		------------------------------------------------------------ STATIC SECTION
@@ -294,6 +295,7 @@
 		FILTER (?comp >= "' <yearstart> '"^^xsd:gYear AND
 		        ?comp <= "' <yearend> '"^^xsd:gYear)
 	}
+	GROUP BY ?expression
 	ORDER BY rand()
 	LIMIT ' <num> '
 	\end{lstlisting}
@@ -396,8 +398,9 @@
 	The bot is also capable of giving the user some future and past performances and events. The place and the time period can be, of course, specified in the query. The query is the following:
 	\begin{lstlisting}
 	
-	SELECT DISTINCT ?performance, ?title, ?subtitle,
-	                ?actorsName, ?placeName, ?date
+	SELECT SAMPLE(?title) AS ?title, SAMPLE(?subtitle) AS ?subtitle,
+	       SAMPLE(?actorsName) AS ?actorsName,
+	       SAMPLE(?placeName) AS ?placeName, SAMPLE(?date) AS ?date
 	WHERE {
 	  ?performance a mus:M26_Foreseen_Performance ;
 	    ecrm:P102_has_title ?title ;
@@ -413,6 +416,7 @@
 	           ?time <= "' <enddate> '"^^xsd:date ) .
 	  FILTER ( contains(lcase(str(?placeName)), "' <city> '") )
 	}
+	GROUP BY ?performance
 	ORDER BY rand()
 	LIMIT ' <number> '
 	\end{lstlisting}
@@ -427,19 +431,19 @@
 	The query is the following:
 	\begin{lstlisting}
 	
-	SELECT DISTINCT ?composer, ?name, ?bio, ?image,
-	  xsd:date(?d_date) AS ?death_date, ?death_place,
-	  xsd:date(?b_date) AS ?birth_date, ?birth_place
+	SELECT ?name, ?bio, ?image,
+	       xsd:date(?d_date) AS ?death_date, ?death_place,
+	       xsd:date(?b_date) AS ?birth_date, ?birth_place
 	WHERE {
 	  VALUES(?composer) {(<http://data.doremus.org/artist/' <artist> '>)} .
-	  ?composer rdfs:comment ?bio .
-	  ?composer foaf:depiction ?image .
-	  ?composer schema:deathDate ?d_date .
-	  ?composer foaf:name ?name .
-	  ?composer dbpprop:deathPlace ?d_place .
+	  ?composer rdfs:comment ?bio ;
+	    foaf:depiction ?image ;
+	    schema:deathDate ?d_date ;
+	    foaf:name ?name ;
+	    dbpprop:deathPlace ?d_place ;
+	    schema:birthDate ?b_date ;
+	    dbpprop:birthPlace ?b_place .
 	  OPTIONAL { ?d_place rdfs:label ?death_place } .
-	  ?composer schema:birthDate ?b_date .
-	  ?composer dbpprop:birthPlace ?b_place .
 	  OPTIONAL { ?b_place rdfs:label ?birth_place } .
 	  FILTER (lang(?bio) = "en")
 	}
