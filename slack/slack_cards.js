@@ -1,3 +1,5 @@
+/* SLACK CARDS */
+
 /*******************************************************************************/
 module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]

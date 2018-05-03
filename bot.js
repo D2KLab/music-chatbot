@@ -14,6 +14,7 @@ Authors:
 Supported platforms:
   - Slack
   - Facebook Messenger
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // VARIABLES DECLARATION
