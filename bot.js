@@ -15,6 +15,7 @@ Authors:
 
 // LOAD VARIABLES
 var botVars = require("./bot_vars.js");
+var botFunctions = require("./bot_functions.js");
 var slackController = botVars.slackController;
 var dialogflowMiddleware = botVars.dialogflowMiddleware;
 var slackBot = botVars.slackBot;
@@ -26,13 +27,18 @@ var botfunctions = require("./bot_functions.js");
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
-    console.log('Error: Specify token in environment');
+    console.log('Error! Specify Slack token in environment');
     process.exit(1);
 }
 
 if (!process.env.dialogflow) {
-    console.log('Error: Specify dialogflow in environment');
+    console.log('Error! Specify Dialogflow token in environment');
     process.exit(1);
+}
+
+if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbAppSecret) {
+  console.log('Error! Specify Facebook tokens in environment');
+  process.exit(1);
 }
 
 
@@ -155,7 +161,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     }
 
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQuery(parameters.artist, parameters.number, parameters.instruments, 
+    botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments, 
             parameters.strictly, startyear, endyear, parameters.genre, bot, message);
   }
   else {
@@ -206,7 +212,7 @@ slackController.hears(['works-by - no'], 'direct_message, direct_mention, mentio
   }
 
   // DO THE QUERY (WITH ALL THE INFOS)
-  doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
+  botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
   
 });
 
@@ -247,7 +253,7 @@ slackController.hears(['find-artist'], 'direct_message, direct_mention, mention'
     } 
   
     // SEND THE BIO TO THE USER
-    doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
+    botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
 });
 
 
@@ -258,7 +264,7 @@ slackController.hears(['discover-artist'], 'direct_message, direct_mention, ment
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // SEND THE BIO TO THE USER
-    answerBio(bot, message, message.entities["doremus-artist"]);
+    botFunctions.answerBio(bot, message, message.entities["doremus-artist"]);
   }
   
   // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -294,7 +300,7 @@ slackController.hears(['find-performance'], 'direct_message, direct_mention, men
     var enddate = date.split("/")[1];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    doQueryPerformance(num, city, startdate, enddate, bot, message);
+    botFunctions.doQueryPerformance(num, city, startdate, enddate, bot, message);
   }
   
   // ACTION INCOMPLETE (missing date)
