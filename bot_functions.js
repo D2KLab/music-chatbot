@@ -37,7 +37,9 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT DISTINCT ?expression, ?title, ?artist, ?year, ?genre, ?comment, ?key \
+  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title) AS ?title, sql:BEST_LANGMATCH(?artist) AS ?artist, \
+                  sql:BEST_LANGMATCH(?year) AS ?year, sql:BEST_LANGMATCH(?genre) AS ?genre, \
+                  sql:BEST_LANGMATCH(?comment) AS ?comment, SAMPLE(?key) AS ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -137,7 +139,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
-  
+  console.log(newQuery);
   // -> Do the HTTP request
   const request = require('request');
   request(finalQuery, (err, res, body) => {
