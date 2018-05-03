@@ -1,5 +1,5 @@
-var botVars = require("./bot_vars.js");
-var botFunctions = require("./bot_functions.js");
+var botVars = require("../bot.js");
+var botFunctions = require("../doremus/bot_functions.js");
 
 // WORKS-BY INTENT
 botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {

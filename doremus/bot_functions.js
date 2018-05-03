@@ -1,6 +1,5 @@
 // LOAD VARIABLES AND FUNCTIONS
-const slackCards = require("./slack_cards.js");
-var comm = "";
+const slackCards = require("../slack/slack_cards.js");
 
 // FUNCTIONS
 /*******************************************************************************/
@@ -178,6 +177,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   });
 }
 /*******************************************************************************/
+
 
 /*******************************************************************************/
 module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, bot, message) {

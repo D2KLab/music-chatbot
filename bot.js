@@ -18,6 +18,7 @@ var request = require('request');
 var http = require('http');
 var SpellChecker = require('spellchecker');
 
+
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
     console.log('Error! Specify Slack token in environment');
@@ -33,6 +34,7 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
   console.log('Error! Specify Facebook tokens in environment');
   process.exit(1);
 }
+
 
 // SLACK
 var slackBotOptions = {
@@ -67,11 +69,11 @@ fbController.setupWebserver(
       }
 );
 
-
-
+// 'Dialogflow' MIDDLEWARE
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
 });
+
 
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
 slackController.middleware.receive.use((bot, message, next) => {
