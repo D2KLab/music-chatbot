@@ -57,13 +57,13 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
       } . '
   
   console.log(genre);
-  if (genre != undefined) {
+  if (genre !== "") {
    newQuery += 'VALUES(?gen) { \
                    (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
                  }';
   }
   
-  if (artist != undefined) {
+  if (artist !== "") {
     newQuery += 'VALUES(?composer) { \
                    (<http://data.doremus.org/artist/' + artist + '>) \
                  }';
@@ -81,7 +81,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   }
   
   // -> No instrument
-  if (instrument == []) {
+  if (instrument.length == 0) {
     
     newQuery += '} \
                  ORDER BY rand() \
@@ -138,7 +138,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
   
-    console.log(newQuery);
+  console.log(newQuery);
   
   // -> Do the HTTP request
   const request = require('request');
@@ -161,7 +161,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         
         var artist = row["artist"]["value"];
         var title = row["title"]["value"];
-        var year = row["year"]["value"];
+        var year = row["key"] !== undefined ? row["year"]["value"]: '-';
         var genre = row["genre"]["value"];
         var comment = row["comment"]["value"];
         var key = row["key"] !== undefined ? row["key"]["value"]: '-';

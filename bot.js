@@ -36,10 +36,10 @@ if (!process.env.dialogflow) {
     process.exit(1);
 }
 
-if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbAppSecret) {
-  console.log('Error! Specify Facebook tokens in environment');
-  process.exit(1);
-}
+// if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbAppSecret) {
+//   console.log('Error! Specify Facebook tokens in environment');
+//   process.exit(1);
+// }
 
 
 // INITs
@@ -78,36 +78,36 @@ slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
 
 // FACEBOOK
-fbController.middleware.receive.use((bot, message, next) => {
-  if (!message.text) {
-    next();
-    return;
-  }
+// fbController.middleware.receive.use((bot, message, next) => {
+//   if (!message.text) {
+//     next();
+//     return;
+//   }
 
-  if (message.is_echo || message.type === 'self_message') {
-    next();
-    return;
-  }
+//   if (message.is_echo || message.type === 'self_message') {
+//     next();
+//     return;
+//   }
 
-  //apply spell checking for each word of the text before sending dialogflow
-  var messageMisspelledFree = "";
-  var words = message.text.split(" ");
-  for (var i = 0; i < words.length; i++) {
-    if (SpellChecker.isMisspelled(words[i])) {
-      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
-      if (corrections.length > 0) {
-        messageMisspelledFree += corrections[0] + ' ';
-      } else {
-        messageMisspelledFree += words[i] + ' ';
-      }
-    } else {
-      messageMisspelledFree += words[i] + ' ';
-    }
-  }
-  message.text = messageMisspelledFree;
-  next();
-  return;
-});
+//   //apply spell checking for each word of the text before sending dialogflow
+//   var messageMisspelledFree = "";
+//   var words = message.text.split(" ");
+//   for (var i = 0; i < words.length; i++) {
+//     if (SpellChecker.isMisspelled(words[i])) {
+//       var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
+//       if (corrections.length > 0) {
+//         messageMisspelledFree += corrections[0] + ' ';
+//       } else {
+//         messageMisspelledFree += words[i] + ' ';
+//       }
+//     } else {
+//       messageMisspelledFree += words[i] + ' ';
+//     }
+//   }
+//   message.text = messageMisspelledFree;
+//   next();
+//   return;
+// });
 
 // fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
@@ -134,7 +134,6 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   var filterCounter = 0;
   for (var key in parameters) {
     if (parameters[key] != undefined) {
-      console.log(parameters[key]);
       filterCounter++;
     }
   }
@@ -145,7 +144,8 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     // YEAR CHECK AND PARSING
     var startyear = null;
     var endyear = null;
-    if (parameters.year != undefined) {
+    console.log(parameters.year);
+    if (parameters.year !== "") {
       startyear = parseInt(parameters.year.split("/")[0]);
       endyear = parseInt(parameters.year.split("/")[1]);
 
@@ -158,7 +158,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     }
 
     // ARTIST PARSING
-    if (parameters.artist == undefined && parameters.prevArtist != undefined) {
+    if (parameters.artist == "" && parameters.prevArtist !== "") {
       parameters.artist = parameters.prevArtist;
     }
 
