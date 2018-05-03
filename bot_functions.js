@@ -37,9 +37,9 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
   // JSON QUERY  
   // -> Init query
-  var newQuery = 'SELECT sql:BEST_LANGMATCH(?title,"en","en") AS ?title, sql:BEST_LANGMATCH(?artist,"en","en") AS ?artist, \
-                  sql:BEST_LANGMATCH(?year,"en","en") AS ?year, sql:BEST_LANGMATCH(?genre,"en","en") AS ?genre, \
-                  sql:BEST_LANGMATCH(?comment,"en","en") AS ?comment, sql:BEST_LANGMATCH(?key,"en","en") AS ?key \
+  var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?artist) AS ?artist, \
+                  SAMPLE(?year) AS ?year, SAMPLE(?genre) AS ?genre, \
+                  SAMPLE(?comment) AS ?comment, SAMPLE(?key) AS ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
         rdfs:label ?title ; \
@@ -86,7 +86,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   if (instrument.length == 0) {
     
     newQuery += '} \
-                 GROUP BY ?composer \
+                 GROUP BY ?expression \
                  ORDER BY rand() \
                  LIMIT ' + num
   }
@@ -99,6 +99,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
                    (<http://data.doremus.org/vocabulary/iaml/mop/' + instrument + '>) \
                  } \
                } \
+               GROUP BY ?expression \
                ORDER BY rand() \
                LIMIT ' + num
   }
@@ -116,6 +117,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
       }
 
       newQuery += '} \
+                   GROUP BY ?expression \
                    ORDER BY rand() \
                    LIMIT ' + num
     }
@@ -131,6 +133,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
       newQuery += '} \
                  } \
+                 GROUP BY ?expression \
                  ORDER BY rand() \
                  LIMIT ' + num
     }
