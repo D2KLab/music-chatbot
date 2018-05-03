@@ -1,14 +1,12 @@
-// LOAD VARIABLES
+// LOAD VARIABLES AND FUNCTIONS
 var botvars = require("./bot_vars.js");
-var slackcards = 
-var misspellingSolver = botvars.misspellingSolver;
-var popularityDictionary = botvars.popularityDictionary;
+var slackCards = require("./slack_cards.js");
 var slackBot = botvars.slackBot;
 
 
 // FUNCTIONS
 /*******************************************************************************/
-function sendClearContext(sessionID) {
+module.exports = function sendClearContext(sessionID) {
   
   var request = require('request');
   var options = {
@@ -32,7 +30,7 @@ function sendClearContext(sessionID) {
 
 
 /*******************************************************************************/
-function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
+module.exports = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -168,7 +166,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
         var comment = row["comment"]["value"];
         var key = row["key"] !== undefined ? row["key"]["value"]: '-';
         
-        bot.reply(message, getWorkCard(title, artist, year, genre, comment, key));
+        bot.reply(message, slackCards.getWorkCard(title, artist, year, genre, comment, key));
       });
     }
 
@@ -177,7 +175,7 @@ function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre
 /*******************************************************************************/
 
 /*******************************************************************************/
-function doQueryPerformance(number, city, startdate, enddate, bot, message) {
+module.exports = function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT DISTINCT ?performance, \
@@ -234,7 +232,7 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
         var placeName = row["placeName"]["value"];
         var actorsName = row["actorsName"]["value"];
         var date = row["date"]["value"];
-        bot.reply(message, getPerformanceCard(title, subtitle, placeName, actorsName, date));
+        bot.reply(message, slackCards.getPerformanceCard(title, subtitle, placeName, actorsName, date));
       });
     }
   });
@@ -243,7 +241,7 @@ function doQueryPerformance(number, city, startdate, enddate, bot, message) {
 
 
 /*******************************************************************************/
-function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
+module.exports = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count, \
@@ -321,7 +319,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
         var count = row["count"]["value"];
         
         // CREATE ATTACHMENT
-        var attachment = getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
+        var attachment = slackCards.getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
         bot.reply(message, attachment);
       });
     }
@@ -331,7 +329,7 @@ function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot
 
 
 /*******************************************************************************/
-var answerBio = function(bot, message, artist) {
+module.exports = function answerBio(bot, message, artist) {
   
     var newQuery = 'SELECT DISTINCT ?composer, \
                     ?name, \
@@ -392,18 +390,9 @@ var answerBio = function(bot, message, artist) {
         image = row["image"]["value"];
 
         // CREATE ATTACHMENT
-        var attachment = getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
+        var attachment = slackCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
         bot.reply(message, attachment);
       }
     });
 }
-/*******************************************************************************/
-
-// EXPORTS
-exports.sendClearContext = sendClearContext;
-exports.getBioCard = getBioCard;
-exports.getWorkCard = getWorkCard;
-exports.doQuery = doQuery;
-exports.doQueryPerformance = doQueryPerformance;
-exports.answerBio = answerBio;
-exports.doQueryFindArtist = doQueryFindArtist;
+/********************************************************************************/

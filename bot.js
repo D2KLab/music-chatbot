@@ -14,21 +14,15 @@ Authors:
 
 
 // LOAD VARIABLES
-var botvars = require("./bot_vars.js");
-var slackController = botvars.slackController;
-var dialogflowMiddleware = botvars.dialogflowMiddleware;
-var slackBot = botvars.slackBot;
-var SpellChecker = botvars.SpellChecker;
-var fbController = botvars.fbController;
+var botVars = require("./bot_vars.js");
+var slackController = botVars.slackController;
+var dialogflowMiddleware = botVars.dialogflowMiddleware;
+var slackBot = botVars.slackBot;
+var SpellChecker = botVars.SpellChecker;
+var fbController = botVars.fbController;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
-var doQuery = botfunctions.doQuery;
-var doQueryPerformance = botfunctions.doQueryPerformance;
-var sendClearContext = botfunctions.sendClearContext;
-var answerBio = botfunctions.answerBio;
-var doQueryFindArtist = botfunctions.doQueryFindArtist;
-
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
