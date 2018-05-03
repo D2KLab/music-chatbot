@@ -30,6 +30,13 @@ var fbBotOptions = {
 };
 
 var fbController = Botkit.facebookbot(fbBotOptions);
+fbController.setupWebserver(
+      3000,
+      (err, webserver) => {
+        this.controller.createWebhookEndpoints(webserver, this.bot);
+      }
+);
+
 var fbBot = fbController.spawn({
   
 });
