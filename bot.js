@@ -133,9 +133,12 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   // COUNT OF THE FILTER SET BY THE USER
   var filterCounter = 0;
   for (var key in parameters) {
-    if (parameters[key] != undefined) {
+    if (parameters[key] !== "") {
       filterCounter++;
     }
+    else if (typeof parameters[key] !== "string"
+    console.log(parameters[key]);
+    
   }
    
   // CHECK IF THE MAX AMOUNT OF FILTERS IS APPLIED
