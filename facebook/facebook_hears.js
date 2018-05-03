@@ -149,7 +149,7 @@ module.exports.findArtist = botVars.fbController.hears('find-artist', 'message_r
     } 
   
     // SEND THE BIO TO THE USER
-    botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
+    botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "facebook", bot, message);
 });
 
 
@@ -160,7 +160,7 @@ module.exports.discoverArtist = botVars.fbController.hears('discover-artist', 'm
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // SEND THE BIO TO THE USER
-    botFunctions.answerBio(bot, message, message.entities["doremus-artist"]);
+    botFunctions.answerBio(message.entities["doremus-artist"], "facebook", bot, message);
   }
   
   // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -196,7 +196,7 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
     var enddate = date.split("/")[1];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    botFunctions.doQueryPerformance(num, city, startdate, enddate, bot, message);
+    botFunctions.doQueryPerformance(num, city, startdate, enddate, "facebook", bot, message);
   }
   
   // ACTION INCOMPLETE (missing date)

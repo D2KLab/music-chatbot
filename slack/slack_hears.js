@@ -15,7 +15,6 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
    genre: message.entities["doremus-genre"]
   }
   
-  
   // COUNT OF THE FILTER SET BY THE USER
   var filterCounter = 0;
   for (var key in parameters) {
@@ -53,7 +52,7 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
 
     // DO THE QUERY (WITH ALL THE INFOS)
     botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments, 
-            parameters.strictly, startyear, endyear, parameters.genre, bot, message);
+            parameters.strictly, startyear, endyear, parameters.genre, "slack", bot, message);
   }
   else {
     
@@ -103,7 +102,7 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
   }
 
   // DO THE QUERY (WITH ALL THE INFOS)
-  botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, bot, message);
+  botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "slack", bot, message);
   
 });
 
@@ -144,7 +143,7 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
     } 
   
     // SEND THE BIO TO THE USER
-    botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message);
+    botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "slack", bot, message);
 });
 
 
@@ -155,7 +154,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
     // SEND THE BIO TO THE USER
-    botFunctions.answerBio(bot, message, message.entities["doremus-artist"]);
+    botFunctions.answerBio(message.entities["doremus-artist"], "slack", bot, message);
   }
   
   // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -191,7 +190,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
     var enddate = date.split("/")[1];
     
     // DO THE QUERY (WITH ALL THE INFOS)
-    botFunctions.doQueryPerformance(num, city, startdate, enddate, bot, message);
+    botFunctions.doQueryPerformance(num, city, startdate, enddate, "slack", bot, message);
   }
   
   // ACTION INCOMPLETE (missing date)
