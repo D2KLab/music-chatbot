@@ -182,12 +182,8 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
-  var newQuery = 'SELECT DISTINCT ?performance, \
-                    ?title, \
-                    ?subtitle, \
-                    ?actorsName, \
-                    ?placeName, \
-                    ?date \
+  var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?subtitle) AS ?subtitle, \
+	                SAMPLE(?actorsName) AS ?actorsName, SAMPLE(?placeName) AS ?placeName, SAMPLE(?date) AS ?date \
                   WHERE { \
                     ?performance a mus:M26_Foreseen_Performance ; \
                       ecrm:P102_has_title ?title ; \
@@ -206,6 +202,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
   }
   
   newQuery += '} \
+               GROUP BY ?performance \
                ORDER BY rand() \
                LIMIT ' + number
   
@@ -335,7 +332,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
 /*******************************************************************************/
 module.exports.answerBio = function answerBio(bot, message, artist) {
   
-    var newQuery = 'SELECT DISTINCT ?composer, \
+    var newQuery = 'SELECT ?composer, \
                     ?name, \
                     ?bio, \
                     xsd:date(?d_date) AS ?death_date, \
@@ -367,7 +364,7 @@ module.exports.answerBio = function answerBio(bot, message, artist) {
       if (err) { return console.log(err); }
       
       // JSON PARSING
-      var json = JSON.parse(body)
+      var json = JSON.parse(body);
 
       // RESPONSE
       var name = "";
