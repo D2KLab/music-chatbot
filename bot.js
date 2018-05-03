@@ -111,7 +111,7 @@ fbController.middleware.receive.use((bot, message, next) => {
 
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
-fbController.on('message_received,facebook_postback, (.*)', function(bot, message) {
+fbController.hears('(.*)', 'facebook_postback', function(bot, message) {
         if (message.text) {
             console.log(message)
         }
