@@ -27,7 +27,7 @@ module.exports.sendClearContext = function sendClearContext(sessionID) {
 
 
 /*******************************************************************************/
-module.exports.doQuery = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
+module.exports.doQuery = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, platform, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -170,7 +170,12 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         var comment = row["comment"]["value"];
         var key = row["key"] !== undefined ? row["key"]["value"]: '-';
         
-        bot.reply(message, slackCards.getWorkCard(title, artist, year, genre, comment, key));
+        if (platform === "slack") {
+          bot.reply(message, slackCards.getWorkCard(title, artist, year, genre, comment, key));
+        }
+        else if (platform === "facebook") {
+          bot.reply(message, "Facebook Card to be implemented");
+        }
       });
     }
 
@@ -180,7 +185,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
 
 /*******************************************************************************/
-module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, bot, message) {
+module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, platform, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?subtitle) AS ?subtitle, \
@@ -234,7 +239,13 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
         var placeName = row["placeName"]["value"];
         var actorsName = row["actorsName"]["value"];
         var date = row["date"]["value"];
-        bot.reply(message, slackCards.getPerformanceCard(title, subtitle, placeName, actorsName, date));
+        
+        if (platform === "slack") {
+          bot.reply(message, slackCards.getPerformanceCard(title, subtitle, placeName, actorsName, date));
+        }
+        else if (platform === "facebook") {
+          bot.reply(message, "Facebook Card to be implemented");
+        }
       });
     }
   });
@@ -243,7 +254,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
 
 
 /*******************************************************************************/
-module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
+module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, platform, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count, \
@@ -322,7 +333,13 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
         
         // CREATE ATTACHMENT
         var attachment = slackCards.getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
-        bot.reply(message, attachment);
+        
+        if (platform === "slack") {
+          bot.reply(message, attachment);
+        }
+        else if (platform === "facebook") {
+          bot.reply(message, "Facebook Card to be implemented");
+        }
       });
     }
   });
@@ -331,7 +348,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
 
 
 /*******************************************************************************/
-module.exports.answerBio = function answerBio(bot, message, artist) {
+module.exports.answerBio = function answerBio(artist, platform, bot, message) {
   
     var newQuery = 'SELECT ?name, \
                     ?bio, \
@@ -392,7 +409,13 @@ module.exports.answerBio = function answerBio(bot, message, artist) {
 
         // CREATE ATTACHMENT
         var attachment = slackCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
-        bot.reply(message, attachment);
+        
+        if (platform === "slack") {
+          bot.reply(message, attachment);
+        }
+        else if (platform === "facebook") {
+          bot.reply(message, "Facebook Card to be implemented");
+        }
       }
     });
 }
