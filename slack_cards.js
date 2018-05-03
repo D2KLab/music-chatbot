@@ -14,7 +14,7 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
                 "short": true
             },
             {
-                "title": "Birthdate",
+                "title": "Birth date",
                 "value": birthDate,
                 "short": true
             },
@@ -55,7 +55,7 @@ module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birt
                 "short": true
             },
             {
-                "title": "Birthdate",
+                "title": "Birth date",
                 "value": birthDate,
                 "short": true
             },
@@ -90,7 +90,7 @@ module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, co
         "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
         "fields": [
             {
-                "title": "Artist",
+                "title": "Composer",
                 "value": artist,
                 "short": true
             },
