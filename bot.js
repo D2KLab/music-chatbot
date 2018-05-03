@@ -5,11 +5,15 @@
            \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \_\    \ \_\
             \/_____/   \/_____/     \/_/   \/_/\/_/   \/_/     \/_/
             
-This is the DOREMUS Slack Bot! Built with Botkit, using the Dialogflow middleware.
+This is the DOREMUS Bot! Built with Botkit, using the Dialogflow middleware.
 
 Authors:
   - Luca LOMBARDO
   - Claudio SCALZO
+  
+Supported platforms:
+  - Slack
+  - Facebook Messenger
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // VARIABLES DECLARATION
@@ -17,7 +21,6 @@ var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
 var SpellChecker = require('spellchecker');
-
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
@@ -154,3 +157,7 @@ exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.SpellChecker = SpellChecker;
 exports.fbController = fbController;
+
+// IMPORT HEARS
+var slackHears = require('./slack/slack_hears.js');
+var fbHears = require('./facebook/facebook_hears.js');
