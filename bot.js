@@ -16,12 +16,13 @@ Authors:
 // LOAD VARIABLES
 var botVars = require("./bot_vars.js");
 var botFunctions = require("./bot_functions.js");
+
+// RENAME (for readability)
 var slackController = botVars.slackController;
-var dialogflowMiddleware = botVars.dialogflowMiddleware;
-var slackBot = botVars.slackBot;
-var SpellChecker = botVars.SpellChecker;
 var fbController = botVars.fbController;
-var comm = "";
+var slackBot = botVars.slackBot;
+var dialogflowMiddleware = botVars.dialogflowMiddleware;
+var SpellChecker = botVars.SpellChecker;
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
@@ -40,7 +41,7 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
 }
 
 
-// INITs
+// SLACK: 'SpellChecker' MIDDLEWARE INIT
 slackController.middleware.receive.use((bot, message, next) => {
   if (!message.text) {
     next();
@@ -52,7 +53,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
 
-  //apply spell checking for each word of the text before sending dialogflow
+  // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
   for (var i = 0; i < words.length; i++) {
@@ -72,10 +73,10 @@ slackController.middleware.receive.use((bot, message, next) => {
   return;
 });
 
+// SLACK: 'Dialogflow' MIDDLEWARE INIT
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
-slackBot.startRTM();
 
-// FACEBOOK
+// FACEBOOK: 'SpellChecker' MIDDLEWARE INIT
 fbController.middleware.receive.use((bot, message, next) => {
   if (!message.text) {
     next();
@@ -87,7 +88,7 @@ fbController.middleware.receive.use((bot, message, next) => {
     return;
   }
 
-  //apply spell checking for each word of the text before sending dialogflow
+  // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
   for (var i = 0; i < words.length; i++) {
@@ -107,8 +108,8 @@ fbController.middleware.receive.use((bot, message, next) => {
   return;
 });
 
+// FACEBOOK: 'Dialogflow' MIDDLEWARE INIT
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
-fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
-    bot.reply(message, "Ma che davero?");
-});
+// BOT: START THE SERVICE
+slackBot.startRTM();
