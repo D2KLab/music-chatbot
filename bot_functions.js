@@ -1,5 +1,6 @@
 // LOAD VARIABLES AND FUNCTIONS
 const slackCards = require("./slack_cards.js");
+var comm = "";
 
 // FUNCTIONS
 /*******************************************************************************/

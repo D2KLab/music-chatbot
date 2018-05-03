@@ -21,6 +21,7 @@ var dialogflowMiddleware = botVars.dialogflowMiddleware;
 var slackBot = botVars.slackBot;
 var SpellChecker = botVars.SpellChecker;
 var fbController = botVars.fbController;
+var comm = "";
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
