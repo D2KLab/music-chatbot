@@ -30,16 +30,24 @@ var fbBotOptions = {
 };
 
 var fbController = Botkit.facebookbot(fbBotOptions);
-fbController.setupWebserver(
-      3000,
-      (err, webserver) => {
-        this.controller.createWebhookEndpoints(webserver, this.bot);
-      }
-);
-
 var fbBot = fbController.spawn({
   
 });
+
+fbController.setupWebserver(
+      3000,
+      (err, webserver) => {
+        fbController.createWebhookEndpoints(webserver, fbBot);
+      }
+);
+
+fbController.on('message_received,facebook_postback', function(bot, message) {
+        if (message.text) {
+            console.log(message)
+        }
+});
+
+
 
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
