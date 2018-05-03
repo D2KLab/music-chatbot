@@ -109,11 +109,11 @@ fbController.middleware.receive.use((bot, message, next) => {
   return;
 });
 
-fbController.middleware.receive.use(dialogflowMiddleware.receive);
+// fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
-fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
-    bot.reply(message, "Ma che davero?");
-});
+// fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
+//     bot.reply(message, "Ma che davero?");
+// });
 
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {
@@ -133,7 +133,9 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   // COUNT OF THE FILTER SET BY THE USER
   var filterCounter = 0;
   for (var key in parameters) {
-    if (parameters[key] != "") filterCounter++; 
+    if (parameters[key] != undefined) {
+      filterCounter++;
+    }
   }
   
   
@@ -143,7 +145,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     // YEAR CHECK AND PARSING
     var startyear = null;
     var endyear = null;
-    if (parameters.year !== "") {
+    if (parameters.year != undefined) {
       startyear = parseInt(parameters.year.split("/")[0]);
       endyear = parseInt(parameters.year.split("/")[1]);
 
