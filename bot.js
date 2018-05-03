@@ -134,6 +134,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
   var filterCounter = 0;
   for (var key in parameters) {
     if (parameters[key] != undefined) {
+      console.log(parameters[key]);
       filterCounter++;
     }
   }

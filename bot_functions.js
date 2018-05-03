@@ -56,6 +56,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         ?k skos:prefLabel ?key \
       } . '
   
+  console.log(genre);
   if (genre != undefined) {
    newQuery += 'VALUES(?gen) { \
                    (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
@@ -80,7 +81,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   }
   
   // -> No instrument
-  if (instrument ==instrument.length == 0) {
+  if (instrument == []) {
     
     newQuery += '} \
                  ORDER BY rand() \
@@ -136,6 +137,8 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
+  
+    console.log(newQuery);
   
   // -> Do the HTTP request
   const request = require('request');
