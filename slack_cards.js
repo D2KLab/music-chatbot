@@ -1,5 +1,5 @@
 /*******************************************************************************/
-module.exports = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
+module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
     "attachments": [{
@@ -42,7 +42,7 @@ module.exports = function getBioCard(fullname, birthPlace, birthDate, deathPlace
 /*******************************************************************************/
 
 /*******************************************************************************/
-module.exports = function getArtistCard(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
+module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
 
   var artistAttachment = {
     "attachments": [{
@@ -83,7 +83,7 @@ module.exports = function getArtistCard(fullname, birthPlace, birthDate, deathPl
 /*******************************************************************************/
 
 /*******************************************************************************/
-module.exports = function getWorkCard(title, artist, year, genre, comment, key) {
+module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, comment, key) {
   var workAttachment = {
     "attachments": [{
         "title": title,
@@ -124,7 +124,7 @@ module.exports = function getWorkCard(title, artist, year, genre, comment, key) 
 
 
 /*******************************************************************************/
-module.exports = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
+module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
   var performanceAttachment = {
     "attachments": [{
         "title": title,

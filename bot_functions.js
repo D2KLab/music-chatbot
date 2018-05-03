@@ -1,9 +1,9 @@
 // LOAD VARIABLES AND FUNCTIONS
-var slackCards = require("./slack_cards.js");
+const slackCards = require("./slack_cards.js");
 
 // FUNCTIONS
 /*******************************************************************************/
-module.exports = function sendClearContext(sessionID) {
+module.exports.sendClearContext = function sendClearContext(sessionID) {
   
   var request = require('request');
   var options = {
@@ -27,7 +27,7 @@ module.exports = function sendClearContext(sessionID) {
 
 
 /*******************************************************************************/
-module.exports = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
+module.exports.doQuery = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
   var num = 5;
@@ -172,7 +172,7 @@ module.exports = function doQuery(artist, number, instrument, strictly, yearstar
 /*******************************************************************************/
 
 /*******************************************************************************/
-module.exports = function doQueryPerformance(number, city, startdate, enddate, bot, message) {
+module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT DISTINCT ?performance, \
@@ -238,7 +238,7 @@ module.exports = function doQueryPerformance(number, city, startdate, enddate, b
 
 
 /*******************************************************************************/
-module.exports = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
+module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, bot, message) {
   
   // JSON QUERY  
   var newQuery = 'SELECT SAMPLE(?name) AS ?name, count(distinct ?expr) AS ?count, \
@@ -326,7 +326,7 @@ module.exports = function doQueryFindArtist(num, startdate, enddate, city, instr
 
 
 /*******************************************************************************/
-module.exports = function answerBio(bot, message, artist) {
+module.exports.answerBio = function answerBio(bot, message, artist) {
   
     var newQuery = 'SELECT DISTINCT ?composer, \
                     ?name, \
