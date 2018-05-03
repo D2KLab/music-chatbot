@@ -4,3 +4,5 @@ node_modules/
 components/routes/_*
 .sass-cache/*
 final-report/report.log
+views/
+utilities/
