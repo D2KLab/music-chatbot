@@ -332,8 +332,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
 /*******************************************************************************/
 module.exports.answerBio = function answerBio(bot, message, artist) {
   
-    var newQuery = 'SELECT ?composer, \
-                    ?name, \
+    var newQuery = 'SELECT ?name, \
                     ?bio, \
                     xsd:date(?d_date) AS ?death_date, \
                     ?death_place, \
@@ -342,14 +341,14 @@ module.exports.answerBio = function answerBio(bot, message, artist) {
                     ?image \
                     WHERE { \
                       VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} . \
-                      ?composer rdfs:comment ?bio . \
-                      ?composer foaf:depiction ?image . \
-                      ?composer schema:deathDate ?d_date . \
-                      ?composer foaf:name ?name . \
-                      ?composer dbpprop:deathPlace ?d_place . \
+                      ?composer rdfs:comment ?bio ; \
+                        foaf:depiction ?image ; \
+                        schema:deathDate ?d_date ; \
+                        foaf:name ?name ; \
+                        dbpprop:deathPlace ?d_place ; \
+                        schema:birthDate ?b_date ; \
+                        dbpprop:birthPlace ?b_place . \
                       OPTIONAL { ?d_place rdfs:label ?death_place } . \
-                      ?composer schema:birthDate ?b_date . \
-                      ?composer dbpprop:birthPlace ?b_place . \
                       OPTIONAL { ?b_place rdfs:label ?birth_place } . \
                       FILTER (lang(?bio) = "en") \
                     }'
