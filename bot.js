@@ -137,8 +137,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
       filterCounter++;
     }
   }
-  
-  
+   
   // CHECK IF THE MAX AMOUNT OF FILTERS IS APPLIED
   if (filterCounter > 2) {
 
@@ -158,7 +157,7 @@ slackController.hears(['works-by'], 'direct_message, direct_mention, mention', d
     }
 
     // ARTIST PARSING
-    if (parameters.artist === "" && parameters.prevArtist !== "") {
+    if (parameters.artist == undefined && parameters.prevArtist != undefined) {
       parameters.artist = parameters.prevArtist;
     }
 

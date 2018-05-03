@@ -56,13 +56,13 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         ?k skos:prefLabel ?key \
       } . '
   
-  if (genre !== "") {
+  if (genre != undefined) {
    newQuery += 'VALUES(?gen) { \
                    (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
                  }';
   }
   
-  if (artist !== "") {
+  if (artist != undefined) {
     newQuery += 'VALUES(?composer) { \
                    (<http://data.doremus.org/artist/' + artist + '>) \
                  }';
@@ -80,7 +80,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   }
   
   // -> No instrument
-  if (instrument.length == 0) {
+  if (instrument ==instrument.length == 0) {
     
     newQuery += '} \
                  ORDER BY rand() \
