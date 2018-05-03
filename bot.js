@@ -12,17 +12,11 @@ Authors:
   - Claudio SCALZO
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-
-// LOAD VARIABLES
-var botVars = require("./bot_vars.js");
-var botFunctions = require("./bot_functions.js");
-
-// RENAME (for readability)
-var slackController = botVars.slackController;
-var fbController = botVars.fbController;
-var slackBot = botVars.slackBot;
-var dialogflowMiddleware = botVars.dialogflowMiddleware;
-var SpellChecker = botVars.SpellChecker;
+// VARIABLES DECLARATION
+var Botkit = require('botkit');
+var request = require('request');
+var http = require('http');
+var SpellChecker = require('spellchecker');
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
@@ -40,6 +34,44 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
   process.exit(1);
 }
 
+// SLACK
+var slackBotOptions = {
+    clientId: process.env.clientId,
+    clientSecret: process.env.clientSecret,
+    debug: false,
+    scopes: ['bot'],
+};
+var slackController = Botkit.slackbot(slackBotOptions);
+var slackBot = slackController.spawn({
+    token: process.env.token,
+});
+
+
+// FB MESSENGER
+var fbBotOptions = {
+  debug: false,
+  log: true,
+  access_token: process.env.fbAccessToken,
+  verify_token: process.env.fbVerifyToken,
+  app_secret: process.env.fbAppSecret,
+  validate_requests: true
+};
+var fbController = Botkit.facebookbot(fbBotOptions);
+var fbBot = fbController.spawn({
+  
+});
+fbController.setupWebserver(
+      3000,
+      (err, webserver) => {
+        fbController.createWebhookEndpoints(webserver, fbBot);
+      }
+);
+
+
+
+var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
+    token: process.env.dialogflow,
+});
 
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
 slackController.middleware.receive.use((bot, message, next) => {
@@ -113,3 +145,10 @@ fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
 // BOT: START THE SERVICE
 slackBot.startRTM();
+
+// EXPORTS
+exports.slackController = slackController;
+exports.slackBot = slackBot;
+exports.dialogflowMiddleware = dialogflowMiddleware;
+exports.SpellChecker = SpellChecker;
+exports.fbController = fbController;

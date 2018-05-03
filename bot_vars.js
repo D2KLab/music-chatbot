@@ -9,7 +9,7 @@ var SpellChecker = require('spellchecker')
 var slackBotOptions = {
     clientId: process.env.clientId,
     clientSecret: process.env.clientSecret,
-    //debug: true,
+    debug: false,
     scopes: ['bot'],
 };
 var slackController = Botkit.slackbot(slackBotOptions);
@@ -18,10 +18,9 @@ var slackBot = slackController.spawn({
 });
 
 
-
 /* FB MESSENGER */ 
 var fbBotOptions = {
-  debug: true,
+  debug: false,
   log: true,
   access_token: process.env.fbAccessToken,
   verify_token: process.env.fbVerifyToken,
