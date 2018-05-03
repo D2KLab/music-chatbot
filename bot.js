@@ -19,6 +19,7 @@ var slackController = botvars.slackController;
 var dialogflowMiddleware = botvars.dialogflowMiddleware;
 var slackBot = botvars.slackBot;
 var SpellChecker = botvars.SpellChecker;
+var fbController = botvars.fbController;
 
 // LOAD FUNCTIONS
 var botfunctions = require("./bot_functions.js");
@@ -76,6 +77,45 @@ slackController.middleware.receive.use((bot, message, next) => {
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 slackBot.startRTM();
 
+// FACEBOOK
+fbController.middleware.receive.use((bot, message, next) => {
+  if (!message.text) {
+    next();
+    return;
+  }
+
+  if (message.is_echo || message.type === 'self_message') {
+    next();
+    return;
+  }
+
+  //apply spell checking for each word of the text before sending dialogflow
+  var messageMisspelledFree = "";
+  var words = message.text.split(" ");
+  for (var i = 0; i < words.length; i++) {
+    if (SpellChecker.isMisspelled(words[i])) {
+      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
+      if (corrections.length > 0) {
+        messageMisspelledFree += corrections[0] + ' ';
+      } else {
+        messageMisspelledFree += words[i] + ' ';
+      }
+    } else {
+      messageMisspelledFree += words[i] + ' ';
+    }
+  }
+  message.text = messageMisspelledFree;
+  next();
+  return;
+});
+
+fbController.middleware.receive.use(dialogflowMiddleware.receive);
+
+fbController.on('message_received,facebook_postback, (.*)', function(bot, message) {
+        if (message.text) {
+            console.log(message)
+        }
+});
 
 // WORKS-BY INTENT
 slackController.hears(['works-by'], 'direct_message, direct_mention, mention', dialogflowMiddleware.hears, function(bot, message) {

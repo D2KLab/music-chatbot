@@ -41,12 +41,6 @@ fbController.setupWebserver(
       }
 );
 
-fbController.on('message_received,facebook_postback', function(bot, message) {
-        if (message.text) {
-            console.log(message)
-        }
-});
-
 
 
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
@@ -59,4 +53,5 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
-exports.SpellChecker = SpellChecker
+exports.SpellChecker = SpellChecker;
+exports.fbController = fbController;
