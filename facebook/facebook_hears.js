@@ -209,7 +209,7 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 
 
 // HELLO INTENT
-botVars.fbController.hears('hello', 'message_received', function(bot, message) {
+botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
   console.log(message);
   bot.reply(message, message['fulfillment']['speech']);
 });
