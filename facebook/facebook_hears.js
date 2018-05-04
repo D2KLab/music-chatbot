@@ -216,7 +216,7 @@ module.exports.hello = botVars.fbController.hears('hello', 'message_received', b
 
 
 // DEFAULT INTENT
-module.exports.default = botVars.fbController.hears('Default Fallback Intent', 'message_received, facebook_postback', function(bot, message) {
+module.exports.default = botVars.fbController.hears('Default Fallback Intent', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   bot.reply(message, message['fulfillment']['speech']);
 });
