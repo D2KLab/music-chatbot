@@ -55,7 +55,7 @@ var slackBot = slackController.spawn({
 
 // FB MESSENGER
 var fbBotOptions = {
-  debug: false,
+  debug: true,
   log: true,
   access_token: process.env.fbAccessToken,
   verify_token: process.env.fbVerifyToken,

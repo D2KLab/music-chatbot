@@ -203,15 +203,14 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
   
   // ACTION INCOMPLETE (missing date)
   else {
-
     bot.reply(message, message['fulfillment']['speech']);
   }
 });
 
 
 // HELLO INTENT
-botVars.fbController.hears('hello', 'message_received, facebook_postback', function(bot, message) {
-  
+module.exports.hello = botVars.fbController.hears('hello', 'message_received, facebook_postback', function(bot, message) {
+  console.log("AAAAAAA");
   bot.reply(message, message['fulfillment']['speech']);
 });
 
