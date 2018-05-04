@@ -9,7 +9,7 @@ var botFunctions = require("../doremus/bot_functions.js");
 //});
 
 // WORKS-BY INTENT
-botVars.fbController.hears('works-by', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksBy = botVars.fbController.hears('works-by', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   // GET PARAMETERS
   var parameters = {
@@ -70,13 +70,13 @@ botVars.fbController.hears('works-by', 'message_received, facebook_postback', bo
 });
 
 // WORKS-BY - YES INTENT
-botVars.fbController.hears('works-by - yes', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksByYes = botVars.fbController.hears('works-by - yes', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
    
   bot.reply(message, message['fulfillment']['speech']);
 });
 
 // WORKS-BY - NO
-botVars.fbController.hears('works-by - no', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksByNo = botVars.fbController.hears('works-by - no', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   var context = message["nlpResponse"]["result"]["contexts"][0];
   
@@ -116,14 +116,14 @@ botVars.fbController.hears('works-by - no', 'message_received, facebook_postback
 
 
 // WORKS-BY-SOMETHING INTENT
-botVars.fbController.hears(['works-by-artist','works-by-genre','works-by-instrument','works-by-years'], 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksBySomething = botVars.fbController.hears(['works-by-artist','works-by-genre','works-by-instrument','works-by-years'], 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
   bot.reply(message, message['fulfillment']['speech']);
 });
 
 
 // DISCOVER ARTIST
-botVars.fbController.hears('find-artist', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.findArtist = botVars.fbController.hears('find-artist', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
     
     // GET ENTITIES
     var date = message.entities["date-period"];
@@ -156,7 +156,7 @@ botVars.fbController.hears('find-artist', 'message_received, facebook_postback',
 
 
 // DISCOVER ARTIST
-botVars.fbController.hears('discover-artist', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.discoverArtist = botVars.fbController.hears('discover-artist', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   // ACTION COMPLETE (we have all the required infos)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
@@ -175,7 +175,7 @@ botVars.fbController.hears('discover-artist', 'message_received, facebook_postba
 
 
 // FIND-PERFORMANCE
-botVars.fbController.hears('find-performance', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears,  function(bot, message) {
+module.exports.findPerformance = botVars.fbController.hears('find-performance', 'message_received, facebook_postback', botVars.dialogflowMiddleware.hears,  function(bot, message) {
   
   // ACTION COMPLETE (the date has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
@@ -209,7 +209,7 @@ botVars.fbController.hears('find-performance', 'message_received, facebook_postb
 
 
 // HELLO INTENT
-botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.hello = botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
   console.log(message);
   bot.reply(message, message['fulfillment']['speech']);
 });

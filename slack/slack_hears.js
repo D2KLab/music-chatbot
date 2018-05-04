@@ -4,7 +4,7 @@ var botVars = require("../bot.js");
 var botFunctions = require("../doremus/bot_functions.js");
 
 // WORKS-BY INTENT
-botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   // GET PARAMETERS
   var parameters = {
@@ -64,7 +64,7 @@ botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, men
 });
 
 // WORKS-BY - YES INTENT
-botVars.slackController.hears(['works-by - yes'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.worksByYes = botVars.slackController.hears(['works-by - yes'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
    
   bot.reply(message, message['fulfillment']['speech']);
 });
@@ -117,7 +117,7 @@ module.exports.worksBySomething = botVars.slackController.hears(['works-by-artis
 
 
 // DISCOVER ARTIST
-botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
     
     // GET ENTITIES
     var date = message.entities["date-period"];
@@ -150,7 +150,7 @@ botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, 
 
 
 // DISCOVER ARTIST
-botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   // ACTION COMPLETE (we have all the required infos)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
@@ -169,7 +169,7 @@ botVars.slackController.hears(['discover-artist'], 'direct_message, direct_menti
 
 
 // FIND-PERFORMANCE
-botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.findPerformance = botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   // ACTION COMPLETE (the date has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
@@ -204,14 +204,14 @@ botVars.slackController.hears(['find-performance'], 'direct_message, direct_ment
 
 
 // HELLO INTENT
-botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   bot.reply(message, message['fulfillment']['speech']);
 });
 
 
 // DEFAULT INTENT
-botVars.slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+module.exports.default = botVars.slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
   bot.reply(message, message['fulfillment']['speech']);
 });
