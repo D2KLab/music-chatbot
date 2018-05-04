@@ -4,9 +4,9 @@ var botVars = require("../bot.js");
 var botFunctions = require("../doremus/bot_functions.js");
 
 // ANY INTENT
-botVars.fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
-    bot.reply(message, "Ma che davero?");
-});
+//botVars.fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
+//    bot.reply(message, "Ma che davero?");
+//});
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.fbController.hears('works-by', 'message_received, facebook_postback', function(bot, message) {
@@ -210,7 +210,7 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 
 
 // HELLO INTENT
-module.exports.hello = botVars.fbController.hears('hello', 'message_received, facebook_postback', function(bot, message) {
+botVars.fbController.hears('hello', 'message_received, facebook_postback', function(bot, message) {
   
   bot.reply(message, message['fulfillment']['speech']);
 });
