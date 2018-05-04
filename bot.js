@@ -63,9 +63,9 @@ var fbBotOptions = {
   validate_requests: true
 };
 var fbController = Botkit.facebookbot(fbBotOptions);
-var fbBot = fbController.spawn({
-  
+var fbBot = fbController.spawn({  
 });
+
 fbController.setupWebserver(
       3000,
       (err, webserver) => {
