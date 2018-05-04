@@ -209,7 +209,7 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 
 
 // HELLO INTENT
-module.exports.hello = botVars.fbController.hears('hello', 'message_received, facebook_postback', function(bot, message) {
+botVars.fbController.hears(['hello'], 'message_received, facebook_postback', function(bot, message) {
   console.log("AAAAAAA");
   bot.reply(message, message['fulfillment']['speech']);
 });
