@@ -80,7 +80,7 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 
 
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
-/*
+
 slackController.middleware.receive.use((bot, message, next) => {
   if (!message.text) {
     next();
@@ -111,7 +111,7 @@ slackController.middleware.receive.use((bot, message, next) => {
   next();
   return;
 });
-*/
+
 
 // SLACK: 'Dialogflow' MIDDLEWARE INIT
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
