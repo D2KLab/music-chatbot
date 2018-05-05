@@ -21,7 +21,6 @@ Supported platforms:
 var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
-var SpellChecker = require('spellchecker');
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
@@ -95,19 +94,7 @@ slackController.middleware.receive.use((bot, message, next) => {
   // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
-  for (var i = 0; i < words.length; i++) {
-    if (SpellChecker.isMisspelled(words[i])) {
-      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
-      if (corrections.length > 0) {
-        messageMisspelledFree += corrections[0] + ' ';
-      } else {
-        messageMisspelledFree += words[i] + ' ';
-      }
-    } else {
-      messageMisspelledFree += words[i] + ' ';
-    }
-  }
-  message.text = messageMisspelledFree;
+  
   next();
   return;
 });
@@ -127,24 +114,7 @@ fbController.middleware.receive.use((bot, message, next) => {
     next();
     return;
   }
-
-  // apply spell checking for each word of the text before sending dialogflow
-  var messageMisspelledFree = "";
-  var words = message.text.split(" ");
-  for (var i = 0; i < words.length; i++) {
-    if (SpellChecker.isMisspelled(words[i])) {
-      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
-      if (corrections.length > 0) {
-        messageMisspelledFree += corrections[0] + ' ';
-      } else {
-        messageMisspelledFree += words[i] + ' ';
-      }
-    } else {
-      messageMisspelledFree += words[i] + ' ';
-    }
-  }
-  message.text = messageMisspelledFree;
-  next();
+  next()
   return;
 });
 
@@ -158,7 +128,6 @@ slackBot.startRTM();
 exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
-exports.SpellChecker = SpellChecker;
 exports.fbController = fbController;
 
 // IMPORT HEARS
