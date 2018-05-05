@@ -28,3 +28,64 @@ module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, bi
     };
   return bioAttachment;
 }
+/*******************************************************************************/
+
+
+/*******************************************************************************/
+module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
+  var performanceAttachment = {
+    "attachments": [{
+        "title": title,
+        "text": subtitle,
+        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+        "fields": [
+            {
+                "title": "Where",
+                "value": placeName,
+                "short": true
+            },
+            {
+                "title": "When",
+                "value": date,
+                "short": true
+            },
+            {
+                "title": "Actors",
+                "value": actorsName,
+                "short": false
+            }
+        ],
+        "color": "#f4b042"
+    }]
+  }
+  
+  var attachment = {
+      "type": "template",
+      "payload": {
+        "template_type": "list",
+        "top_element_style": "compact",
+        "elements": [
+          {
+            "title": title,
+            "subtitle": subtitle,
+          },
+          {
+            "title": "Where",
+            "subtitle": placeName,
+          },
+          {
+            "title": "When",
+            "subtitle": date,        
+          }
+        ],
+         "buttons": [
+          {
+            "title": "View More",
+            "type": "postback",
+            "payload": "payload"            
+          }
+        ]  
+      }
+  }
+  return attachment;
+}

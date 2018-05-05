@@ -247,7 +247,8 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
           bot.reply(message, slackCards.getPerformanceCard(title, subtitle, placeName, actorsName, date));
         }
         else if (platform === "facebook") {
-          bot.reply(message, "Facebook Card to be implemented");
+          var attachment = fbCards.getPerformanceCard(title, subtitle, placeName, actorsName, date)
+          bot.reply(message, {attachment: attachment});
         }
       });
     }
