@@ -2,6 +2,7 @@
 
 // LOAD VARIABLES AND FUNCTIONS
 const slackCards = require("../slack/slack_cards.js");
+const fbCards = require("../facebook/facebook_cards.js");
 
 // FUNCTIONS
 /*******************************************************************************/
