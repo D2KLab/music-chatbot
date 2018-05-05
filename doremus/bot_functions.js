@@ -424,3 +424,33 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
     });
 }
 /********************************************************************************/
+module.exports.answerBioSmall = function answerBioSmall(artist) {
+  
+    var newQuery = 'SELECT ?bio, \
+                    WHERE { \
+                      VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} . \
+                      FILTER (lang(?bio) = "en") \
+                    }'
+    
+    // -> Finalize the query
+    var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
+    var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
+    var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
+  
+    const request = require('request');
+    request(finalQuery, (err, res, body) => {
+      if (err) { return console.log(err); }
+      
+      // JSON PARSING
+      var json = JSON.parse(body);
+
+      // RESPONSE
+      var bio = "";
+
+      var row = json["results"]["bindings"][0];
+      if (row == undefined) {
+        return "Sorry, there was an error! Retry later.";
+      }
+      else return bio = row["bio"]["value"];
+    });
+}
