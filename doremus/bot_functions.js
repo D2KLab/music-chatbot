@@ -284,7 +284,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
                  } .'
   }
   
-  if (instrument !== "") {
+  if (instrument.length != 0) {
     newQuery += '?casting mus:U23_has_casting_detail ?castingDetail . \
                  ?castingDetail mus:U2_foresees_use_of_medium_of_performance \
 		                            / skos:exactMatch* ?instrument . \
@@ -309,7 +309,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
   // -> Finalize the query
   var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
-  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
+  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix;
   
   // -> Do the HTTP request
   const request = require('request');
