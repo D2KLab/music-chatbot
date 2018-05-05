@@ -409,15 +409,15 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
           deathPlace = row["death_place"]["value"];
         deathDate = row["death_date"]["value"];
         image = row["image"]["value"];
-
-        // CREATE ATTACHMENT
-        var attachment = slackCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
         
         if (platform === "slack") {
+          var attachment = slackCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
           bot.reply(message, attachment);
         }
         else if (platform === "facebook") {
-          bot.reply(message, "Facebook Card to be implemented");
+          var attachment = fbCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
+          console.log("AAA", attachment)
+          bot.reply(message, attachment);
         }
       }
     });
