@@ -19,7 +19,7 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
                         {
                         'type':'postback',
                         'title':'Get bio',
-                        'payload':'chocolate'
+                        'payload': bio
                         }
                     ]
                 },

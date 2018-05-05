@@ -220,3 +220,13 @@ module.exports.default = botVars.fbController.hears('Default Fallback Intent', '
   
   bot.reply(message, message['fulfillment']['speech']);
 });
+
+
+
+
+module.exports.default = botVars.fbController.on('facebook_postback', function(bot, message) {
+    console.log("AAA", message)
+    if (message.payload == 'chocolate') {
+        bot.reply(message, 'You ate the chocolate cookie!')
+    }
+});
