@@ -27,17 +27,20 @@ const fs = require('fs');
 var enDIC = fs.readFileSync("/app/node_modules/dictionary-en-us/index.dic", 'utf-8')
 var enAFF = fs.readFileSync("/app/node_modules/dictionary-en-us/index.aff", 'utf-8')
 var spellEN = nspell(enAFF, enDIC)
+console.log("ok")
 
 var frDIC = fs.readFileSync("/app/node_modules/dictionary-fr/index.dic", 'utf-8')
 var frAFF = fs.readFileSync("/app/node_modules/dictionary-fr/index.aff", 'utf-8')
 var spellFR = nspell(frAFF, frDIC)
+console.log("ok")
+
+var itDIC = fs.readFileSync("/app/dictionaries/it.dic", 'utf-8')
+var itAFF = fs.readFileSync("/app/dictionaries/it.aff", 'utf-8')
+var spellIT = nspell(itAFF, itDIC)
+console.log("ok")
 
 var speller = spellEN
 var currentLang = "en"
-
-//var itDIC = fs.readFileSync("/app/node_modules/dictionary-it/index.dic", 'utf-8')
-//var itAFF = fs.readFileSync("/app/node_modules/dictionary-it/index.aff", 'utf-8')
-//var spellIT = nspell(itAFF, itDIC)
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
