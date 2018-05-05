@@ -1,7 +1,7 @@
 /* FACEBOOK CARDS */
 
 /*******************************************************************************/
-module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
+module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
         'type':'template',
@@ -19,7 +19,7 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
                         {
                         'type':'postback',
                         'title':'Get bio',
-                        'payload': bio
+                        'payload': artist
                         }
                     ]
                 },

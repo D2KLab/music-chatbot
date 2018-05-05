@@ -415,11 +415,10 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
           bot.reply(message, attachment);
         }
         else if (platform === "facebook") {
-          var attachment = fbCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
-          //console.log("AAA", attachment)
+          var attachment = fbCards.getBioCard(artist, name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
           bot.reply(message, {
-        attachment: attachment,
-    });
+              attachment: attachment,
+          });
         }
       }
     });
