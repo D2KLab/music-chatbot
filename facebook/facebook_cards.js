@@ -32,34 +32,8 @@ module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, bi
 
 
 /*******************************************************************************/
-module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
+module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {  
   var performanceAttachment = {
-    "attachments": [{
-        "title": title,
-        "text": subtitle,
-        "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
-        "fields": [
-            {
-                "title": "Where",
-                "value": placeName,
-                "short": true
-            },
-            {
-                "title": "When",
-                "value": date,
-                "short": true
-            },
-            {
-                "title": "Actors",
-                "value": actorsName,
-                "short": false
-            }
-        ],
-        "color": "#f4b042"
-    }]
-  }
-  
-  var attachment = {
       "type": "template",
       "payload": {
         "template_type": "list",
@@ -67,25 +41,22 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
         "elements": [
           {
             "title": title,
-            "subtitle": subtitle,
+            "subtitle": subtitle
           },
           {
             "title": "Where",
-            "subtitle": placeName,
+            "subtitle": placeName
           },
           {
             "title": "When",
-            "subtitle": date,        
-          }
-        ],
-         "buttons": [
+            "subtitle": date        
+          },
           {
-            "title": "View More",
-            "type": "postback",
-            "payload": "payload"            
+            "title": "Actors",
+            "subtitle": actorsName        
           }
-        ]  
+        ] 
       }
   }
-  return attachment;
+  return performanceAttachment;
 }
