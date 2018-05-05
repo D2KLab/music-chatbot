@@ -27,24 +27,18 @@ var dictEN = require('dictionary-en-us')
 var dictIT = require('dictionary-it')
 var dictFR = require('dictionary-fr')
 
+var word = "ciau"
 function ondictionary(err, dict) {
   if (err) {
     throw err
   }
-
+  
   var spell = nspell(dict)
-
-  console.log(spell.correct('colour')) // => false
-  console.log(spell.suggest('colour')) // => ['color']
-  console.log(spell.correct('color')) // => true
-  console.log(spell.correct('npm')) // => false
-  spell.add('npm')
-  console.log(spell.correct('npm')) // => true
+  console.log(spell.correct(word)) // => false
 }
 
-dictEN(ondictionary)
-var spell = nspell(dictEN)
-//dictIT(ondictionary)
+//dictEN(ondictionary)
+dictIT(ondictionary)
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
