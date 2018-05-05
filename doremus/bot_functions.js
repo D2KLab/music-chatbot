@@ -415,9 +415,31 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
           bot.reply(message, attachment);
         }
         else if (platform === "facebook") {
-          var attachment = fbCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
-          console.log("AAA", attachment)
-          bot.reply(message, attachment);
+          //var attachment = fbCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio)
+          //console.log("AAA", attachment)
+          var attachment = {
+        'type':'template',
+        'payload':{
+            'template_type':'generic',
+            'elements':[
+                {
+                    'title':'Chocolate Cookie',
+                    'image_url':'http://cookies.com/cookie.png',
+                    'subtitle':'A delicious chocolate cookie',
+                    'buttons':[
+                        {
+                        'type':'postback',
+                        'title':'Eat Cookie',
+                        'payload':'chocolate'
+                        }
+                    ]
+                },
+            ]
+        }
+    };
+          bot.reply(message, {
+        attachment: attachment,
+    });
         }
       }
     });
