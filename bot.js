@@ -33,6 +33,7 @@ var frAFF = fs.readFileSync("/app/node_modules/dictionary-fr/index.aff", 'utf-8'
 var spellFR = nspell(frAFF, frDIC)
 
 var speller = spellEN
+var currentLang = "en"
 
 //var itDIC = fs.readFileSync("/app/node_modules/dictionary-it/index.dic", 'utf-8')
 //var itAFF = fs.readFileSync("/app/node_modules/dictionary-it/index.aff", 'utf-8')
@@ -108,7 +109,17 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
-  if me
+  // update current dictionary if necessary
+  if (message.text == "hi") {
+    console.log("SWITCHED TO EN");
+    speller = spellEN;
+    currentLang = "en";
+  }
+  else if (message.text == "bonjour") {
+    console.log("SWITCHED TO FR")
+    speller = spellFR
+    currentLang = "fr";
+  }
   
   // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
@@ -127,7 +138,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
-  console.log(message.text)
+  message.language = currentLang;
   next()
   return;
 });
