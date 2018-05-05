@@ -22,15 +22,30 @@ var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
 var nspell = require('nspell')
+
 var dictEN = require('dictionary-en-us')
 var dictIT = require('dictionary-it')
 var dictFR = require('dictionary-fr')
 
-var spellEN = dictEN(function (err, result) {
-  console.log(err || result)
-});
+function ondictionary(err, dict) {
+  if (err) {
+    throw err
+  }
 
-var spellEN = nspell(spellEN)
+  var spell = nspell(dict)
+
+  console.log(spell.correct('colour')) // => false
+  console.log(spell.suggest('colour')) // => ['color']
+  console.log(spell.correct('color')) // => true
+  console.log(spell.correct('npm')) // => false
+  spell.add('npm')
+  console.log(spell.correct('npm')) // => true
+}
+
+dictEN(ondictionary)
+var spell = nspell(dictEN)
+//dictIT(ondictionary)
+
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
