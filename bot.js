@@ -26,6 +26,12 @@ var dictEN = require('dictionary-en-us')
 var dictIT = require('dictionary-it')
 var dictFR = require('dictionary-fr')
 
+var spellEN = dictEN(function (err, result) {
+  console.log(err || result)
+});
+
+var spellEN = nspell(spellEN)
+
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
     console.log('Error! Specify Slack token in environment');
@@ -124,8 +130,8 @@ fbController.middleware.receive.use((bot, message, next) => {
   var words = message.text.split(" ");
   
   for (var i = 0; i < words.length; i++) {
-    if (SpellChecker.isMisspelled(words[i])) {
-      var corrections = SpellChecker.getCorrectionsForMisspelling(words[i])
+    if (spellEN.correct(words[i]) == false) {
+      var corrections = spellEN.suggest(words[i])
       if (corrections.length > 0) {
         messageMisspelledFree += corrections[0] + ' ';
       } else {
@@ -136,7 +142,6 @@ fbController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
-  
   
   next()
   return;
