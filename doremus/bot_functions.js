@@ -177,7 +177,8 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
           bot.reply(message, slackCards.getWorkCard(title, artist, year, genre, comment, key));
         }
         else if (platform === "facebook") {
-          bot.reply(message, "Facebook Card to be implemented");
+          var attachment = fbCards.getWorkCard(title, artist, year, genre, comment, key);
+          bot.reply(message, {attachment: attachment});
         }
       });
     }

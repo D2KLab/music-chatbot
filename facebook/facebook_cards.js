@@ -60,3 +60,32 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
   }
   return performanceAttachment;
 }
+/*******************************************************************************/
+
+/*******************************************************************************/
+module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, comment, key) {
+  var workAttachment = {
+      "type": "template",
+      "payload": {
+        "template_type": "list",
+        "top_element_style": "compact",
+        "elements": [
+          {
+            "title": title,
+            "subtitle": "by " + artist
+          },
+          {
+            "title": "Details",
+            "subtitle": "Year: " + year + "\nGenre: " + genre + "\nKey: " + key
+          },
+          {
+            "title": "Comment",
+            "subtitle": comment        
+          }
+        ] 
+      }
+  }
+  return workAttachment;
+}
+/*******************************************************************************/
+
