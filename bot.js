@@ -24,16 +24,19 @@ var http = require('http');
 var nspell = require('nspell')
 const fs = require('fs');
 
-var dictIT = require('dictionary-it')
-var dictFR = require('dictionary-fr')
-
-
-var path = require('path')
-var base = require.resolve('dictionary-it')
-
 var enDIC = fs.readFileSync("/app/node_modules/dictionary-en-us/index.dic", 'utf-8')
 var enAFF = fs.readFileSync("/app/node_modules/dictionary-en-us/index.aff", 'utf-8')
 var spellEN = nspell(enAFF, enDIC)
+
+var frDIC = fs.readFileSync("/app/node_modules/dictionary-fr/index.dic", 'utf-8')
+var frAFF = fs.readFileSync("/app/node_modules/dictionary-fr/index.aff", 'utf-8')
+var spellFR = nspell(frAFF, frDIC)
+
+var speller = spellEN
+
+//var itDIC = fs.readFileSync("/app/node_modules/dictionary-it/index.dic", 'utf-8')
+//var itAFF = fs.readFileSync("/app/node_modules/dictionary-it/index.aff", 'utf-8')
+//var spellIT = nspell(itAFF, itDIC)
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -105,13 +108,15 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
+  if me
+  
   // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
   
   for (var i = 0; i < words.length; i++) {
-    if (spellEN.correct(words[i]) == false) {
-      var corrections = spellEN.suggest(words[i])
+    if (speller.correct(words[i]) == false) {
+      var corrections = speller.suggest(words[i])
       if (corrections.length > 0) {
         messageMisspelledFree += corrections[0] + ' ';
       } else {
