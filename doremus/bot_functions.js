@@ -424,11 +424,12 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
     });
 }
 /********************************************************************************/
-module.exports.answerBioSmall = function answerBioSmall(artist) {
+module.exports.answerBioSmallAsText = function answerBioSmallAsText(artist, bot, message) {
   
-    var newQuery = 'SELECT ?bio, \
+    var newQuery = 'SELECT ?bio \
                     WHERE { \
                       VALUES(?composer) {(<http://data.doremus.org/artist/' + artist + '>)} . \
+                      ?composer rdfs:comment ?bio .\
                       FILTER (lang(?bio) = "en") \
                     }'
     
@@ -449,8 +450,8 @@ module.exports.answerBioSmall = function answerBioSmall(artist) {
 
       var row = json["results"]["bindings"][0];
       if (row == undefined) {
-        return "Sorry, there was an error! Retry later.";
+        bot.reply(message, "Sorry, there was an error! Retry later.");
       }
-      else return bio = row["bio"]["value"];
+      else bot.reply(message, row["bio"]["value"]);
     });
 }

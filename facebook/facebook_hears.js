@@ -221,13 +221,9 @@ module.exports.default = botVars.fbController.hears('Default Fallback Intent', '
   bot.reply(message, message['fulfillment']['speech']);
 });
 
-
-
-
+// POSTBACKS
 module.exports.default = botVars.fbController.on('facebook_postback', function(bot, message) {
     if (message.postback.title == 'Get bio') {
-        var bio = botFunctions.answerBioSmall(message.payload);
-        console.log(bio)
-        bot.reply(message, bio);
+        var bio = botFunctions.answerBioSmallAsText(message.payload, bot, message);
     }
 });
