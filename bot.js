@@ -22,23 +22,18 @@ var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
 var nspell = require('nspell')
+const fs = require('fs');
 
-var dictEN = require('dictionary-en-us')
 var dictIT = require('dictionary-it')
 var dictFR = require('dictionary-fr')
 
-var word = "ciau"
-function ondictionary(err, dict) {
-  if (err) {
-    throw err
-  }
-  
-  var spell = nspell(dict)
-  console.log(spell.correct(word)) // => false
-}
 
-//dictEN(ondictionary)
-dictIT(ondictionary)
+var path = require('path')
+var base = require.resolve('dictionary-it')
+
+var enDIC = fs.readFileSync("/app/node_modules/dictionary-en-us/index.dic", 'utf-8')
+var enAFF = fs.readFileSync("/app/node_modules/dictionary-en-us/index.aff", 'utf-8')
+var spellEN = nspell(enAFF, enDIC)
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -109,12 +104,26 @@ slackController.middleware.receive.use((bot, message, next) => {
     next();
     return;
   }
-
+  
   // apply spell checking for each word of the text before sending dialogflow
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
   
-  next();
+  for (var i = 0; i < words.length; i++) {
+    if (spellEN.correct(words[i]) == false) {
+      var corrections = spellEN.suggest(words[i])
+      if (corrections.length > 0) {
+        messageMisspelledFree += corrections[0] + ' ';
+      } else {
+        messageMisspelledFree += words[i] + ' ';
+      }
+    } else {
+      messageMisspelledFree += words[i] + ' ';
+    }
+  }
+  message.text = messageMisspelledFree;
+  console.log(message.text)
+  next()
   return;
 });
 
@@ -151,7 +160,7 @@ fbController.middleware.receive.use((bot, message, next) => {
     }
   }
   message.text = messageMisspelledFree;
-  
+  console.log(message.text)
   next()
   return;
 });
