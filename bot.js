@@ -77,10 +77,19 @@ var performMisspellingCheck = function(message) {
   return messageMisspelledFree;
 }
 
+var greetings = {};
+greetings["hello"] = true;
+greetings["hi"] = true;
+greetings["good morning"] = true;
+greetings["hey"] = true;
+greetings["bonjour"] = true;
+greetings["salut"] = true;
+
+
 var isGreetings = function(message) {
-  var enGreetings = ["hi", "hello", "good morning", "hey"];
-  var frGreetings = ["bonjour", "salut"];
-  
+  var lowerCaseMessage = message.text.toLowerCase();
+  if(greetings[lowerCaseMessage]) return true;
+  return false;
 }
 
 
@@ -136,7 +145,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
-  if (message.text.split(" ").length > 1 && isGreetings(message) ) {
+  if (message.text.split(" ").length > 1 || isGreetings(message) ) {
     // update current dictionary if necessary
     var url = "https://translate.googleapis.com/translate_a/single"
     var parameters = { 
