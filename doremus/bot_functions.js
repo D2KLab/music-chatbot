@@ -24,7 +24,7 @@ module.exports.sendClearContext = function sendClearContext(sessionID) {
       console.log(response);
     }
   }
-  request(options, callback)
+  request(options, callback);
 }
 /*******************************************************************************/
 
@@ -228,7 +228,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
     if (err) { return console.log(err); }
 
     // JSON PARSING
-    var json = JSON.parse(body)
+    var json = JSON.parse(body);
 
     // RESPONSE
     if (json["results"]["bindings"].length === 0) {
