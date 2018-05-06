@@ -143,11 +143,9 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   }
   
   // -> Finalize the query
-  var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query='
-  var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
-  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
-
-  console.log(newQuery);
+  var queryPrefix = 'http://data.doremus.org/sparql?default-graph-uri=&query=';
+  var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on';
+  var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix;
   
   // -> Do the HTTP request
   const request = require('request');

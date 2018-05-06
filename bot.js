@@ -179,6 +179,7 @@ slackController.middleware.receive.use((bot, message, next) => {
       
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
+      console.log("to dialogflow: ", message.text)
       message.language = currentLang;
       next()
     });
@@ -186,7 +187,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     console.log("I STAY IN " + currentLang);
     var cleanMessage = performMisspellingCheck(message)
     message.text = cleanMessage;
-    console.log(message.text)
+    console.log("to dialogflow: ", message.text)
     message.language = currentLang;
     next();
   }
