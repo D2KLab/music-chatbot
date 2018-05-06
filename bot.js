@@ -184,9 +184,9 @@ slackController.middleware.receive.use((bot, message, next) => {
     });
   } else {
     console.log("I STAY IN " + currentLang);
-    console.log(message.text)
     var cleanMessage = performMisspellingCheck(message)
     message.text = cleanMessage;
+    console.log(message.text)
     message.language = currentLang;
     next();
   }
