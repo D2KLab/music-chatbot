@@ -112,6 +112,53 @@ slackController.middleware.receive.use((bot, message, next) => {
   }
   
   // update current dictionary if necessary
+  var url = "https://translate.googleapis.com/translate_a/single"
+  var parameters = { 
+      q: message.text, 
+      dt: 't',
+      tl: 'en',
+      sl: 'auto',
+      client: 'gtx',
+      hl: 'it'
+  };
+  
+  request({url:url, qs:parameters}, function(err, response, body) {
+    if (err) {
+      console.log("ERROR DURING LANGUAGE DETECTION");
+      next(err);
+    }
+    //detect language from json
+    var res = JSON.parse(body);
+    var lang = res[2];
+    
+    if (lang == "fr") {
+      console.log("SWTICHED TO FR");
+      speller = spellFR;
+      currentLang = "fr";
+    }
+    
+    var messageMisspelledFree = "";
+    var words = message.text.split(" ");
+
+    for (var i = 0; i < words.length; i++) {
+      if (speller.correct(words[i]) == false) {
+        var corrections = speller.suggest(words[i])
+        if (corrections.length > 0) {
+          messageMisspelledFree += corrections[0] + ' ';
+        } else {
+          messageMisspelledFree += words[i] + ' ';
+        }
+      } else {
+        messageMisspelledFree += words[i] + ' ';
+      }
+    }
+    message.text = messageMisspelledFree;
+    message.language = currentLang;
+    next()
+    return;
+  });
+    
+  /*
   if (message.text == "hi") {
     console.log("SWITCHED TO EN");
     speller = spellEN;
@@ -122,27 +169,8 @@ slackController.middleware.receive.use((bot, message, next) => {
     speller = spellFR
     currentLang = "fr";
   }
-  
+  */
   // apply spell checking for each word of the text before sending dialogflow
-  var messageMisspelledFree = "";
-  var words = message.text.split(" ");
-  
-  for (var i = 0; i < words.length; i++) {
-    if (speller.correct(words[i]) == false) {
-      var corrections = speller.suggest(words[i])
-      if (corrections.length > 0) {
-        messageMisspelledFree += corrections[0] + ' ';
-      } else {
-        messageMisspelledFree += words[i] + ' ';
-      }
-    } else {
-      messageMisspelledFree += words[i] + ' ';
-    }
-  }
-  message.text = messageMisspelledFree;
-  message.language = currentLang;
-  next()
-  return;
 });
 
 
