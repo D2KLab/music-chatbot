@@ -224,37 +224,52 @@ fbController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
-  // update current dictionary if necessary
-  if (message.text == "hi") {
-    console.log("SWITCHED TO EN");
-    speller = spellEN;
-    currentLang = "en";
-  }
-  else if (message.text == "bonjour") {
-    console.log("SWITCHED TO FR")
-    speller = spellFR
-    currentLang = "fr";
-  }
-  
-  // apply spell checking for each word of the text before sending dialogflow
-  var messageMisspelledFree = "";
-  var words = message.text.split(" ");
-  
-  for (var i = 0; i < words.length; i++) {
-    if (speller.correct(words[i]) == false) {
-      var corrections = speller.suggest(words[i])
-      if (corrections.length > 0) {
-        messageMisspelledFree += corrections[0] + ' ';
-      } else {
-        messageMisspelledFree += words[i] + ' ';
+  if (message.text.split(" ").length > 1 || isGreetings(message) ) {
+    // update current dictionary if necessary
+    var url = "https://translate.googleapis.com/translate_a/single"
+    var parameters = { 
+        q: message.text, 
+        dt: 't',
+        tl: 'it',
+        sl: 'auto',
+        client: 'gtx',
+        hl: 'it'
+    };
+
+    request({url:url, qs:parameters}, function(err, response, body) {
+      if (err) {
+        console.log("ERROR DURING LANGUAGE DETECTION");
+        next(err);
       }
-    } else {
-      messageMisspelledFree += words[i] + ' ';
-    }
+      //detect language from json
+      var res = JSON.parse(body);
+      var lang = res[2];
+
+      if (lang == "fr") {
+        console.log("SWTICHED TO FR");
+        speller = spellFR;
+        currentLang = "fr";
+      } else if (lang == "en") {
+        console.log("SWTICHED TO EN");
+        speller = spellEN;
+        currentLang = "en";
+      }
+      //otherwise don't change anything
+      
+      var cleanMessage = performMisspellingCheck(message)
+      message.text = cleanMessage;
+      console.log("to dialogflow: ", message.text)
+      message.language = currentLang;
+      next()
+    });
+  } else {
+    console.log("I STAY IN " + currentLang);
+    var cleanMessage = performMisspellingCheck(message)
+    message.text = cleanMessage;
+    console.log("to dialogflow: ", message.text)
+    message.language = currentLang;
+    next();
   }
-  message.text = messageMisspelledFree;
-  message.language = currentLang;
-  next()
   return;
 });
 
