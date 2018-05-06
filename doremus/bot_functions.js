@@ -147,6 +147,8 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
   var querySuffix = '&format=application%2Fsparql-results%2Bjson&timeout=0&debug=on'
   var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
 
+  console.log(newQuery);
+  
   // -> Do the HTTP request
   const request = require('request');
   request(finalQuery, (err, res, body) => {
