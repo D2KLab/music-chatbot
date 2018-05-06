@@ -21,4 +21,6 @@
 \contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{18}{subsection.4.3.3}
 \contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{19}{subsection.4.3.4}
 \contentsline {section}{\numberline {4.4}The flow}{20}{section.4.4}
-\contentsline {section}{\numberline {4.5}The spell checker}{20}{section.4.5}
+\contentsline {section}{\numberline {4.5}The spell checker middleware}{20}{section.4.5}
+\contentsline {section}{\numberline {4.6}Slack and Facebook Messenger}{20}{section.4.6}
+\contentsline {section}{\numberline {4.7}The code organization}{20}{section.4.7}
