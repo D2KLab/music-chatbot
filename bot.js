@@ -116,7 +116,7 @@ slackController.middleware.receive.use((bot, message, next) => {
   var parameters = { 
       q: message.text, 
       dt: 't',
-      tl: 'en',
+      tl: 'it',
       sl: 'auto',
       client: 'gtx',
       hl: 'it'
@@ -135,6 +135,10 @@ slackController.middleware.receive.use((bot, message, next) => {
       console.log("SWTICHED TO FR");
       speller = spellFR;
       currentLang = "fr";
+    } else {
+      console.log("SWTICHED TO EN");
+      speller = spellEN;
+      currentLang = "en";
     }
     
     var messageMisspelledFree = "";
