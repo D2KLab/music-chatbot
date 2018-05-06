@@ -170,11 +170,12 @@ slackController.middleware.receive.use((bot, message, next) => {
         console.log("SWTICHED TO FR");
         speller = spellFR;
         currentLang = "fr";
-      } else {
+      } else if (lang == "en") {
         console.log("SWTICHED TO EN");
         speller = spellEN;
         currentLang = "en";
       }
+      //otherwise don't change anything
       
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
