@@ -58,6 +58,25 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
   process.exit(1);
 }
 
+var performMisspellingCheck = function(message) {
+  var messageMisspelledFree = "";
+  var words = message.text.split(" ");
+
+  for (var i = 0; i < words.length; i++) {
+    if (speller.correct(words[i]) == false) {
+      var corrections = speller.suggest(words[i])
+      if (corrections.length > 0) {
+        messageMisspelledFree += corrections[0] + ' ';
+      } else {
+        messageMisspelledFree += words[i] + ' ';
+      }
+    } else {
+      messageMisspelledFree += words[i] + ' ';
+    }
+  }
+  return messageMisspelledFree;
+}
+
 
 // SLACK
 var slackBotOptions = {
@@ -111,56 +130,46 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
-  // update current dictionary if necessary
-  var url = "https://translate.googleapis.com/translate_a/single"
-  var parameters = { 
-      q: message.text, 
-      dt: 't',
-      tl: 'it',
-      sl: 'auto',
-      client: 'gtx',
-      hl: 'it'
-  };
-  
-  request({url:url, qs:parameters}, function(err, response, body) {
-    if (err) {
-      console.log("ERROR DURING LANGUAGE DETECTION");
-      next(err);
-    }
-    //detect language from json
-    var res = JSON.parse(body);
-    var lang = res[2];
-    
-    if (lang == "fr") {
-      console.log("SWTICHED TO FR");
-      speller = spellFR;
-      currentLang = "fr";
-    } else {
-      console.log("SWTICHED TO EN");
-      speller = spellEN;
-      currentLang = "en";
-    }
-    
-    var messageMisspelledFree = "";
-    var words = message.text.split(" ");
+  if (message.text.split(" ") > 2) {
+    // update current dictionary if necessary
+    var url = "https://translate.googleapis.com/translate_a/single"
+    var parameters = { 
+        q: message.text, 
+        dt: 't',
+        tl: 'it',
+        sl: 'auto',
+        client: 'gtx',
+        hl: 'it'
+    };
 
-    for (var i = 0; i < words.length; i++) {
-      if (speller.correct(words[i]) == false) {
-        var corrections = speller.suggest(words[i])
-        if (corrections.length > 0) {
-          messageMisspelledFree += corrections[0] + ' ';
-        } else {
-          messageMisspelledFree += words[i] + ' ';
-        }
-      } else {
-        messageMisspelledFree += words[i] + ' ';
+    request({url:url, qs:parameters}, function(err, response, body) {
+      if (err) {
+        console.log("ERROR DURING LANGUAGE DETECTION");
+        next(err);
       }
-    }
-    message.text = messageMisspelledFree;
-    message.language = currentLang;
-    next()
-    return;
-  });
+      //detect language from json
+      var res = JSON.parse(body);
+      var lang = res[2];
+
+      if (lang == "fr") {
+        console.log("SWTICHED TO FR");
+        speller = spellFR;
+        currentLang = "fr";
+      } else {
+        console.log("SWTICHED TO EN");
+        speller = spellEN;
+        currentLang = "en";
+      }
+      
+      var cleanMessage = performMisspellingCheck(message.text)
+      message.text = cleanMessage;
+      message.language = currentLang;
+      next()
+    });
+  } else {
+    console.log("I STAY IN " + currentLang);
+  }
+    
     
   /*
   if (message.text == "hi") {
