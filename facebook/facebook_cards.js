@@ -1,4 +1,5 @@
 /* FACEBOOK CARDS */
+var comm = "";
 
 /*******************************************************************************/
 module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {

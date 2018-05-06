@@ -23,6 +23,7 @@ var request = require('request');
 var http = require('http');
 var nspell = require('nspell')
 const fs = require('fs');
+var comm = "";
 
 var enDIC = fs.readFileSync("/app/node_modules/dictionary-en-us/index.dic", 'utf-8')
 var enAFF = fs.readFileSync("/app/node_modules/dictionary-en-us/index.aff", 'utf-8')
@@ -133,7 +134,6 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 
 
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
-
 slackController.middleware.receive.use((bot, message, next) => {
   if (!message.text) {
     next();

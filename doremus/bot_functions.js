@@ -1,4 +1,5 @@
 /* BOT FUNCTIONS */
+var comm = "";
 
 // LOAD VARIABLES AND FUNCTIONS
 const slackCards = require("../slack/slack_cards.js");

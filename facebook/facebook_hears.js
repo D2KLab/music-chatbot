@@ -1,4 +1,5 @@
 /* FACEBOOK HEARS */
+var comm = "";
 
 var botVars = require("../bot.js");
 var botFunctions = require("../doremus/bot_functions.js");
