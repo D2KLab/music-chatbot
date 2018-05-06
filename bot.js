@@ -77,6 +77,12 @@ var performMisspellingCheck = function(message) {
   return messageMisspelledFree;
 }
 
+var isGreetings = function(message) {
+  var enGreetings = ["hi", "hello", "good morning", "hey"];
+  var frGreetings = ["bonjour", "salut"];
+  
+}
+
 
 // SLACK
 var slackBotOptions = {
@@ -130,7 +136,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
-  if (message.text.split(" ") > 2) {
+  if (message.text.split(" ").length > 1 && isGreetings(message) ) {
     // update current dictionary if necessary
     var url = "https://translate.googleapis.com/translate_a/single"
     var parameters = { 
@@ -161,15 +167,20 @@ slackController.middleware.receive.use((bot, message, next) => {
         currentLang = "en";
       }
       
-      var cleanMessage = performMisspellingCheck(message.text)
+      var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
       message.language = currentLang;
       next()
     });
   } else {
     console.log("I STAY IN " + currentLang);
+    console.log(message.text)
+    var cleanMessage = performMisspellingCheck(message)
+    message.text = cleanMessage;
+    message.language = currentLang;
+    next();
   }
-    
+  return;
     
   /*
   if (message.text == "hi") {
