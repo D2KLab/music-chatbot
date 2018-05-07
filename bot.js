@@ -64,7 +64,7 @@ var performMisspellingCheck = function(message) {
   var words = message.text.split(" ");
 
   for (var i = 0; i < words.length; i++) {
-    if (speller.correct(words[i]) == false) {
+    if (speller.correct(words[i]) == false && isNaN(words[i]) ) {
       var corrections = speller.suggest(words[i])
       if (corrections.length > 0) {
         messageMisspelledFree += corrections[0] + ' ';
