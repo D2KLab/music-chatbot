@@ -4,7 +4,6 @@ var comm = "";
 /*******************************************************************************/
 module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
-  console.log(imageURLHTTPDropped)
   var bioAttachment = {
     "attachments": [{
         "pretext": "This is what I found:",
