@@ -8,7 +8,14 @@ var botFunctions = require("../doremus/bot_functions.js");
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   console.log(botVars.showNewSentence())
   if (botVars.showNewSentence()) {
-    bot.reply(message, message['text']);
+    bot.reply(message, {
+      "attachments": [
+        {
+          text: "I understood: " + message["text"],
+          color: "warning"
+        }
+        ]
+    });
   }
   
   // GET PARAMETERS
