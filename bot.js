@@ -41,6 +41,7 @@ var spellEN = nspell(itAFF, itDIC)
 
 var speller = spellEN
 var currentLang = "en"
+var showNewSentence = false
 
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
@@ -62,11 +63,13 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
 var performMisspellingCheck = function(message) {
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
+  showNewSentence = false
 
   for (var i = 0; i < words.length; i++) {
     if (speller.correct(words[i]) == false && isNaN(words[i]) ) {
       var corrections = speller.suggest(words[i])
       if (corrections.length > 0) {
+        showNewSentence = true
         messageMisspelledFree += corrections[0] + ' ';
       } else {
         messageMisspelledFree += words[i] + ' ';
@@ -284,6 +287,7 @@ exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.fbController = fbController;
+exports.showNewSentence = showNewSentence;
 
 // IMPORT HEARS
 var slackHears = require('./slack/slack_hears.js');

@@ -7,6 +7,10 @@ var botFunctions = require("../doremus/bot_functions.js");
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
+  if (botVars.showNewSentence) {
+    bot.reply(message, message['text']);
+  }
+  
   // GET PARAMETERS
   var parameters = {
    artist: message.entities["doremus-artist"],
