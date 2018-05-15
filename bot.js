@@ -288,7 +288,7 @@ exports.slackController = slackController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.fbController = fbController;
-exports.showNewSentence = showNewSentence;
+exports.showNewSentence = function() {return showNewSentence };
 
 // IMPORT HEARS
 var slackHears = require('./slack/slack_hears.js');

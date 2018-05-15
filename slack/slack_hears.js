@@ -6,8 +6,8 @@ var botFunctions = require("../doremus/bot_functions.js");
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
-  console.log(botVars.showNewSentence)
-  if (botVars.showNewSentence) {
+  console.log(botVars.showNewSentence())
+  if (botVars.showNewSentence()) {
     bot.reply(message, message['text']);
   }
   
