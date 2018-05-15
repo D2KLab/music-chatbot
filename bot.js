@@ -78,6 +78,7 @@ var performMisspellingCheck = function(message) {
       messageMisspelledFree += words[i] + ' ';
     }
   }
+  console(showNewSentence)
   return messageMisspelledFree;
 }
 
