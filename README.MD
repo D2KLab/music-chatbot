@@ -7,9 +7,9 @@ The bot makes use of different tools:
 
 - It uses the [DOREMUS](https://github.com/DOREMUS-ANR) knowledge base as source of informations to answer the queries.
 
-- [Dialogflow](https://github.com/dialogflow) as Natural Language Processing tool.
+- Uses [Dialogflow](https://github.com/dialogflow) as Natural Language Processing tool.
 
-- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messanger](https://www.messenger.com).
+- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com).
 
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/architecture.png) 
