@@ -495,6 +495,16 @@
 		\textit{What do you know about Beethoven?} - \textbf{User}\\
 	\end{verse}
 
+	The bot is also capable of mixing the \texttt{discover-artist} and \texttt{works-by} intents:
+	after asking the bot of the details of an artist, the user can retrieve its works, applying the usual filters. Let's make an example:
+	
+	\begin{verse}
+		\textit{Tell me something about Mozart} - \textbf{User}\\
+		[Result with bio, picture, birth/death date/place] - \textbf{Bot}\\
+		\textit{Now give me 5 of his works, written for clarinet} - \textbf{User}\\
+		[Result with the 5 works of that artist] - \textbf{Bot}\\
+	\end{verse}
+
 	\section{The flow}
 	\section{The spell checker middleware}
 	\section{Slack and Facebook Messenger}
