@@ -47,10 +47,10 @@ The bot is also capable of mixing the "artist discovering" and "works finding" i
 after asking the bot of the details of an artist, the user can retrieve its works,
 applying the usual filters. Let's make an example:
 
-    - *"Tell me something about Mozart"* - User
-    - [Result with bio, picture, birth/death date/place]
-    - *"Now give me 5 of his works, written for clarinet"* - User
-    - [Result with the 5 works of that artist]
+- *"Tell me something about Mozart"* - User
+- [Result with bio, picture, birth/death date/place]
+- *"Now give me 5 of his works, written for clarinet"* - User
+- [Result with the 5 works of that artist]
 
 # How to deploy DOREMUS Bot
 
