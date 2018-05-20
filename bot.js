@@ -45,7 +45,7 @@ var currentLang = "en"
 var showNewSentence = false
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
-if (!process.env.token) {
+if (!process.env.slackToken) {
     console.log('Error! Specify Slack token in environment');
     process.exit(1);
 }

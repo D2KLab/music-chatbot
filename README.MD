@@ -1,5 +1,47 @@
 # DOREMUS Bot
 ### A virtual assistant for answering music related questions.
+
+# How to deploy DOREMUS Bot
+
+## What you need
+Make sure you have [https://nodejs.org/en/download/](*Node.js*) installed in your local machine.
+
+## Installing
+
+```
+$ git clone https://github.com/D2KLab/music-chatbot.git
+$ cd music-chatbot
+$ npm install 
+```
+
+## Configuring
+
+```
+# Environment Config
+
+# store your secrets and config variables in here
+# only invited collaborators will be able to see your .env values
+# reference these in your code with process.env.SECRET
+
+clientId=<your client id>
+clientSecret=<your client secret>
+studio_token=<your studio token>
+PORT=3000
+
+# slack
+slackToken=<slack token>
+
+# facebook
+fbAccessToken=<fb access token>
+fbVerifyToken=<fb verify token>
+fbAppSecret=<fb app secret token>
+
+# dialogflow
+dialogflow=<dialogflow token>
+```
+
+#Description
+
 This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related queries.
 
 The bot makes use of different tools:
@@ -14,7 +56,7 @@ The bot makes use of different tools:
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/architecture.png) 
 
-# The bot capabilities
+## The bot capabilities
 The intents are grouped in a simple and clear way, according to what the user
 wants to retrieve from the DOREMUS knowledge base. The bot can:
 
@@ -52,5 +94,4 @@ applying the usual filters. Let's make an example:
 - *"Now give me 5 of his works, written for clarinet"* - User
 - [Result with the 5 works of that artist]
 
-# How to deploy DOREMUS Bot
 
