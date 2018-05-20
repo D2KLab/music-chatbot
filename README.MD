@@ -1,9 +1,9 @@
 # DOREMUS Bot
 ### A virtual assistant for answering music related questions.
 
-# Description
+## Description
 
-#### This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related queries.
+##### This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related queries.
 
 The bot makes use of different tools:
 - It's built using the [BotKit](https://github.com/howdyai/botkit) bot building tool.
@@ -12,17 +12,17 @@ The bot makes use of different tools:
 
 - Uses [Dialogflow](https://github.com/dialogflow) as Natural Language Processing tool.
 
-- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com).
+- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/)
 
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/architecture.png) 
 
-# How to deploy DOREMUS Bot
+## Getting started
 
-## What you need
-Make sure you have [https://nodejs.org/en/download/](*Node.js*) installed in your local machine.
+### What you need
+Make sure you have [*Node.js*](https://nodejs.org/en/download/) installed in your local machine.
 
-## Installing
+### Installing
 
 ```
 $ git clone https://github.com/D2KLab/music-chatbot.git
@@ -30,8 +30,8 @@ $ cd music-chatbot
 $ npm install 
 ```
 
-## Configuring
-
+### Configuring
+Prepare a .env for your node app. You can easily copy-paste the following:
 ```
 # Environment Config
 
@@ -56,7 +56,18 @@ fbAppSecret=<fb app secret token>
 dialogflow=<dialogflow token>
 ```
 
+You need:
+- [Slack token](https://api.slack.com/apps)
+- [Facebook tokens](https://developers.facebook.com/apps/)
+- DialogFlow token
 
+### Deploying
+You can easily launch the bot with:
+```
+$ npm start 
+```
+
+Enjoy!
 
 ## The bot capabilities
 The intents are grouped in a simple and clear way, according to what the user
