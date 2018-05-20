@@ -16,6 +16,7 @@ Supported platforms:
   - Facebook Messenger
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+require('dotenv').load();
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
@@ -25,12 +26,12 @@ var nspell = require('nspell')
 const fs = require('fs');
 var comm = "";
 
-var enDIC = fs.readFileSync("/app/node_modules/dictionary-en-us/index.dic", 'utf-8')
-var enAFF = fs.readFileSync("/app/node_modules/dictionary-en-us/index.aff", 'utf-8')
+var enDIC = fs.readFileSync("./node_modules/dictionary-en-us/index.dic", 'utf-8')
+var enAFF = fs.readFileSync("./node_modules/dictionary-en-us/index.aff", 'utf-8')
 var spellEN = nspell(enAFF, enDIC)
 
-var frDIC = fs.readFileSync("/app/node_modules/dictionary-fr/index.dic", 'utf-8')
-var frAFF = fs.readFileSync("/app/node_modules/dictionary-fr/index.aff", 'utf-8')
+var frDIC = fs.readFileSync("./node_modules/dictionary-fr/index.dic", 'utf-8')
+var frAFF = fs.readFileSync("./node_modules/dictionary-fr/index.aff", 'utf-8')
 var spellFR = nspell(frAFF, frDIC)
 
 /*
@@ -42,7 +43,6 @@ var spellEN = nspell(itAFF, itDIC)
 var speller = spellEN
 var currentLang = "en"
 var showNewSentence = false
-
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.token) {
