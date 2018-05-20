@@ -196,20 +196,6 @@ slackController.middleware.receive.use((bot, message, next) => {
     next();
   }
   return;
-    
-  /*
-  if (message.text == "hi") {
-    console.log("SWITCHED TO EN");
-    speller = spellEN;
-    currentLang = "en";
-  }
-  else if (message.text == "bonjour") {
-    console.log("SWITCHED TO FR")
-    speller = spellFR
-    currentLang = "fr";
-  }
-  */
-  // apply spell checking for each word of the text before sending dialogflow
 });
 
 
