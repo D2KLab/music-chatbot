@@ -30,6 +30,39 @@ $ cd music-chatbot
 $ npm install 
 ```
 
+### The code organization
+```
+    bot.js
+    .env
+    
+    doremus/
+        bot_functions.js
+    
+    slack/
+        slack_hears.js
+        slack_cards.js
+    
+    facebook/
+        facebook_hears.js
+        facebook_cards.js
+```
+
+- [bot.js](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
+
+- .env is the secret file containing all the tokens for Slack, Facebook and BotKit Studio. It's ignored from the GitHub repository because it contains sensitive informations (tokens): you have to set it following the [Configuration section](#configuring).
+
+- [doremus/](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
+
+- [slack/](./slack/) is a directory containing the files related to Slack:
+
+    - [slack_hears.js](./slack/slack_hears.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
+    - [slack_cards.js](./slack/slack_cards.js) contains the code to build the Slack cards to make the answers prettier.
+
+- [facebook/](./facebook/) is a directory containing the files related to Facebook:
+
+    - [facebook_hears.js](./facebook/facebook_hears.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
+    - [facebook_cards.js](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
+
 ### Configuring
 Prepare a .env for your node app. You can easily copy-paste the following:
 ```
