@@ -30,6 +30,23 @@ $ cd music-chatbot
 $ npm install 
 ```
 
+### The code organization
+```
+    bot.js
+    .env
+    
+    doremus/
+        bot_functions.js
+    
+    slack/
+        slack_hears.js
+        slack_cards.js
+    
+    facebook/
+        facebook_hears.js
+        facebook_cards.js
+```
+
 ### Configuring
 Prepare a .env for your node app. You can easily copy-paste the following:
 ```
