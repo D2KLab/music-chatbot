@@ -9,9 +9,9 @@
 \BOOKMARK [2][-]{subsection.2.3.1}{Attention-Based RNN model for joint intent detection and slot-filling}{section.2.3}% 9
 \BOOKMARK [1][-]{section.2.4}{State of art \(1st meeting slides\)}{chapter.2}% 10
 \BOOKMARK [0][-]{chapter.3}{Dialogflow}{}% 11
-\BOOKMARK [1][-]{section.3.1}{What is Dialogflow}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.2}{Why Dialogflow}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.3}{How it works?}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.1}{What is Dialogflow?}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.2}{How does it work?}{chapter.3}% 13
+\BOOKMARK [2][-]{subsection.3.2.1}{Fundamental concepts}{section.3.2}% 14
 \BOOKMARK [0][-]{chapter.4}{The bot}{}% 15
 \BOOKMARK [1][-]{section.4.1}{The architecture}{chapter.4}% 16
 \BOOKMARK [1][-]{section.4.2}{Entities}{chapter.4}% 17
@@ -20,7 +20,5 @@
 \BOOKMARK [2][-]{subsection.4.3.2}{Finding some artists}{section.4.3}% 20
 \BOOKMARK [2][-]{subsection.4.3.3}{Finding some future and past performances}{section.4.3}% 21
 \BOOKMARK [2][-]{subsection.4.3.4}{Know more about an artist}{section.4.3}% 22
-\BOOKMARK [1][-]{section.4.4}{The flow}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.5}{The spell checker middleware}{chapter.4}% 24
-\BOOKMARK [1][-]{section.4.6}{Slack and Facebook Messenger}{chapter.4}% 25
-\BOOKMARK [1][-]{section.4.7}{The code organization}{chapter.4}% 26
+\BOOKMARK [1][-]{section.4.4}{The spell checker middleware}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.5}{Slack and Facebook Messenger}{chapter.4}% 24

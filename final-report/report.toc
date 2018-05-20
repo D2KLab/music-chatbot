@@ -9,18 +9,16 @@
 \contentsline {subsection}{\numberline {2.3.1}Attention-Based RNN model for joint intent detection and slot-filling}{7}{subsection.2.3.1}
 \contentsline {section}{\numberline {2.4}State of art (1st meeting slides)}{8}{section.2.4}
 \contentsline {chapter}{\numberline {3}Dialogflow}{9}{chapter.3}
-\contentsline {section}{\numberline {3.1}What is Dialogflow}{9}{section.3.1}
-\contentsline {section}{\numberline {3.2}Why Dialogflow}{9}{section.3.2}
-\contentsline {section}{\numberline {3.3}How it works?}{9}{section.3.3}
-\contentsline {chapter}{\numberline {4}The bot}{10}{chapter.4}
-\contentsline {section}{\numberline {4.1}The architecture}{10}{section.4.1}
-\contentsline {section}{\numberline {4.2}Entities}{12}{section.4.2}
-\contentsline {section}{\numberline {4.3}Intents}{14}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{14}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{18}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{19}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{20}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}The flow}{21}{section.4.4}
-\contentsline {section}{\numberline {4.5}The spell checker middleware}{21}{section.4.5}
-\contentsline {section}{\numberline {4.6}Slack and Facebook Messenger}{21}{section.4.6}
-\contentsline {section}{\numberline {4.7}The code organization}{21}{section.4.7}
+\contentsline {section}{\numberline {3.1}What is Dialogflow?}{9}{section.3.1}
+\contentsline {section}{\numberline {3.2}How does it work?}{9}{section.3.2}
+\contentsline {subsection}{\numberline {3.2.1}Fundamental concepts}{10}{subsection.3.2.1}
+\contentsline {chapter}{\numberline {4}The bot}{11}{chapter.4}
+\contentsline {section}{\numberline {4.1}The architecture}{11}{section.4.1}
+\contentsline {section}{\numberline {4.2}Entities}{13}{section.4.2}
+\contentsline {section}{\numberline {4.3}Intents}{15}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{15}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{19}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{20}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{21}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}The spell checker middleware}{22}{section.4.4}
+\contentsline {section}{\numberline {4.5}Slack and Facebook Messenger}{22}{section.4.5}
