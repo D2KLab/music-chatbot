@@ -133,7 +133,7 @@ var fbBot = fbController.spawn({
 });
 
 fbController.setupWebserver(
-      3000,
+      process.env.PORT || 5000,
       (err, webserver) => {
         fbController.createWebhookEndpoints(webserver, fbBot);
       }
