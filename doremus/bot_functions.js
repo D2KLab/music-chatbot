@@ -4,6 +4,7 @@ var comm = "";
 // LOAD VARIABLES AND FUNCTIONS
 const slackCards = require("../slack/slack_cards.js");
 const fbCards = require("../facebook/facebook_cards.js");
+const botVars = require("../bot.js");
 
 // FUNCTIONS
 /*******************************************************************************/
@@ -160,7 +161,13 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
     // RESPONSE
     if (json["results"]["bindings"].length === 0) {
       
-      bot.reply(message, "Sorry... I didn't find anything!");
+	  var currentLang = botVars.currentLang;
+	  if (currentLang === "fr") {
+	    bot.reply(message, "Desolé... Je n'ai trouvé rien!");
+	  }
+	  else {
+	    bot.reply(message, "Sorry... I didn't find anything!");
+	  }
     }
     else {
       
@@ -234,7 +241,13 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
     // RESPONSE
     if (json["results"]["bindings"].length === 0) {
       
-      bot.reply(message, "Sorry... I didn't find anything!");
+      var currentLang = botVars.currentLang;
+	  if (currentLang === "fr") {
+	    bot.reply(message, "Desolé... Je n'ai trouvé rien!");
+	  }
+	  else {
+	    bot.reply(message, "Sorry... I didn't find anything!");
+	  }
     }
     else {
       var resp = "This is the list:\n";
@@ -324,7 +337,13 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
     // RESPONSE
     if (json["results"]["bindings"].length === 0) {
       
-      bot.reply(message, "Sorry... I didn't find anything!");
+      var currentLang = botVars.currentLang;
+	  if (currentLang === "fr") {
+	    bot.reply(message, "Desolé... Je n'ai trouvé rien!");
+	  }
+	  else {
+	    bot.reply(message, "Sorry... I didn't find anything!");
+	  }
     }
     else {
       var resp = "This is the list:\n";
