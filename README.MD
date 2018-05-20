@@ -20,7 +20,7 @@ The architecture is the following:
 ## Getting started
 
 ### What you need
-Make sure you have [*Node.js*](https://nodejs.org/en/download/) installed in your local machine.
+Make sure you have [Node.js](https://nodejs.org/en/download/) installed in your local machine.
 
 ### Installing
 
@@ -34,18 +34,14 @@ $ npm install
 Prepare a .env for your node app. You can easily copy-paste the following:
 ```
 # Environment Config
+# (reference these in your code with process.env.SECRET)
 
-# store your secrets and config variables in here
-# only invited collaborators will be able to see your .env values
-# reference these in your code with process.env.SECRET
-
-clientId=<your client id>
-clientSecret=<your client secret>
-studio_token=<your studio token>
 PORT=3000
 
 # slack
 slackToken=<slack token>
+clientId=<your client id>
+clientSecret=<your client secret>
 
 # facebook
 fbAccessToken=<fb access token>
@@ -59,7 +55,7 @@ dialogflow=<dialogflow token>
 You need:
 - [Slack token](https://api.slack.com/apps)
 - [Facebook tokens](https://developers.facebook.com/apps/)
-- DialogFlow token
+- Dialogflow token
 
 ### Deploying
 You can easily launch the bot with:
