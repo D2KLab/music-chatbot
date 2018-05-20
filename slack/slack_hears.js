@@ -6,7 +6,7 @@ var botFunctions = require("../doremus/bot_functions.js");
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
-  console.log(botVars.showNewSentence())
+
   if (botVars.showNewSentence()) {
     bot.reply(message, {
       "attachments": [
@@ -131,6 +131,17 @@ module.exports.worksBySomething = botVars.slackController.hears(['works-by-artis
 // DISCOVER ARTIST
 module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
     
+    if (botVars.showNewSentence()) {
+      bot.reply(message, {
+        "attachments": [
+          {
+            text: "I understood: " + message["text"],
+            color: "warning"
+          }
+          ]
+      });
+    }
+
     // GET ENTITIES
     var date = message.entities["date-period"];
     var number = message.entities["number"];
@@ -164,6 +175,17 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
 // DISCOVER ARTIST
 module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
   
+  if (botVars.showNewSentence()) {
+    bot.reply(message, {
+      "attachments": [
+        {
+          text: "I understood: " + message["text"],
+          color: "warning"
+        }
+        ]
+    });
+  }
+
   // ACTION COMPLETE (we have all the required infos)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
     
@@ -182,6 +204,17 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 
 // FIND-PERFORMANCE
 module.exports.findPerformance = botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+  
+  if (botVars.showNewSentence()) {
+    bot.reply(message, {
+      "attachments": [
+        {
+          text: "I understood: " + message["text"],
+          color: "warning"
+        }
+        ]
+    });
+  }
   
   // ACTION COMPLETE (the date has been provided)
   if (message['nlpResponse']['result']['actionIncomplete'] == false) {
