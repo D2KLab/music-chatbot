@@ -61,24 +61,31 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
 }
 
 var performMisspellingCheck = function(message) {
+  // empty string where to append corrected words
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
+  // initially assume there is no correction neeeded
   showNewSentence = false
 
   for (var i = 0; i < words.length; i++) {
+    // check for each word if is it misspelled
     if (speller.correct(words[i]) == false && isNaN(words[i]) ) {
       var corrections = speller.suggest(words[i])
       if (corrections.length > 0) {
-        showNewSentence = true
+        // if it is and at least a correction exists append the first one
         messageMisspelledFree += corrections[0] + ' ';
+        // set the global var to true in order to show that a correction happened
+        // in the next response to the user
+        showNewSentence = true
       } else {
+        // otherwise append the original word
         messageMisspelledFree += words[i] + ' ';
       }
     } else {
+      // otherwise append the original word
       messageMisspelledFree += words[i] + ' ';
     }
   }
-  console.log(showNewSentence)
   return messageMisspelledFree;
 }
 
@@ -88,6 +95,7 @@ greetings["hi"] = true;
 greetings["good morning"] = true;
 greetings["hey"] = true;
 greetings["bonjour"] = true;
+greetings["bonsoir"] = true;
 greetings["salut"] = true;
 
 
@@ -125,7 +133,7 @@ var fbBot = fbController.spawn({
 });
 
 fbController.setupWebserver(
-      3000,
+      process.env.PORT || 5000,
       (err, webserver) => {
         fbController.createWebhookEndpoints(webserver, fbBot);
       }
@@ -149,8 +157,10 @@ slackController.middleware.receive.use((bot, message, next) => {
     return;
   }
   
+  // trigger language detection in case of long sentences or greetings
   if (message.text.split(" ").length > 1 || isGreetings(message) ) {
-    // update current dictionary if necessary
+
+    // prepare arguments for requesto to Google Translate
     var url = "https://translate.googleapis.com/translate_a/single"
     var parameters = { 
         q: message.text, 
@@ -166,32 +176,33 @@ slackController.middleware.receive.use((bot, message, next) => {
         console.log("ERROR DURING LANGUAGE DETECTION");
         next(err);
       }
-      //detect language from json
+
+      // get language from json
       var res = JSON.parse(body);
       var lang = res[2];
 
+      // update accordingly the speller and the global var 
       if (lang == "fr") {
-        console.log("SWTICHED TO FR");
         speller = spellFR;
         currentLang = "fr";
       } else if (lang == "en") {
-        console.log("SWTICHED TO EN");
         speller = spellEN;
         currentLang = "en";
       }
       //otherwise don't change anything
       
+      // perform the misspelling with the (potentially) updated speller
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
-      console.log("to dialogflow: ", message.text)
+      // fill the language field in order to send it to dialogflow api
       message.language = currentLang;
       next()
     });
   } else {
-    console.log("I STAY IN " + currentLang);
+    // perform the misspelling with the same speller as before
     var cleanMessage = performMisspellingCheck(message)
     message.text = cleanMessage;
-    console.log("to dialogflow: ", message.text)
+    // fill the language field in order to send it to dialogflow api
     message.language = currentLang;
     next();
   }
