@@ -126,14 +126,15 @@ date, a picture and a little bio. After the card visualization, a set of works
 of the artist (connection with the works-by intent) can be asked.
     - *"Tell me something about Mozart"*
     - *"What do you know about Beethoven?"*
-    
+
+
 The bot is also capable of mixing the "artist discovering" and "works finding" intents:
 after asking the bot of the details of an artist, the user can retrieve its works,
 applying the usual filters. Let's make an example:
 
-- *"Tell me something about Mozart"* - User
+- *"Tell me something about Mozart"*
 - [Result with bio, picture, birth/death date/place]
-- *"Now give me 5 of his works, written for clarinet"* - User
+- *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
 
 

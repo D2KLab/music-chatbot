@@ -43,7 +43,7 @@
 \setlength\epigraphwidth{0.7\textwidth}
 \title{Developing a virtual assistant for answering music related questions}
 \author{Claudio SCALZO \\ (\href{mailto:scalzo@eurecom.fr}{scalzo@eurecom.fr}) \and Luca LOMBARDO \\ (\href{mailto:lombardo@eurecom.fr}{lombardo@eurecom.fr}) }
-\date{Professor: Raphael Troncy\\Supervisors: Pasquale Lisena | Thibault Ehrhart}
+\date{Professor: Raphaël Troncy\\Supervisors: Pasquale Lisena | Thibault Ehrhart}
 
 \begin{document}
 \maketitle
@@ -114,7 +114,57 @@
 			and slot filling.}
 	\end{figure}
 	The attention-based model proposed by Liu and Lane shows a clear structure: each bidirectional \textit{RNN} produces a forward and a backward hidden state, useful for predicting the slot label (the core of the slot-filling task). At the same time, these outputs \textit{h\textsubscript{i}} are merged with the context vector \textit{c} to predict the final intent label.
-	\section{State of art (1st meeting slides)}
+	
+	\section{State of art: famous and most used tools}
+	\begin{itemize}
+		\item \textbf{Wit.ai}\cite{witai}\\
+		Facebook owned, is one of the most complete solutions for natural language processing. It supports 50 languages, it’s free.
+		
+		Pros:
+		\begin{itemize}
+			\item Supports machine learning to learn alternative phrases.
+			\item UI to work with intent and entities.
+			\item Developer view with conversation flows, context variables, branching logic.
+			\item Supports "roles" in entities (e.g. \texttt{fromLocation(Nice)} to \texttt{toLocation(Turin)}).
+		\end{itemize}
+		
+		Cons:
+		\begin{itemize}
+			\item No "required field" option (slot-filling)
+		\end{itemize}	
+
+		\item \textbf{Snips}\cite{snips}\\
+		An open source alternative to the most popular NLU systems.
+		
+		Pros:
+		\begin{itemize}
+			\item Fully runs on device.
+			\item Heavily exploits machine learning (especially CRF).
+			\item Privacy by design.
+			\item Precise performance metrics .
+			\item Open source (\textit{\href{https://github.com/snipsco}{https://github.com/snipsco}}).
+			\item Integrated Automatic Speech Recognition.
+		\end{itemize}
+		
+		Cons:
+		\begin{itemize}
+			\item Doesn't support a big set of languages.
+		\end{itemize}
+	
+		\item \textbf{IBM Watson}\cite{watson}\\
+		\textit{"The first choice as a bot-building platform for 61\% of businesses".}\\
+		It supports Node, Java, Python, iOS and Unity SDK. Free and Premium plans. It’s heavy but powerful.
+		
+		\item \textbf{Amazon Lex}\cite{lex}\\
+		It powers \textit{Alexa}. SDKs for popular platforms.\\
+		You pay only for what you use. No demo, no open-source.
+		
+		\item \textbf{Microsoft LUIS}\cite{luis}\\
+		Supports and heavily uses machine learning. Composite entities (e.g. \textit{"2-adults first class flight ticket"}). Rich metrics of performances evaluation of the assistant.
+		
+		\item \textbf{Recast.ai}\cite{recast}\\
+		SAP-owned. \textit{"Free"} and \textit{"Company"} accounts. Funny interactive demo on the website which shows SDK code for a lot of platforms.
+	\end{itemize}
 
 \chapter{Dialogflow}
 	\section{What is Dialogflow?}
@@ -132,7 +182,7 @@
 		\caption{Architecture of a generic system using \textit{Dialogflow}\cite{apiai}}
 	\end{figure}
 	
-	\subsection{Fundamental concepts}
+	\section{Fundamental concepts}
 		Dialogflow works thanks to some fundamental pillars:
 		\begin{itemize}
 			\item \textbf{Intents}\\
@@ -557,15 +607,122 @@
 		\item Misspelling check
 		\item Setting of the variables used from the next middleware
 	\end{enumerate}
-	In the first step we use \textit{Google Translate}. For this reason we initially prepare few parameters that we are going to attach to the HTTP request. Among the many, the most important is \texttt{sl} that stands for "source language": setting it to "auto" we let Google Translate detecting it. This information is in the response JSON.
+	In the first step we use the \textit{Google Translate API}. For this reason we initially prepare few parameters that we are going to attach to the HTTP request. Among the many, the most important is \texttt{sl} that stands for "source language": setting it to "auto" we let the \textit{Google Translate API} detecting it. This information is in the response JSON.
 	
-	In the second step, after setting up the speller accordingly to the language detected, we perform the misspelling check: for each word (splitting by space) we check if is it in the dictionary (in other words well-spelled) otherwise we replace it with the most similar corrected word, if it exists.
+	\begin{lstlisting}[language=C]
+	
+	// LANGUAGE CHECK
+	
+	// prepare arguments for the request to Google Translate API
+	var url = "https://translate.googleapis.com/translate_a/single"
+	var parameters = { 
+		q: message.text, 
+		dt: 't',
+		tl: 'it',
+		sl: 'auto',
+		client: 'gtx',
+		hl: 'it'
+	};
+	
+	request({url:url, qs:parameters}, function(err, response, body) {
+	
+		if (err) {
+			console.log("Error during language detection!");
+			next(err);
+		}
+		
+		// get language from json
+		var res = JSON.parse(body);
+		var lang = res[2];
+		
+		// update accordingly the speller and the global var 
+		if (lang == "fr") {
+			speller = spellFR;
+			currentLang = "fr";
+		}
+		else if (lang == "en") {
+			speller = spellEN;
+			currentLang = "en";
+		}
+		//otherwise don't change anything
+	\end{lstlisting}
+	
+	In the second step, after setting up the speller accordingly to the language detected, we perform the misspelling check: for each word (splitting by space) we check if is it in the dictionary (in other words well-spelled) otherwise we replace it with the most similar corrected word, if it exists:
+	
+	\begin{lstlisting}[language=C]
+	
+	// SPELL CHECKING
+	
+	// perform the misspelling with the (potentially) updated speller
+	var cleanMessage = performMisspellingCheck(message)
+	message.text = cleanMessage;
+	
+	// fill the language field in order to send it to dialogflow api
+	message.language = currentLang;
+	
+	next()
+	\end{lstlisting}
 	
 	The third step is the simplest one: we simply change the text of the message, the object that will handle by the next middleware, with the new, misspelling-free sentence; in addition we set an additional field inside it: the language one, that will be used by \texttt{botkit-middleware-dialogflow} to set the language of the agent before sending the request.
+	
+	\begin{lstlisting}[language=C]
+	
+	if (message.language != null) {
+		app.language = message.language;
+	}
+	\end{lstlisting}
 	
 	One minor aspect is behind the variable \texttt{showNewSentence}. We want to give the user a feedback when a correction occurred. When it is set to true, the first next answer will include a warning for the user, indicating the actual sentence that has been processed.
 	
 	\section{Slack and Facebook Messenger}
+	
+	\subsection{Hears}
+	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{BotKit} environment. The mechanism through which the sentences are heard is simple to understand: the hears methods are instantiated, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{BotKit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to instantiate the methods that needs to be triggered when an intent is detected.\\\\
+	The prototype of a generic hears functions (in our code) is the following:
+	\begin{lstlisting}[language=C]
+	
+	// HELLO INTENT
+	module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+	
+		bot.reply(message, message['fulfillment']['speech']);
+	});
+	\end{lstlisting}
+	The \texttt{hello} variable (put in the module.exports object to be available from the code in other files) is instantiated as an \texttt{hears} (in this case of the \texttt{slackController} object, but it could have been \texttt{fbController}). The code, in the case of the \texttt{hello} intent is really simple, because it just needs to reply with the same answer provided by the \textit{Dialogflow} NLP. For the other intents, the code is obviously more complicated because it needs to get the informations from the \textit{DOREMUS} knowledge base, as explained in the previous chapters.
+	
+	\subsection{Cards}
+	All the textual results that the bot provides are made "prettier" thanks to cards. Both in the \textit{Facebook} and in the \textit{Slack} chat, the results are indeed organized in "key-value" pairs following the JSON syntax. In this way, for example, \textit{Mozart} is presented as the value of the key \textit{Composer}, or \textit{05/12/1791} is the value of the \textit{Death date} key. An example of the code of a card creation is the following:
+	\begin{lstlisting}[language=C]
+	
+	module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {  
+		var performanceAttachment = {
+			"type": "template",
+			"payload": {
+				"template_type": "list",
+				"top_element_style": "compact",
+				"elements": [
+				{
+					"title": title,
+					"subtitle": subtitle
+				},
+				{
+					"title": "Where",
+					"subtitle": placeName
+				},
+				{
+					"title": "When",
+					"subtitle": date        
+				},
+				{
+					"title": "Actors",
+					"subtitle": actorsName        
+				}
+				] 
+			}
+		}
+		return performanceAttachment;
+	\end{lstlisting}
+	
+	\chapter{Conclusions}
 	
 	\begin{thebibliography}{9}
 		\bibitem{doremus} DOREMUS: DOing REusable MUSical data. | \textit{\href{http://www.doremus.org/}{http://www.doremus.org/}}
@@ -574,6 +731,12 @@
 		\bibitem{woods} Augmented Transition Networks for Natural Language Analysis. 1969. Woods, William. | \textit{\href{https://eric.ed.gov/?id=ED037733}{https://eric.ed.gov/?id=ED037733}}
 		\bibitem{nlpnlunlg} NLP, NLU, NLG and how Chatbots work. | \textit{\href{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}}
 		\bibitem{rnn} Attention-Based Recurrent Neural Network Models for Joint Intent Detection and Slot Filling. 2016. Liu, Bing and Lane, Ian. | \textit{\href{https://arxiv.org/abs/1609.01454}{https://arxiv.org/abs/1609.01454}}
+		\bibitem{witai} Wit.ai: Turn what your users say into actions. | \textit{\href{https://wit.ai/}{https://wit.ai/}}
+		\bibitem{snips} Snips: Using Voice to Make Technology Disappear. | \textit{\href{https://snips.ai/}{https://snips.ai/}}
+		\bibitem{watson} IBM Watson: Does your business think? | \textit{\href{https://www.ibm.com/watson/}{https://www.ibm.com/watson/}}
+		\bibitem{lex} Amazon Lex: Build conversation bots. | \textit{\href{https://aws.amazon.com/lex/}{https://aws.amazon.com/lex/}}
+		\bibitem{luis} Microsoft LUIS: A machine learning-based service to build natural language into apps, bots, and IoT devices. | \textit{\href{https://www.luis.ai/}{https://www.luis.ai/}}
+		\bibitem{recast} SAP Recast.ai: A collaborative bot platform. | \textit{\href{https://recast.ai/}{https://recast.ai/}}
 		\bibitem{apiai} Chatbots made easy with Dialogflow. An overview on the architecture. | \textit{\href{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}}
 		\textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow}{https://github.com/jschnurr/botkit-middleware-dialogflow} | The GitHub repository of the BotKit middleware for Dialogflow.}
 	\end{thebibliography}

@@ -8,14 +8,16 @@
 This is the DOREMUS Bot! Built with Botkit, using the Dialogflow middleware.
 
 Authors:
-  - Luca LOMBARDO
-  - Claudio SCALZO
+  - Luca LOMBARDO   <lombardo@eurecom.fr>
+  - Claudio SCALZO  <scalzo@eurecom.fr>
   
 Supported platforms:
   - Slack
   - Facebook Messenger
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+// LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
 require('dotenv').load();
 
 // VARIABLES DECLARATION
@@ -24,7 +26,6 @@ var request = require('request');
 var http = require('http');
 var nspell = require('nspell')
 const fs = require('fs');
-var comm = "";
 
 var enDIC = fs.readFileSync("./node_modules/dictionary-en-us/index.dic", 'utf-8')
 var enAFF = fs.readFileSync("./node_modules/dictionary-en-us/index.aff", 'utf-8')
@@ -60,7 +61,9 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
   process.exit(1);
 }
 
+// FUNCTION TO PERFORM THE SPELL CHECK
 var performMisspellingCheck = function(message) {
+
   // empty string where to append corrected words
   var messageMisspelledFree = "";
   var words = message.text.split(" ");
@@ -68,8 +71,10 @@ var performMisspellingCheck = function(message) {
   showNewSentence = false
 
   for (var i = 0; i < words.length; i++) {
+
     // check for each word if is it misspelled
     if (speller.correct(words[i]) == false && isNaN(words[i]) ) {
+      
       var corrections = speller.suggest(words[i])
       if (corrections.length > 0) {
         // if it is and at least a correction exists append the first one
@@ -77,11 +82,13 @@ var performMisspellingCheck = function(message) {
         // set the global var to true in order to show that a correction happened
         // in the next response to the user
         showNewSentence = true
-      } else {
+      }
+      else {
         // otherwise append the original word
         messageMisspelledFree += words[i] + ' ';
       }
-    } else {
+    }
+    else {
       // otherwise append the original word
       messageMisspelledFree += words[i] + ' ';
     }
@@ -89,6 +96,7 @@ var performMisspellingCheck = function(message) {
   return messageMisspelledFree;
 }
 
+// FIXED GREETINGS (USEFUL ONLY FOR LANGUAGE DETECTION)
 var greetings = {};
 greetings["hello"] = true;
 greetings["hi"] = true;
@@ -101,7 +109,7 @@ greetings["salut"] = true;
 
 var isGreetings = function(message) {
   var lowerCaseMessage = message.text.toLowerCase();
-  if(greetings[lowerCaseMessage]) return true;
+  if (greetings[lowerCaseMessage]) return true;
   return false;
 }
 
@@ -160,7 +168,8 @@ slackController.middleware.receive.use((bot, message, next) => {
   // trigger language detection in case of long sentences or greetings
   if (message.text.split(" ").length > 1 || isGreetings(message) ) {
 
-    // prepare arguments for requesto to Google Translate
+    // LANGUAGE CHECK
+    // prepare arguments for the request to Google Translate API
     var url = "https://translate.googleapis.com/translate_a/single"
     var parameters = { 
         q: message.text, 
@@ -173,7 +182,7 @@ slackController.middleware.receive.use((bot, message, next) => {
 
     request({url:url, qs:parameters}, function(err, response, body) {
       if (err) {
-        console.log("ERROR DURING LANGUAGE DETECTION");
+        console.log("Error during language detection");
         next(err);
       }
 
@@ -191,6 +200,7 @@ slackController.middleware.receive.use((bot, message, next) => {
       }
       //otherwise don't change anything
       
+      // SPELL CHECKING
       // perform the misspelling with the (potentially) updated speller
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
@@ -198,10 +208,13 @@ slackController.middleware.receive.use((bot, message, next) => {
       message.language = currentLang;
       next()
     });
-  } else {
+  }
+  else {
+
     // perform the misspelling with the same speller as before
     var cleanMessage = performMisspellingCheck(message)
     message.text = cleanMessage;
+
     // fill the language field in order to send it to dialogflow api
     message.language = currentLang;
     next();
@@ -226,6 +239,8 @@ fbController.middleware.receive.use((bot, message, next) => {
   }
   
   if (message.text.split(" ").length > 1 || isGreetings(message) ) {
+
+    // LANGUAGE CHECK
     // update current dictionary if necessary
     var url = "https://translate.googleapis.com/translate_a/single"
     var parameters = { 
@@ -238,8 +253,7 @@ fbController.middleware.receive.use((bot, message, next) => {
     };
 
     request({url:url, qs:parameters}, function(err, response, body) {
-      if (err) {
-        console.log("ERROR DURING LANGUAGE DETECTION");
+      if (err) {"Error during language detection");
         next(err);
       }
       //detect language from json
@@ -247,27 +261,29 @@ fbController.middleware.receive.use((bot, message, next) => {
       var lang = res[2];
 
       if (lang == "fr") {
-        console.log("SWTICHED TO FR");
         speller = spellFR;
         currentLang = "fr";
-      } else if (lang == "en") {
-        console.log("SWTICHED TO EN");
+      }
+      else if (lang == "en") {
         speller = spellEN;
         currentLang = "en";
       }
       //otherwise don't change anything
       
+      // SPELL CHECK
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
-      console.log("to dialogflow: ", message.text)
       message.language = currentLang;
       next()
     });
-  } else {
-    console.log("I STAY IN " + currentLang);
+  }
+  else {
+
+    // perform the misspelling with the same speller as before
     var cleanMessage = performMisspellingCheck(message)
     message.text = cleanMessage;
-    console.log("to dialogflow: ", message.text)
+
+    // fill the language field in order to send it to dialogflow api
     message.language = currentLang;
     next();
   }

@@ -7,11 +7,11 @@
 \BOOKMARK [1][-]{section.2.2}{NLP, NLU and NLG}{chapter.2}% 7
 \BOOKMARK [1][-]{section.2.3}{How machine learning can help NLU?}{chapter.2}% 8
 \BOOKMARK [2][-]{subsection.2.3.1}{Attention-Based RNN model for joint intent detection and slot-filling}{section.2.3}% 9
-\BOOKMARK [1][-]{section.2.4}{State of art \(1st meeting slides\)}{chapter.2}% 10
+\BOOKMARK [1][-]{section.2.4}{State of art: famous and most used tools}{chapter.2}% 10
 \BOOKMARK [0][-]{chapter.3}{Dialogflow}{}% 11
 \BOOKMARK [1][-]{section.3.1}{What is Dialogflow?}{chapter.3}% 12
 \BOOKMARK [1][-]{section.3.2}{How does it work?}{chapter.3}% 13
-\BOOKMARK [2][-]{subsection.3.2.1}{Fundamental concepts}{section.3.2}% 14
+\BOOKMARK [1][-]{section.3.3}{Fundamental concepts}{chapter.3}% 14
 \BOOKMARK [0][-]{chapter.4}{The bot}{}% 15
 \BOOKMARK [1][-]{section.4.1}{The architecture}{chapter.4}% 16
 \BOOKMARK [1][-]{section.4.2}{Entities}{chapter.4}% 17
@@ -23,3 +23,6 @@
 \BOOKMARK [1][-]{section.4.4}{The spell checker middleware}{chapter.4}% 23
 \BOOKMARK [2][-]{subsection.4.4.1}{About the implementation}{section.4.4}% 24
 \BOOKMARK [1][-]{section.4.5}{Slack and Facebook Messenger}{chapter.4}% 25
+\BOOKMARK [2][-]{subsection.4.5.1}{Hears}{section.4.5}% 26
+\BOOKMARK [2][-]{subsection.4.5.2}{Cards}{section.4.5}% 27
+\BOOKMARK [0][-]{chapter.5}{Conclusions}{}% 28

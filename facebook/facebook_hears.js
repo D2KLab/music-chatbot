@@ -1,5 +1,4 @@
 /* FACEBOOK HEARS */
-var comm = "";
 
 var botVars = require("../bot.js");
 var botFunctions = require("../doremus/bot_functions.js");
@@ -211,7 +210,7 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 
 // HELLO INTENT
 module.exports.hello = botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
-  console.log(message);
+  
   bot.reply(message, message['fulfillment']['speech']);
 });
 
