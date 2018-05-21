@@ -139,4 +139,4 @@ applying the usual filters. Let's make an example:
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [license](./LICENSE.md) file for details.
+This project is licensed under the Apache License 2.0 - see the [license](./LICENSE) file for details.
