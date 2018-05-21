@@ -137,4 +137,6 @@ applying the usual filters. Let's make an example:
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
 
+## License
 
+This project is licensed under the Apache License 2.0 - see the [license](./LICENSE.md) file for details.

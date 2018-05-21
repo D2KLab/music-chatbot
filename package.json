@@ -49,8 +49,8 @@
     "nlp"
   ],
   "contributors": [
-    "Claudio Scalzo <scalzo@eurecom.fr>",
-    "Luca Lombardo <lombardo@eurecom.fr>"
+    "Claudio Scalzo <scalzo@eurecom.fr> (https://www.linkedin.com/in/claudioscalzo/)",
+    "Luca Lombardo <lombardo@eurecom.fr> (https://www.linkedin.com/in/lomluca/)"
   ],
-  "license": "MIT"
+  "license": "Apache-2.0"
 }
