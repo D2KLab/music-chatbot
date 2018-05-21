@@ -35,12 +35,6 @@ var frDIC = fs.readFileSync("./node_modules/dictionary-fr/index.dic", 'utf-8')
 var frAFF = fs.readFileSync("./node_modules/dictionary-fr/index.aff", 'utf-8')
 var spellFR = nspell(frAFF, frDIC)
 
-/*
-var itDIC = fs.readFileSync("/app/dictionaries/it.dic", 'utf-8')
-var itAFF = fs.readFileSync("/app/dictionaries/it.aff", 'utf-8')
-var spellEN = nspell(itAFF, itDIC)
-*/
-
 var speller = spellEN
 var currentLang = "en"
 var showNewSentence = false
