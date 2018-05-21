@@ -205,7 +205,7 @@ slackController.middleware.receive.use((bot, message, next) => {
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
       // fill the language field in order to send it to dialogflow api
-      message.language = currentLang;
+      message.lang = currentLang;
       next()
     });
   }
@@ -216,7 +216,7 @@ slackController.middleware.receive.use((bot, message, next) => {
     message.text = cleanMessage;
 
     // fill the language field in order to send it to dialogflow api
-    message.language = currentLang;
+    message.lang = currentLang;
     next();
   }
   return;
@@ -253,9 +253,11 @@ fbController.middleware.receive.use((bot, message, next) => {
     };
 
     request({url:url, qs:parameters}, function(err, response, body) {
-      if (err) {"Error during language detection");
+      if (err) {
+        console.log("Error during language detection");
         next(err);
       }
+	  
       //detect language from json
       var res = JSON.parse(body);
       var lang = res[2];
@@ -273,7 +275,7 @@ fbController.middleware.receive.use((bot, message, next) => {
       // SPELL CHECK
       var cleanMessage = performMisspellingCheck(message)
       message.text = cleanMessage;
-      message.language = currentLang;
+      message.lang = currentLang;
       next()
     });
   }
@@ -284,7 +286,7 @@ fbController.middleware.receive.use((bot, message, next) => {
     message.text = cleanMessage;
 
     // fill the language field in order to send it to dialogflow api
-    message.language = currentLang;
+    message.lang = currentLang;
     next();
   }
   return;
