@@ -1,9 +1,9 @@
 {
-  "name": "Botkit Starter Kit",
-  "description": "A starting point for building custom Slack applications",
-  "repository": "https://github.com/howdyai/botkit-starter-slack",
-  "keywords": ["node", "bots", "slack","botkit"],
-  "website": "https://studio.botkit.ai/",
+  "name": "DOREMUS Bot",
+  "description": "A virtual assistant for answering music related questions",
+  "repository": "https://github.com/D2KLab/music-chatbot",
+  "keywords": ["node", "bot", "chatbot", "assistant", "slack", "botkit", "doremus", "facebook", "dialogflow", "apiai", "nlp"],
+  "website": "https://github.com/D2KLab/music-chatbot",
   "success_url":"/",
   "addons":[
     {
@@ -12,15 +12,26 @@
     }
   ],
   "env": {
+      "slackToken": {
+          "description": "Token provided by Slack"
+	    },
       "clientId": {
           "description": "Client ID provided by Slack"
       },
       "clientSecret": {
           "description": "Client Secret provided by Slack"
       },
-      "studio_token": {
-          "description": "Token associated with your bot in Botkit Studio",
-          "required":false
-      }
+      "fbAccessToken": {
+          "description": "Access token provided by Facebook"
+	    },
+      "fbVerifyToken": {
+          "description": "Verification token provided by Facebook"
+	    },
+      "fbAppSecret": {
+          "description": "Secret app token provided by Facebook"
+	    },
+      "dialogflow": {
+          "description": "Token provided by the Dialogflow API"
+	    }
   }
 }

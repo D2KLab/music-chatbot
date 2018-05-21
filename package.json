@@ -1,7 +1,7 @@
 {
-  "name": "botkit-starter-slack",
-  "version": "0.0.2",
-  "description": "A starter kit for building a custom Slack bot with Botkit Studio",
+  "name": "doremus-bot",
+  "version": "1.0.0",
+  "description": "A virtual assistant for answering music related questions",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
@@ -23,23 +23,34 @@
     "node-env-file": "^0.1.8",
     "nspell": "^2.0.0",
     "querystring": "^0.2.0",
-    "request": "^2.85.0",
+    "request": "^2.87.0",
     "wordfilter": "^0.2.6"
   },
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "https://github.com/howdyai/botkit-starter-slack.git"
+    "url": "https://github.com/D2KLab/music-chatbot.git"
   },
   "bugs": {
-    "url": "https://github.com/howdyai/botkit-starter-slack/issues"
+    "url": "https://github.com/D2KLab/music-chatbot/issues"
   },
-  "homepage": "https://github.com/howdyai/botkit-starter-slack",
+  "homepage": "https://github.com/D2KLab/music-chatbot",
   "keywords": [
-    "bots",
-    "chatbots",
-    "slack"
+    "node",
+    "bot",
+    "chatbot",
+    "assistant",
+    "slack",
+    "botkit",
+    "doremus",
+    "facebook",
+    "dialogflow",
+    "apiai",
+    "nlp"
   ],
-  "author": "ben@howdy.ai",
-  "license": "ISC"
+  "contributors": [
+    "Claudio Scalzo <scalzo@eurecom.fr>",
+    "Luca Lombardo <lombardo@eurecom.fr>"
+  ],
+  "license": "MIT"
 }
