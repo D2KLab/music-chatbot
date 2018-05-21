@@ -6,7 +6,8 @@ const fbCards = require("../facebook/facebook_cards.js");
 const botVars = require("../bot.js");
 
 // FUNCTIONS
-/*******************************************************************************/
+
+/* CLEAR CONTEXT ******************************************************************************/
 module.exports.sendClearContext = function sendClearContext(sessionID) {
   
   var request = require('request');
@@ -27,10 +28,9 @@ module.exports.sendClearContext = function sendClearContext(sessionID) {
   }
   request(options, callback);
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
+/* DO QUERY WORKS-BY ************************************************************************/
 module.exports.doQuery = function doQuery(artist, number, instrument, strictly, yearstart, yearend, genre, platform, bot, message) {
   
   // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
@@ -192,10 +192,9 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
   });
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
+/* DO QUERY FIND-PERFORMANCE *********************************************************************/
 module.exports.doQueryPerformance = function doQueryPerformance(number, city, startdate, enddate, platform, bot, message) {
   
   // JSON QUERY  
@@ -268,10 +267,9 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
     }
   });
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
+/* DO QUERY FIND-ARTIST **************************************************************************/
 module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, enddate, city, instrument, genre, platform, bot, message) {
   
   // JSON QUERY  
@@ -368,10 +366,9 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
     }
   });
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
+/* DO QUERY DISCOVER-ARTIST *********************************************************************/
 module.exports.answerBio = function answerBio(artist, platform, bot, message) {
   
     var newQuery = 'SELECT ?name, \
@@ -444,7 +441,9 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
       }
     });
 }
-/********************************************************************************/
+
+
+/* DO QUERY DISCOVER-ARTIST (small) ***********************************************************/
 module.exports.answerBioSmallAsText = function answerBioSmallAsText(artist, bot, message) {
   
     var newQuery = 'SELECT ?bio \

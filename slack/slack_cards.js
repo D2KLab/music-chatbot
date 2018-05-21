@@ -1,6 +1,5 @@
 /* SLACK CARDS */
 
-/*******************************************************************************/
 module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
@@ -41,9 +40,8 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
   }
   return bioAttachment;
 }
-/*******************************************************************************/
 
-/*******************************************************************************/
+
 module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
 
   var artistAttachment = {
@@ -82,9 +80,8 @@ module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birt
   }
   return artistAttachment;
 }
-/*******************************************************************************/
 
-/*******************************************************************************/
+
 module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, comment, key) {
   var workAttachment = {
     "attachments": [{
@@ -122,10 +119,8 @@ module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, co
   }
   return workAttachment;
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
 module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
   var performanceAttachment = {
     "attachments": [{
@@ -154,4 +149,3 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
   }
   return performanceAttachment;
 }
-/*******************************************************************************/

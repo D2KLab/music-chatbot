@@ -1,6 +1,5 @@
 /* FACEBOOK CARDS */
 
-/*******************************************************************************/
 module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
   var imageURLHTTPDropped = imageURL.split("://")[1]
   var bioAttachment = {
@@ -28,10 +27,8 @@ module.exports.getBioCard = function getBioCard(artist, fullname, birthPlace, bi
     };
   return bioAttachment;
 }
-/*******************************************************************************/
 
 
-/*******************************************************************************/
 module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {  
   var performanceAttachment = {
       "type": "template",
@@ -60,9 +57,8 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
   }
   return performanceAttachment;
 }
-/*******************************************************************************/
 
-/*******************************************************************************/
+
 module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, comment, key) {
   var workAttachment = {
       "type": "template",
@@ -87,5 +83,3 @@ module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, co
   }
   return workAttachment;
 }
-/*******************************************************************************/
-
