@@ -49,7 +49,7 @@ $ npm install
 
 - [bot.js](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 
-- .env is the secret file containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [Configuration section](#configuring).
+- .env is the secret file containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
 
 - [doremus/](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
 
