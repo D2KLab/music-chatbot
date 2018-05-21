@@ -222,7 +222,7 @@
 	\end{figure}
 	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand in a glance. A set of examples will be provided in the last chapter.\\\\
 	The second part of the architecture is represented by the NLP. In this case, as told in the previous chapter, we used \textit{Dialogflow}, to exploit its advanced slot-filling techniques and its NLU power.\\\\
-	However, we didn't use \textit{Dialogflow} on its own, exploiting the direct integration with \textit{Slack}, but we used something that we placed in the middle of the two: \textit{BotKit}. \textit{BotKit} is a bot-making toolkit that aims to ease the building process of a bot, potentially exploiting different NLPs and/or different clients. In our case, \textit{BotKit} has been deployed on a web server, and thanks to the \textit{NodeJS} code we were able to come up with a series of features (like the spell checker) that would have been impossible to reach with a simple (direct) integration between \textit{Slack} and \textit{Dialogflow}. We'll talk more about that in the following paragraphs. The communication with the \textit{Dialogflow} NLP is done thanks to a modified version of the \texttt{botkit-middleware-dialogflow}\cite{bmd}: there will be a paragraph dedicated to this middleware in the following pages.\\\\
+	However, we didn't use \textit{Dialogflow} on its own, exploiting the direct integration with \textit{Slack}, but we used something that we placed in the middle of the two: \textit{Botkit}. \textit{Botkit} is a bot-making toolkit that aims to ease the building process of a bot, potentially exploiting different NLPs and/or different clients. In our case, \textit{Botkit} has been deployed on a web server, and thanks to the \textit{NodeJS} code we were able to come up with a series of features (like the spell checker) that would have been impossible to reach with a simple (direct) integration between \textit{Slack} and \textit{Dialogflow}. We'll talk more about that in the following paragraphs. The communication with the \textit{Dialogflow} NLP is done thanks to a modified version of the \texttt{botkit-middleware-dialogflow}\cite{bmd}: there will be a paragraph dedicated to this middleware in the following pages.\\\\
 	The last part of the architecture is of course represented by the data source: \textit{DOREMUS}. We talked about that in the previous chapters, but from the architecture is important to notice how the knowledge base is queried: each query is dynamic, in the sense that according to the intent, the number of filters and the desired results wanted by the user, the query will have a different shape and a different content. The code in the web server is able to add different pieces of queries according to what \textit{Dialogflow} is able to understand and to provide as output values of the API.\\\\
 	The bot code is organized in this way:
 	\begin{lstlisting}
@@ -245,7 +245,7 @@
 	\begin{itemize}
 		\item \texttt{bot.js} is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 		
-		\item \texttt{.env} is the secret file containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{BotKit Studio}.
+		\item \texttt{.env} is the secret file containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
 		\item \texttt{doremus/} contains the files related to the access to the informations of the \textit{DOREMUS} knowledge base: in this case, contains a single file (\texttt{bot\_functions.js}) that contains all the queries that the bot can do to \textit{DOREMUS}.
 		
@@ -663,12 +663,15 @@
 	next()
 	\end{lstlisting}
 	
-	The third step is the simplest one: we simply change the text of the message, the object that will handle by the next middleware, with the new, misspelling-free sentence; in addition we set an additional field inside it: the language one, that will be used by \texttt{botkit-middleware-dialogflow} to set the language of the agent before sending the request.
+	The third step is the simplest one: we simply change the text of the message, the object that will handle by the next middleware, with the new, misspelling-free sentence; in addition we set an additional field inside it: the language one, that will be used by \texttt{botkit-middleware-dialogflow} to set the language of the agent before sending the request. This code, differently from the previous one, has to be inserted directly inside the \texttt{botkit-middleware-dialogflow}: after opening a pull-request to the original author, this code was merged into the author's repository.
 	
 	\begin{lstlisting}[language=C]
 	
-	if (message.language != null) {
-		app.language = message.language;
+	if (message.lang) {
+		app.lang = message.lang;
+	}
+	else {
+		app.lang = 'en';
 	}
 	\end{lstlisting}
 	
@@ -677,7 +680,7 @@
 	\section{Slack and Facebook Messenger}
 	
 	\subsection{Hears}
-	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{BotKit} environment. The mechanism through which the sentences are heard is simple to understand: the hears methods are instantiated, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{BotKit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to instantiate the methods that needs to be triggered when an intent is detected.\\\\
+	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{Botkit} environment. The mechanism through which the sentences are heard is simple to understand: the hears methods are instantiated, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{Botkit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to instantiate the methods that needs to be triggered when an intent is detected.\\\\
 	The prototype of a generic hears functions (in our code) is the following:
 	\begin{lstlisting}[language=C]
 	
@@ -738,6 +741,6 @@
 		\bibitem{luis} Microsoft LUIS: A machine learning-based service to build natural language into apps, bots, and IoT devices. | \textit{\href{https://www.luis.ai/}{https://www.luis.ai/}}
 		\bibitem{recast} SAP Recast.ai: A collaborative bot platform. | \textit{\href{https://recast.ai/}{https://recast.ai/}}
 		\bibitem{apiai} Chatbots made easy with Dialogflow. An overview on the architecture. | \textit{\href{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}}
-		\textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow}{https://github.com/jschnurr/botkit-middleware-dialogflow} | The GitHub repository of the BotKit middleware for Dialogflow.}
+		\bibitem{bmd} The GitHub repository of the Botkit middleware for Dialogflow. | \textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow}{https://github.com/jschnurr/botkit-middleware-dialogflow}}
 	\end{thebibliography}
 \end{document}          
