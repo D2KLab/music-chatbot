@@ -1,6 +1,16 @@
 # DOREMUS Bot
 ### A virtual assistant for answering music related questions.
 
+- [Description](#description)
+- [Getting started](#getting-started)
+    - [What you need](#what-you-need)
+    - [Installing](#entities)
+    - [The code organization](#the-code-organization)
+    - [Configuring](#configuring)
+    - [Deploying](#deploying)
+- [The bot capabilities](#the-bot-capabilities)
+- [License](#license)
+
 ## Description
 
 ##### This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related queries.
