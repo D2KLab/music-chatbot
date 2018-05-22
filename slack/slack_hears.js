@@ -1,12 +1,13 @@
 /* SLACK HEARS */
 
 var botVars = require("../bot.js");
+var spellCheckerMiddleware = require("../spell-checker-middleware.js")
 var botFunctions = require("../doremus/bot_functions.js");
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (botVars.showNewSentence()) {
+    if (spellCheckerMiddleware.showNewSentence()) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -42,7 +43,7 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
         // YEAR CHECK AND PARSING
         var startyear = null;
         var endyear = null;
-        console.log(parameters.year);
+        
         if (parameters.year !== "") {
             startyear = parseInt(parameters.year.split("/")[0]);
             endyear = parseInt(parameters.year.split("/")[1]);
@@ -126,7 +127,7 @@ module.exports.worksBySomething = botVars.slackController.hears(['works-by-artis
 // DISCOVER ARTIST
 module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (botVars.showNewSentence()) {
+    if (spellCheckerMiddleware.showNewSentence()) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -168,7 +169,7 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
 // DISCOVER ARTIST
 module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (botVars.showNewSentence()) {
+    if (spellCheckerMiddleware.showNewSentence()) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -196,7 +197,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 // FIND-PERFORMANCE
 module.exports.findPerformance = botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (botVars.showNewSentence()) {
+    if (spellCheckerMiddleware.showNewSentence()) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],

@@ -1,12 +1,9 @@
 /* FACEBOOK HEARS */
 
 var botVars = require("../bot.js");
+var spellCheckerMiddleware = require("../spell-checker-middleware.js")
 var botFunctions = require("../doremus/bot_functions.js");
 
-// ANY INTENT
-//botVars.fbController.hears('(.*)', 'message_received, facebook_postback', function(bot, message) {
-//    bot.reply(message, "Ma che davero?");
-//});
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.fbController.hears('works-by', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
@@ -39,7 +36,7 @@ module.exports.worksBy = botVars.fbController.hears('works-by', 'message_receive
         // YEAR CHECK AND PARSING
         var startyear = null;
         var endyear = null;
-        console.log(parameters.year);
+        
         if (parameters.year !== "") {
             startyear = parseInt(parameters.year.split("/")[0]);
             endyear = parseInt(parameters.year.split("/")[1]);
