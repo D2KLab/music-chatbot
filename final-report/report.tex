@@ -228,6 +228,7 @@
 	\begin{lstlisting}
 	
 	bot.js
+	spell-checker-middleware.js
 	.env
 	
 	doremus/
@@ -244,6 +245,8 @@
 	where:
 	\begin{itemize}
 		\item \texttt{bot.js} is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
+		
+		\item \texttt{spell-checker-middleware.js} is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 		
 		\item \texttt{.env} is the secret file containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
