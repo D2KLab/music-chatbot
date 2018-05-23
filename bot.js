@@ -86,14 +86,14 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 
 
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
-slackController.middleware.receive.use(spellCheckerMiddleware.receive);
+slackController.middleware.receive.use(spellCheckerMiddleware.run);
 
 // SLACK: 'Dialogflow' MIDDLEWARE INIT
 slackController.middleware.receive.use(dialogflowMiddleware.receive);
 
 
 // FACEBOOK: 'SpellChecker' MIDDLEWARE INIT
-fbController.middleware.receive.use(spellCheckerMiddleware.receive);
+fbController.middleware.receive.use(spellCheckerMiddleware.run);
 
 // FACEBOOK: 'Dialogflow' MIDDLEWARE INIT
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
