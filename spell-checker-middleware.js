@@ -74,89 +74,83 @@ var performMisspellingCheck = function(message) {
 
 
 // SPELL-CHECKER MIDDLEWARE FUNCTION
-module.exports = function() {
+module.exports.run = function(bot, message, next) {
 
-    var middleware = {}
+    if (!message.text) {
+        next();
+        return;
+    }
 
-    middleware.receive = function(bot, message, next) {
+    if (message.is_echo || message.type === 'self_message') {
+        next();
+        return;
+    }
 
-        if (!message.text) {
-            next();
-            return;
-        }
+    // trigger language detection in case of long sentences or greetings
+    if (message.text.split(" ").length > 1 || isGreetings(message)) {
 
-        if (message.is_echo || message.type === 'self_message') {
-            next();
-            return;
-        }
+        // LANGUAGE CHECK
+        // prepare arguments for the request to Google Translate API
+        var url = "https://translate.googleapis.com/translate_a/single"
+        var parameters = {
+            q: message.text,
+            dt: 't',
+            tl: 'it',
+            sl: 'auto',
+            client: 'gtx',
+            hl: 'it'
+        };
 
-        // trigger language detection in case of long sentences or greetings
-        if (message.text.split(" ").length > 1 || isGreetings(message)) {
+        request({
+            url: url,
+            qs: parameters
+        }, function(err, response, body) {
+            if (err) {
+                console.log("Error during language detection");
+                next(err);
+            }
 
-            // LANGUAGE CHECK
-            // prepare arguments for the request to Google Translate API
-            var url = "https://translate.googleapis.com/translate_a/single"
-            var parameters = {
-                q: message.text,
-                dt: 't',
-                tl: 'it',
-                sl: 'auto',
-                client: 'gtx',
-                hl: 'it'
-            };
+            // get language from json
+            var res = JSON.parse(body);
+            var lang = res[2];
 
-            request({
-                url: url,
-                qs: parameters
-            }, function(err, response, body) {
-                if (err) {
-                    console.log("Error during language detection");
-                    next(err);
-                }
+            // update accordingly the speller and the global var 
+            if (lang == "fr") {
+                speller = spellFR;
+                currentLang = "fr";
+            } else if (lang == "en") {
+                speller = spellEN;
+                currentLang = "en";
+            }
+            //otherwise don't change anything
 
-                // get language from json
-                var res = JSON.parse(body);
-                var lang = res[2];
-
-                // update accordingly the speller and the global var 
-                if (lang == "fr") {
-                    speller = spellFR;
-                    currentLang = "fr";
-                } else if (lang == "en") {
-                    speller = spellEN;
-                    currentLang = "en";
-                }
-                //otherwise don't change anything
-
-                // SPELL CHECKING
-                // perform the misspelling with the (potentially) updated speller
-                var cleanMessage = performMisspellingCheck(message)
-                message.text = cleanMessage;
-
-                // fill the language field in order to send it to dialogflow api
-                message.lang = currentLang;
-                next()
-            });
-        } else {
-
-            // perform the misspelling with the same speller as before
+            // SPELL CHECKING
+            // perform the misspelling with the (potentially) updated speller
             var cleanMessage = performMisspellingCheck(message)
             message.text = cleanMessage;
 
             // fill the language field in order to send it to dialogflow api
             message.lang = currentLang;
-            next();
-        }
-        return;
-    }
+            next()
+        });
+    } else {
 
-    middleware.showNewSentence = function() {
-        return showNewSentence;
-    }
+        // perform the misspelling with the same speller as before
+        var cleanMessage = performMisspellingCheck(message)
+        message.text = cleanMessage;
 
-    middleware.currectLang = function() {
-        return currentLang;
+        // fill the language field in order to send it to dialogflow api
+        message.lang = currentLang;
+        next();
     }
-
-    return middleware;
+    return;
 }
+
+
+// EXPORTS
+exports.showNewSentence = function() {
+    return showNewSentence
+};
+exports.currectLang = function() {
+    return currentLang
+};
