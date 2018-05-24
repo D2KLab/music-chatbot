@@ -9,6 +9,7 @@
     - [Configuring](#configuring)
     - [Deploying](#deploying)
 - [The bot capabilities](#the-bot-capabilities)
+- [Credits](#credits)
 - [License](#license)
 
 ## Description
