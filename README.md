@@ -152,8 +152,8 @@ applying the usual filters. Let's make an example:
 
 ## Credits
 
-- Claudio Scalzo <claudio.scalzo@outlook.com> (https://www.linkedin.com/in/claudioscalzo)
-- Luca Lombardo <lomluca12@gmail.com> (https://www.linkedin.com/in/lomluca)
+- Claudio Scalzo <<claudio.scalzo@outlook.com>> (https://www.linkedin.com/in/claudioscalzo)
+- Luca Lombardo  <<lomluca12@gmail.com>>        (https://www.linkedin.com/in/lomluca)
 
 ## License
 
