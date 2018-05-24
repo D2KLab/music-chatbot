@@ -127,7 +127,7 @@ module.exports = function() {
                     currentLang = "en";
                 }
                 //otherwise don't change anything
-
+                
                 // SPELL CHECKING
                 // perform the misspelling with the (potentially) updated speller
                 var cleanMessage = performMisspellingCheck(message)

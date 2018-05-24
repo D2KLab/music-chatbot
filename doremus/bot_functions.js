@@ -4,6 +4,7 @@
 const slackCards = require("../slack/slack_cards.js");
 const fbCards = require("../facebook/facebook_cards.js");
 const botVars = require("../bot.js");
+var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 
 // FUNCTIONS
 
@@ -160,7 +161,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
-            var currentLang = botVars.currentLang;
+            var currentLang = spellCheckerMiddleware.currentLang;
             if (currentLang === "fr") {
                 bot.reply(message, "Desolé... Je n'ai trouvé rien!");
             } else {
