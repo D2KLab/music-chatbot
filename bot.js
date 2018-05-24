@@ -77,7 +77,7 @@ fbController.setupWebserver(
 
 
 // LOAD 'SpellChecker' MIDDLEWARE
-var spellCheckerMiddleware = require('./spell-checker-middleware.js')
+var spellCheckerMiddleware = require('./spell-checker-middleware.js')()
 
 // LOAD 'Dialogflow' MIDDLEWARE
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
@@ -108,6 +108,7 @@ exports.slackController = slackController;
 exports.fbController = fbController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
+exports.spellCheckerMiddleware = spellCheckerMiddleware;
 
 
 // IMPORT HEARS

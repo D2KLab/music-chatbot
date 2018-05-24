@@ -1,7 +1,7 @@
 /* FACEBOOK HEARS */
 
 var botVars = require("../bot.js");
-var spellCheckerMiddleware = require("../spell-checker-middleware.js")
+var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 var botFunctions = require("../doremus/bot_functions.js");
 
 
