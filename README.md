@@ -101,7 +101,7 @@ dialogflow=<dialogflow token>
 You need:
 - [Slack token](https://api.slack.com/apps)
 - [Facebook tokens](https://developers.facebook.com/apps/)
-- Dialogflow token
+- Dialogflow token ([contact us](#credits) to get the token!)
 
 ### Deploying
 You can easily launch the bot with:
@@ -149,6 +149,11 @@ applying the usual filters. Let's make an example:
 - [Result with bio, picture, birth/death date/place]
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
+
+## Credits
+
+Claudio Scalzo <claudio.scalzo@outlook.com> (https://www.linkedin.com/in/claudioscalzo)
+Luca Lombardo <lomluca12@gmail.com> (https://www.linkedin.com/in/lomluca)
 
 ## License
 

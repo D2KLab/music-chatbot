@@ -112,5 +112,5 @@ exports.spellCheckerMiddleware = spellCheckerMiddleware;
 
 
 // IMPORT HEARS
-var slackHears = require('./slack/slack_hears.js');
-var fbHears = require('./facebook/facebook_hears.js');
+var slackHears = require('./slack/slack_io.js');
+var fbHears = require('./facebook/facebook_io.js');
