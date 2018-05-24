@@ -235,11 +235,11 @@
 		bot_functions.js
 	
 	slack/
-		slack_hears.js
+		slack_io.js
 		slack_cards.js
 	
 	facebook/
-		facebook_hears.js
+		facebook_io.js
 		facebook_cards.js
 	\end{lstlisting}
 	where:
@@ -254,13 +254,13 @@
 		
 		\item \texttt{slack/} is a directory containing the files related to \textit{Slack}:
 			\begin{itemize}
-			\item \texttt{slack\_hears.js} contains the methods to receive the sentences sent through \textit{Slack} and processed by the NLU.
+			\item \texttt{slack\_io.js} contains the methods to receive the sentences sent through \textit{Slack} and processed by the NLU.
 			
 			\item \texttt{slack\_cards.js} contains the code to build the \textit{Slack} cards to make the answers prettier.
 			\end{itemize}
 		\item \texttt{facebook/} is a directory containing the files related to \textit{Facebook}:
 			\begin{itemize}
-			\item \texttt{facebook\_hears.js} contains the methods to receive the sentences sent through \textit{Facebook} and processed by the NLU.
+			\item \texttt{facebook\_io.js} contains the methods to receive the sentences sent through \textit{Facebook} and processed by the NLU.
 			
 			\item \texttt{facebook\_cards.js} contains the code to build the \textit{Facebook} cards to make the answers prettier.
 			\end{itemize}

@@ -51,11 +51,11 @@ $ npm install
         bot_functions.js
     
     slack/
-        slack_hears.js
+        slack_io.js
         slack_cards.js
     
     facebook/
-        facebook_hears.js
+        facebook_io.js
         facebook_cards.js
 ```
 
@@ -69,12 +69,12 @@ $ npm install
 
 - [slack/](./slack/) is a directory containing the files related to Slack:
 
-    - [slack_hears.js](./slack/slack_hears.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
+    - [slack_io.js](./slack/slack_io.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
     - [slack_cards.js](./slack/slack_cards.js) contains the code to build the Slack cards to make the answers prettier.
 
 - [facebook/](./facebook/) is a directory containing the files related to Facebook:
 
-    - [facebook_hears.js](./facebook/facebook_hears.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
+    - [facebook_io.js](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
     - [facebook_cards.js](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
 
 ### Configuring
