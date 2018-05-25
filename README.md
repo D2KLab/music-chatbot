@@ -45,7 +45,9 @@ $ npm install
 ```
     bot.js
     spell-checker-middleware.js
-    .env
+    
+    config/
+        .env
     
     doremus/
         bot_functions.js
@@ -63,7 +65,7 @@ $ npm install
 
 - [spell-checker-middleware.js](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 
-- .env is the secret file containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
+- .env is the secret file (to be put in the 'config' directory) containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
 
 - [doremus/](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
 

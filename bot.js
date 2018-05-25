@@ -18,7 +18,7 @@ Supported platforms:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
-require('dotenv').load();
+require('dotenv').config({path: './config/.env'});
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');

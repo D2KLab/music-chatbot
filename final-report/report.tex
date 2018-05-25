@@ -229,7 +229,9 @@
 	
 	bot.js
 	spell-checker-middleware.js
-	.env
+	
+	config/
+		.env
 	
 	doremus/
 		bot_functions.js
@@ -248,7 +250,7 @@
 		
 		\item \texttt{spell-checker-middleware.js} is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 		
-		\item \texttt{.env} is the secret file containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
+		\item \texttt{.env} is the secret file (to place into the \texttt{config} directory) containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
 		\item \texttt{doremus/} contains the files related to the access to the informations of the \textit{DOREMUS} knowledge base: in this case, contains a single file (\texttt{bot\_functions.js}) that contains all the queries that the bot can do to \textit{DOREMUS}.
 		
