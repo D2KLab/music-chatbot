@@ -5,10 +5,10 @@
 - [Getting started](#getting-started)
     - [What you need](#what-you-need)
     - [Installing](#entities)
-    - [The code organization](#the-code-organization)
+    - [Code organization](#code-organization)
     - [Configuring](#configuring)
     - [Deploying](#deploying)
-- [The bot capabilities](#the-bot-capabilities)
+- [Bot Features](#bot-features)
 - [Credits](#credits)
 - [License](#license)
 
@@ -26,7 +26,7 @@ The bot makes use of different tools:
 - Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/)
 
 The architecture is the following:
-![DOREMUS Bot architecture](./final-report/images/arch2.png) 
+![DOREMUS Bot architecture](./final-report/images/arch2.png)
 
 ## Getting started
 
@@ -36,12 +36,12 @@ Make sure you have [Node.js](https://nodejs.org/en/download/) installed in your 
 ### Installing
 
 ```
-$ git clone https://github.com/D2KLab/music-chatbot.git
-$ cd music-chatbot
-$ npm install 
+git clone https://github.com/D2KLab/music-chatbot.git
+cd music-chatbot
+npm install
 ```
 
-### The code organization
+### Code organization
 ```
     bot.js
     spell-checker-middleware.js
@@ -51,11 +51,11 @@ $ npm install
     
     doremus/
         bot_functions.js
-    
+
     slack/
         slack_io.js
         slack_cards.js
-    
+
     facebook/
         facebook_io.js
         facebook_cards.js
@@ -109,12 +109,30 @@ You need:
 ### Deploying
 You can easily launch the bot with:
 ```
-$ npm start 
+npm start
+
+```
+
+Alternatively, you can deploy it with Docker.
+
+```
+docker build -t jplu/node github.com/pasqLisena/docker-node
+
+docker build -t doremus/chatbot .
+
+docker run -d -p 5052:3000 --restart=unless-stopped -v /var/doremus/music-chatbot/.env:/.env --name doremus-bot doremus/chatbot
+```
+
+Uninstall from Docker
+```
+docker stop doremus-bot
+docker rm doremus-bot ##remove from available containers
+docker rmi doremus/chatbot ##remove from images
 ```
 
 Enjoy!
 
-## The bot capabilities
+## Bot Features
 The intents are grouped in a simple and clear way, according to what the user
 wants to retrieve from the DOREMUS knowledge base. The bot can:
 
