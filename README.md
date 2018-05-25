@@ -26,7 +26,7 @@ The bot makes use of different tools:
 - Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/)
 
 The architecture is the following:
-![DOREMUS Bot architecture](./final-report/images/arch2.png) 
+![DOREMUS Bot architecture](./final-report/images/arch2.png)
 
 ## Getting started
 
@@ -36,9 +36,9 @@ Make sure you have [Node.js](https://nodejs.org/en/download/) installed in your 
 ### Installing
 
 ```
-$ git clone https://github.com/D2KLab/music-chatbot.git
-$ cd music-chatbot
-$ npm install 
+git clone https://github.com/D2KLab/music-chatbot.git
+cd music-chatbot
+npm install
 ```
 
 ### The code organization
@@ -46,14 +46,14 @@ $ npm install
     bot.js
     spell-checker-middleware.js
     .env
-    
+
     doremus/
         bot_functions.js
-    
+
     slack/
         slack_io.js
         slack_cards.js
-    
+
     facebook/
         facebook_io.js
         facebook_cards.js
@@ -107,7 +107,18 @@ You need:
 ### Deploying
 You can easily launch the bot with:
 ```
-$ npm start 
+npm start
+
+```
+
+Alternatively, you can deploy it with Docker.
+
+```
+docker build -t jplu/node github.com/pasqLisena/docker-node
+
+docker build -t doremus/chatbot .
+
+docker run -d -p 5050:3000 --restart=unless-stopped --name doremus-bot doremus/chatbot
 ```
 
 Enjoy!
