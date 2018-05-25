@@ -5,10 +5,10 @@
 - [Getting started](#getting-started)
     - [What you need](#what-you-need)
     - [Installing](#entities)
-    - [The code organization](#the-code-organization)
+    - [Code organization](#code-organization)
     - [Configuring](#configuring)
     - [Deploying](#deploying)
-- [The bot capabilities](#the-bot-capabilities)
+- [Bot Features](#bot-features)
 - [Credits](#credits)
 - [License](#license)
 
@@ -41,7 +41,7 @@ cd music-chatbot
 npm install
 ```
 
-### The code organization
+### Code organization
 ```
     bot.js
     spell-checker-middleware.js
@@ -118,12 +118,19 @@ docker build -t jplu/node github.com/pasqLisena/docker-node
 
 docker build -t doremus/chatbot .
 
-docker run -d -p 5050:3000 --restart=unless-stopped --name doremus-bot doremus/chatbot
+docker run -d -p 5052:3000 --restart=unless-stopped -v /var/doremus/music-chatbot/.env:/.env --name doremus-bot doremus/chatbot
+```
+
+Uninstall from Docker
+```
+docker stop doremus-bot
+docker rm doremus-bot ##remove from available containers
+docker rmi doremus/chatbot ##remove from images
 ```
 
 Enjoy!
 
-## The bot capabilities
+## Bot Features
 The intents are grouped in a simple and clear way, according to what the user
 wants to retrieve from the DOREMUS knowledge base. The bot can:
 
