@@ -5,10 +5,11 @@
 - [Getting started](#getting-started)
     - [What you need](#what-you-need)
     - [Installing](#entities)
-    - [The code organization](#the-code-organization)
+    - [Code organization](#code-organization)
     - [Configuring](#configuring)
     - [Deploying](#deploying)
-- [The bot capabilities](#the-bot-capabilities)
+- [Bot Features](#bot-features)
+- [Credits](#credits)
 - [License](#license)
 
 ## Description
@@ -25,7 +26,7 @@ The bot makes use of different tools:
 - Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/)
 
 The architecture is the following:
-![DOREMUS Bot architecture](./final-report/images/arch2.png) 
+![DOREMUS Bot architecture](./final-report/images/arch2.png)
 
 ## Getting started
 
@@ -35,26 +36,28 @@ Make sure you have [Node.js](https://nodejs.org/en/download/) installed in your 
 ### Installing
 
 ```
-$ git clone https://github.com/D2KLab/music-chatbot.git
-$ cd music-chatbot
-$ npm install 
+git clone https://github.com/D2KLab/music-chatbot.git
+cd music-chatbot
+npm install
 ```
 
-### The code organization
+### Code organization
 ```
     bot.js
     spell-checker-middleware.js
-    .env
+    
+    config/
+        .env
     
     doremus/
         bot_functions.js
-    
+
     slack/
-        slack_hears.js
+        slack_io.js
         slack_cards.js
-    
+
     facebook/
-        facebook_hears.js
+        facebook_io.js
         facebook_cards.js
 ```
 
@@ -62,18 +65,18 @@ $ npm install
 
 - [spell-checker-middleware.js](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 
-- .env is the secret file containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
+- .env is the secret file (to be put in the 'config' directory) containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
 
 - [doremus/](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
 
 - [slack/](./slack/) is a directory containing the files related to Slack:
 
-    - [slack_hears.js](./slack/slack_hears.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
+    - [slack_io.js](./slack/slack_io.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
     - [slack_cards.js](./slack/slack_cards.js) contains the code to build the Slack cards to make the answers prettier.
 
 - [facebook/](./facebook/) is a directory containing the files related to Facebook:
 
-    - [facebook_hears.js](./facebook/facebook_hears.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
+    - [facebook_io.js](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
     - [facebook_cards.js](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
 
 ### Configuring
@@ -101,17 +104,35 @@ dialogflow=<dialogflow token>
 You need:
 - [Slack token](https://api.slack.com/apps)
 - [Facebook tokens](https://developers.facebook.com/apps/)
-- Dialogflow token
+- Dialogflow token ([contact us](#credits) to get the token!)
 
 ### Deploying
 You can easily launch the bot with:
 ```
-$ npm start 
+npm start
+
+```
+
+Alternatively, you can deploy it with Docker.
+
+```
+docker build -t jplu/node github.com/pasqLisena/docker-node
+
+docker build -t doremus/chatbot .
+
+docker run -d -p 5052:3000 --restart=unless-stopped -v /var/doremus/music-chatbot/.env:/.env --name doremus-bot doremus/chatbot
+```
+
+Uninstall from Docker
+```
+docker stop doremus-bot
+docker rm doremus-bot ##remove from available containers
+docker rmi doremus/chatbot ##remove from images
 ```
 
 Enjoy!
 
-## The bot capabilities
+## Bot Features
 The intents are grouped in a simple and clear way, according to what the user
 wants to retrieve from the DOREMUS knowledge base. The bot can:
 
@@ -149,6 +170,11 @@ applying the usual filters. Let's make an example:
 - [Result with bio, picture, birth/death date/place]
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
+
+## Credits
+
+- Claudio Scalzo <<claudio.scalzo@outlook.com>> (https://www.linkedin.com/in/claudioscalzo)
+- Luca Lombardo  <<lomluca12@gmail.com>>        (https://www.linkedin.com/in/lomluca)
 
 ## License
 

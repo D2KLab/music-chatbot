@@ -18,7 +18,7 @@ Supported platforms:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
-require('dotenv').load();
+require('dotenv').config({path: './config/.env'});
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
@@ -112,5 +112,5 @@ exports.spellCheckerMiddleware = spellCheckerMiddleware;
 
 
 // IMPORT HEARS
-var slackHears = require('./slack/slack_hears.js');
-var fbHears = require('./facebook/facebook_hears.js');
+var slackHears = require('./slack/slack_io.js');
+var fbHears = require('./facebook/facebook_io.js');

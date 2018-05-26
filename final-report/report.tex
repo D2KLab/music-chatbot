@@ -43,7 +43,7 @@
 \setlength\epigraphwidth{0.7\textwidth}
 \title{Developing a virtual assistant for answering music related questions}
 \author{Claudio SCALZO \\ (\href{mailto:scalzo@eurecom.fr}{scalzo@eurecom.fr}) \and Luca LOMBARDO \\ (\href{mailto:lombardo@eurecom.fr}{lombardo@eurecom.fr}) }
-\date{Professor: Raphaël Troncy\\Supervisors: Pasquale Lisena | Thibault Ehrhart}
+\date{\textit{Professor}: Raphaël Troncy\\\textit{Supervisors}: Pasquale Lisena | Thibault Ehrhart}
 
 \begin{document}
 \maketitle
@@ -229,17 +229,19 @@
 	
 	bot.js
 	spell-checker-middleware.js
-	.env
+	
+	config/
+		.env
 	
 	doremus/
 		bot_functions.js
 	
 	slack/
-		slack_hears.js
+		slack_io.js
 		slack_cards.js
 	
 	facebook/
-		facebook_hears.js
+		facebook_io.js
 		facebook_cards.js
 	\end{lstlisting}
 	where:
@@ -248,19 +250,19 @@
 		
 		\item \texttt{spell-checker-middleware.js} is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 		
-		\item \texttt{.env} is the secret file containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
+		\item \texttt{.env} is the secret file (to place into the \texttt{config} directory) containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
 		\item \texttt{doremus/} contains the files related to the access to the informations of the \textit{DOREMUS} knowledge base: in this case, contains a single file (\texttt{bot\_functions.js}) that contains all the queries that the bot can do to \textit{DOREMUS}.
 		
 		\item \texttt{slack/} is a directory containing the files related to \textit{Slack}:
 			\begin{itemize}
-			\item \texttt{slack\_hears.js} contains the methods to receive the sentences sent through \textit{Slack} and processed by the NLU.
+			\item \texttt{slack\_io.js} contains the methods to receive the sentences sent through \textit{Slack} and processed by the NLU.
 			
 			\item \texttt{slack\_cards.js} contains the code to build the \textit{Slack} cards to make the answers prettier.
 			\end{itemize}
 		\item \texttt{facebook/} is a directory containing the files related to \textit{Facebook}:
 			\begin{itemize}
-			\item \texttt{facebook\_hears.js} contains the methods to receive the sentences sent through \textit{Facebook} and processed by the NLU.
+			\item \texttt{facebook\_io.js} contains the methods to receive the sentences sent through \textit{Facebook} and processed by the NLU.
 			
 			\item \texttt{facebook\_cards.js} contains the code to build the \textit{Facebook} cards to make the answers prettier.
 			\end{itemize}
@@ -603,7 +605,6 @@
 	\section{The spell checker middleware}
 	One of the most important aspect of the bot is the misspelling and language detection mechanism, which make it smarter and more reliable. Everything is implemented in an additional middleware located upstream, before the Dialogflow middleware actually send the request to the NLP engine. In this way we intercept every message typed by the user, fixing any typos which otherwise would affect the Dialogflow capabilities to detect intent and entities. In addition we can set the language of the agent, making the bot capable of changing the spoken language at each message. Of course the language detection is a fundamental step in order to use the proper dictionaries during misspelling check.
 	
-	\subsection{About the implementation}
 	The core implementation of the middleware could be splitted in 3 parts:
 	\begin{enumerate}
 		\item Language detection
@@ -680,9 +681,9 @@
 	
 	One minor aspect is behind the variable \texttt{showNewSentence}. We want to give the user a feedback when a correction occurred. When it is set to true, the first next answer will include a warning for the user, indicating the actual sentence that has been processed.
 	
-	\section{Slack and Facebook Messenger}
+	\section{Supported platforms}
 	
-	\subsection{Hears}
+	\subsection{Textual approach: Slack and Facebook}
 	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{Botkit} environment. The mechanism through which the sentences are heard is simple to understand: the hears methods are instantiated, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{Botkit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to instantiate the methods that needs to be triggered when an intent is detected.\\\\
 	The prototype of a generic hears functions (in our code) is the following:
 	\begin{lstlisting}[language=C]
@@ -693,9 +694,8 @@
 		bot.reply(message, message['fulfillment']['speech']);
 	});
 	\end{lstlisting}
-	The \texttt{hello} variable (put in the module.exports object to be available from the code in other files) is instantiated as an \texttt{hears} (in this case of the \texttt{slackController} object, but it could have been \texttt{fbController}). The code, in the case of the \texttt{hello} intent is really simple, because it just needs to reply with the same answer provided by the \textit{Dialogflow} NLP. For the other intents, the code is obviously more complicated because it needs to get the informations from the \textit{DOREMUS} knowledge base, as explained in the previous chapters.
+	The \texttt{hello} variable (put in the module.exports object to be available from the code in other files) is instantiated as an \texttt{hears} (in this case of the \texttt{slackController} object, but it could have been \texttt{fbController}). The code, in the case of the \texttt{hello} intent is really simple, because it just needs to reply with the same answer provided by the \textit{Dialogflow} NLP. For the other intents, the code is obviously more complicated because it needs to get the informations from the \textit{DOREMUS} knowledge base, as explained in the previous chapters.\\\\
 	
-	\subsection{Cards}
 	All the textual results that the bot provides are made "prettier" thanks to cards. Both in the \textit{Facebook} and in the \textit{Slack} chat, the results are indeed organized in "key-value" pairs following the JSON syntax. In this way, for example, \textit{Mozart} is presented as the value of the key \textit{Composer}, or \textit{05/12/1791} is the value of the \textit{Death date} key. An example of the code of a card creation is the following:
 	\begin{lstlisting}[language=C]
 	
@@ -727,6 +727,10 @@
 		}
 		return performanceAttachment;
 	\end{lstlisting}
+	
+	\subsection{Vocal approach: Google Home}
+	
+	\chapter{Evaluation}
 	
 	\chapter{Conclusions}
 	

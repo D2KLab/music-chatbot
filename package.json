@@ -9,7 +9,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "botkit": "^0.6.12",
-    "botkit-middleware-dialogflow": "git+https://github.com/jschnurr/botkit-middleware-dialogflow.git#dev",
+    "botkit-middleware-dialogflow": "^1.4.0",
     "botkit-storage-mongo": "^1.0.6",
     "botkit-studio-metrics": "^0.0.2",
     "cookie-parser": "^1.4.3",
