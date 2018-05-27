@@ -43,7 +43,7 @@
 \setlength\epigraphwidth{0.7\textwidth}
 \title{Developing a virtual assistant for answering music related questions}
 \author{Claudio SCALZO \\ (\href{mailto:scalzo@eurecom.fr}{scalzo@eurecom.fr}) \and Luca LOMBARDO \\ (\href{mailto:lombardo@eurecom.fr}{lombardo@eurecom.fr}) }
-\date{\textit{Professor}: Raphaël Troncy\\\textit{Supervisors}: Pasquale Lisena | Thibault Ehrhart}
+\date{\textit{Professor}: Raphaël Troncy\\\textit{Supervisors}: Pasquale Lisena~~-~~Thibault Ehrhart}
 
 \begin{document}
 \maketitle
@@ -80,6 +80,7 @@
 	\end{itemize}
 	
 	\section{How machine learning can help NLU?}
+	\subsection{Attention-Based RNN model for joint intent detection and slot-filling}
 	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. For what regards the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}.\\\\
 	Is fundamental in this case, to understand the concept of alignment:
 	\begin{itemize}
@@ -97,7 +98,6 @@
 	P(y) = \prod_{t=1}^{T} P(y\textsubscript{t}|y\textsubscript{1}\textsuperscript{t-1},c)
 	\end{equation}
 	The work conducted by Liu and Lane aims to propose two different alternatives to be able to work well in joint intent detection and slot-filling tasks.
-	\subsection{Attention-Based RNN model for joint intent detection and slot-filling}
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.4]{alt1}
@@ -115,6 +115,41 @@
 	\end{figure}
 	The attention-based model proposed by Liu and Lane shows a clear structure: each bidirectional \textit{RNN} produces a forward and a backward hidden state, useful for predicting the slot label (the core of the slot-filling task). At the same time, these outputs \textit{h\textsubscript{i}} are merged with the context vector \textit{c} to predict the final intent label.
 	
+	\subsection{A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning}
+	One fundamental work in the Natural Language Processing worlds is the one by Collobert and Weston\cite{unified}. In their work, they propose a deep neural network that learns relevant features also with limited prior knowledge.\\\\
+	The different tasks considered in the work are:
+	\begin{itemize}
+		\item Part-Of-Speech Tagging (POS): labeling each word with its role in the sentence (noun, adverb, verd, etc.).
+		\item Chunking: labeling segments of sentences, with each word tagged as begin-chunk or inside-chunk.
+		\item Named Entity Recognition (NER): labels elements in the sentence in categories (person, city, company, etc.).
+		\item Semantic Role Labeling (SRL): gives a semantic role to a constituent of a sentence.
+		\item Language Models: estimates the probability of the next word to be \textit{w} in a given word sequence.
+		\item Semantically Related Word: understand if two words are semantically related (synonyms, holonymns, etc.).
+	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.4]{unified}
+		\caption{Deep Neural Networks for Natural Language Processing\cite{unified}.}
+	\end{figure}
+	In the proposed model, each word is considered as part of a given table:
+	\begin{equation}
+	LT_w(i) = W_i
+	\end{equation}
+	where the W term is the set of parameters to be learned. So, in the first layer of the network the input sequence is transformed into a set of vectors ${W_i}$.\\\\
+	The output is then computed by the second layer, which performs convolutional operations:
+	\begin{equation}
+	o(t) = \sum_{j=1-t}^{n-t} L_j \cdot x_{t+j}
+	\end{equation}
+	where the \texttt{L} parameters are trained by back-propagation.\\\\
+	Then, a layer follows the convolutional ones: it takes the most relevant features of the sentence feeding the output into a "\textit{Max}" Layer. It's important to notice that the output is of fixed length: this means that classical neural networks can be appended and trained for the labeling tasks.\\\\
+	An important feature of the proposed model is the ability to perform multitask learning (MTL), in a deep joint training fashion. The network automatically learns features for each task in the various layers of the architecture: the deepest layers (with lookup-tables) learns the features for each word in the dictionary, so using them in common for related tasks (during training) can improve the overall generalization performance. In the work proposed by Collobert and Weston indeed, training is done in a stochastic fashion (keeping in mind that the labeled data for each task can be different, also coming from different datasets):
+	\begin{enumerate}
+		\item Take the next task.
+		\item Select a training example for this specific task.
+		\item Train the neural network (updating weights) using the gradient with respect to the example.
+		\item Restart from point 1.
+	\end{enumerate}
+
 	\section{State of art: famous and most used tools}
 	\begin{itemize}
 		\item \textbf{Wit.ai}\cite{witai}\\
@@ -745,6 +780,7 @@
 		\bibitem{woods} Augmented Transition Networks for Natural Language Analysis. 1969. Woods, William. | \textit{\href{https://eric.ed.gov/?id=ED037733}{https://eric.ed.gov/?id=ED037733}}
 		\bibitem{nlpnlunlg} NLP, NLU, NLG and how Chatbots work. | \textit{\href{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}}
 		\bibitem{rnn} Attention-Based Recurrent Neural Network Models for Joint Intent Detection and Slot Filling. 2016. Liu, Bing and Lane, Ian. | \textit{\href{https://arxiv.org/abs/1609.01454}{https://arxiv.org/abs/1609.01454}}
+		\bibitem{unified} A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning. 2008. Collobert, Ronan and Weston, Jason. | \textit{\href{https://ronan.collobert.com/pub/matos/2008\_nlp\_icml.pdf}{https://ronan.collobert.com/pub/matos/2008\_nlp\_icml.pdf}}
 		\bibitem{witai} Wit.ai: Turn what your users say into actions. | \textit{\href{https://wit.ai/}{https://wit.ai/}}
 		\bibitem{snips} Snips: Using Voice to Make Technology Disappear. | \textit{\href{https://snips.ai/}{https://snips.ai/}}
 		\bibitem{watson} IBM Watson: Does your business think? | \textit{\href{https://www.ibm.com/watson/}{https://www.ibm.com/watson/}}

@@ -6,23 +6,24 @@
 \contentsline {section}{\numberline {2.1}What is NLU?}{5}{section.2.1}
 \contentsline {section}{\numberline {2.2}NLP, NLU and NLG}{5}{section.2.2}
 \contentsline {section}{\numberline {2.3}How machine learning can help NLU?}{6}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}Attention-Based RNN model for joint intent detection and slot-filling}{8}{subsection.2.3.1}
-\contentsline {section}{\numberline {2.4}State of art: famous and most used tools}{9}{section.2.4}
-\contentsline {chapter}{\numberline {3}Dialogflow}{11}{chapter.3}
-\contentsline {section}{\numberline {3.1}What is Dialogflow?}{11}{section.3.1}
-\contentsline {section}{\numberline {3.2}How does it work?}{11}{section.3.2}
-\contentsline {section}{\numberline {3.3}Fundamental concepts}{12}{section.3.3}
-\contentsline {chapter}{\numberline {4}The bot}{14}{chapter.4}
-\contentsline {section}{\numberline {4.1}The architecture}{14}{section.4.1}
-\contentsline {section}{\numberline {4.2}Entities}{16}{section.4.2}
-\contentsline {section}{\numberline {4.3}Intents}{18}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{19}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{22}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{23}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{24}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}The spell checker middleware}{25}{section.4.4}
-\contentsline {section}{\numberline {4.5}Supported platforms}{27}{section.4.5}
-\contentsline {subsection}{\numberline {4.5.1}Textual approach: Slack and Facebook}{27}{subsection.4.5.1}
-\contentsline {subsection}{\numberline {4.5.2}Vocal approach: Google Home}{29}{subsection.4.5.2}
-\contentsline {chapter}{\numberline {5}Evaluation}{30}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions}{31}{chapter.6}
+\contentsline {subsection}{\numberline {2.3.1}Attention-Based RNN model for joint intent detection and slot-filling}{6}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning}{9}{subsection.2.3.2}
+\contentsline {section}{\numberline {2.4}State of art: famous and most used tools}{11}{section.2.4}
+\contentsline {chapter}{\numberline {3}Dialogflow}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}What is Dialogflow?}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}How does it work?}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}Fundamental concepts}{14}{section.3.3}
+\contentsline {chapter}{\numberline {4}The bot}{16}{chapter.4}
+\contentsline {section}{\numberline {4.1}The architecture}{16}{section.4.1}
+\contentsline {section}{\numberline {4.2}Entities}{18}{section.4.2}
+\contentsline {section}{\numberline {4.3}Intents}{20}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{21}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Finding some artists}{24}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{25}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{26}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}The spell checker middleware}{27}{section.4.4}
+\contentsline {section}{\numberline {4.5}Supported platforms}{29}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Textual approach: Slack and Facebook}{29}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}Vocal approach: Google Home}{31}{subsection.4.5.2}
+\contentsline {chapter}{\numberline {5}Evaluation}{32}{chapter.5}
+\contentsline {chapter}{\numberline {6}Conclusions}{33}{chapter.6}

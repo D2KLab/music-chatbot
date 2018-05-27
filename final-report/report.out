@@ -7,22 +7,23 @@
 \BOOKMARK [1][-]{section.2.2}{NLP, NLU and NLG}{chapter.2}% 7
 \BOOKMARK [1][-]{section.2.3}{How machine learning can help NLU?}{chapter.2}% 8
 \BOOKMARK [2][-]{subsection.2.3.1}{Attention-Based RNN model for joint intent detection and slot-filling}{section.2.3}% 9
-\BOOKMARK [1][-]{section.2.4}{State of art: famous and most used tools}{chapter.2}% 10
-\BOOKMARK [0][-]{chapter.3}{Dialogflow}{}% 11
-\BOOKMARK [1][-]{section.3.1}{What is Dialogflow?}{chapter.3}% 12
-\BOOKMARK [1][-]{section.3.2}{How does it work?}{chapter.3}% 13
-\BOOKMARK [1][-]{section.3.3}{Fundamental concepts}{chapter.3}% 14
-\BOOKMARK [0][-]{chapter.4}{The bot}{}% 15
-\BOOKMARK [1][-]{section.4.1}{The architecture}{chapter.4}% 16
-\BOOKMARK [1][-]{section.4.2}{Entities}{chapter.4}% 17
-\BOOKMARK [1][-]{section.4.3}{Intents}{chapter.4}% 18
-\BOOKMARK [2][-]{subsection.4.3.1}{Retrieving a set of works}{section.4.3}% 19
-\BOOKMARK [2][-]{subsection.4.3.2}{Finding some artists}{section.4.3}% 20
-\BOOKMARK [2][-]{subsection.4.3.3}{Finding some future and past performances}{section.4.3}% 21
-\BOOKMARK [2][-]{subsection.4.3.4}{Know more about an artist}{section.4.3}% 22
-\BOOKMARK [1][-]{section.4.4}{The spell checker middleware}{chapter.4}% 23
-\BOOKMARK [1][-]{section.4.5}{Supported platforms}{chapter.4}% 24
-\BOOKMARK [2][-]{subsection.4.5.1}{Textual approach: Slack and Facebook}{section.4.5}% 25
-\BOOKMARK [2][-]{subsection.4.5.2}{Vocal approach: Google Home}{section.4.5}% 26
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 27
-\BOOKMARK [0][-]{chapter.6}{Conclusions}{}% 28
+\BOOKMARK [2][-]{subsection.2.3.2}{A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning}{section.2.3}% 10
+\BOOKMARK [1][-]{section.2.4}{State of art: famous and most used tools}{chapter.2}% 11
+\BOOKMARK [0][-]{chapter.3}{Dialogflow}{}% 12
+\BOOKMARK [1][-]{section.3.1}{What is Dialogflow?}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.2}{How does it work?}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.3}{Fundamental concepts}{chapter.3}% 15
+\BOOKMARK [0][-]{chapter.4}{The bot}{}% 16
+\BOOKMARK [1][-]{section.4.1}{The architecture}{chapter.4}% 17
+\BOOKMARK [1][-]{section.4.2}{Entities}{chapter.4}% 18
+\BOOKMARK [1][-]{section.4.3}{Intents}{chapter.4}% 19
+\BOOKMARK [2][-]{subsection.4.3.1}{Retrieving a set of works}{section.4.3}% 20
+\BOOKMARK [2][-]{subsection.4.3.2}{Finding some artists}{section.4.3}% 21
+\BOOKMARK [2][-]{subsection.4.3.3}{Finding some future and past performances}{section.4.3}% 22
+\BOOKMARK [2][-]{subsection.4.3.4}{Know more about an artist}{section.4.3}% 23
+\BOOKMARK [1][-]{section.4.4}{The spell checker middleware}{chapter.4}% 24
+\BOOKMARK [1][-]{section.4.5}{Supported platforms}{chapter.4}% 25
+\BOOKMARK [2][-]{subsection.4.5.1}{Textual approach: Slack and Facebook}{section.4.5}% 26
+\BOOKMARK [2][-]{subsection.4.5.2}{Vocal approach: Google Home}{section.4.5}% 27
+\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 28
+\BOOKMARK [0][-]{chapter.6}{Conclusions}{}% 29
