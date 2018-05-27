@@ -16,7 +16,7 @@
 \contentsline {section}{\numberline {4.1}The architecture}{14}{section.4.1}
 \contentsline {section}{\numberline {4.2}Entities}{16}{section.4.2}
 \contentsline {section}{\numberline {4.3}Intents}{18}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{18}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.1}Retrieving a set of works}{19}{subsection.4.3.1}
 \contentsline {subsection}{\numberline {4.3.2}Finding some artists}{22}{subsection.4.3.2}
 \contentsline {subsection}{\numberline {4.3.3}Finding some future and past performances}{23}{subsection.4.3.3}
 \contentsline {subsection}{\numberline {4.3.4}Know more about an artist}{24}{subsection.4.3.4}

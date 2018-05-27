@@ -243,6 +243,9 @@
 	facebook/
 		facebook_io.js
 		facebook_cards.js
+		
+	dialogflow/
+		webhook_server.js
 	\end{lstlisting}
 	where:
 	\begin{itemize}
@@ -266,6 +269,7 @@
 			
 			\item \texttt{facebook\_cards.js} contains the code to build the \textit{Facebook} cards to make the answers prettier.
 			\end{itemize}
+		\item \texttt{dialogflow/} is a directory containing the webhook useful for the \textit{Dialogflow} fulfillment phase. This flow is totally detached from our original architecture (which uses \textit{Botkit}), and it's useful only for the lightweight version of the bot which can be used with \textit{Google Home}.
 	\end{itemize}
 	
 	\section{Entities}

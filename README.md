@@ -23,7 +23,9 @@ The bot makes use of different tools:
 
 - Uses [Dialogflow](https://github.com/dialogflow) as Natural Language Processing tool. The communication with the NLP is managed thanks to a modified version of the [botkit-middleware-dialogflow](https://github.com/jschnurr/botkit-middleware-dialogflow).
 
-- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/)
+- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/).
+
+- In a lightweight version (without spell checking and language detection) is also able to work with a device running [Google Assistant](https://assistant.google.com) (e.g. Google Home).
 
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/arch2.png)
@@ -79,6 +81,8 @@ npm install
     - [facebook_io.js](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
     - [facebook_cards.js](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
 
+- [dialogflow/](./dialogflow/) is a directory containing the webhook useful for the Dialogflow fulfillment phase. This flow is totally detached from our original architecture (which uses Botkit), and it's useful only for the lightweight version of the bot which can be used with Google Home.
+
 ### Configuring
 Prepare a .env for your node app. You can easily copy-paste the following:
 ```
@@ -110,10 +114,9 @@ You need:
 You can easily launch the bot with:
 ```
 npm start
-
 ```
 
-Alternatively, you can deploy it with Docker.
+Alternatively, you can deploy it with Docker:
 
 ```
 docker build -t jplu/node github.com/pasqLisena/docker-node
@@ -123,7 +126,7 @@ docker build -t doremus/chatbot .
 docker run -d -p 5052:3000 --restart=unless-stopped -v /var/doremus/music-chatbot/.env:/.env --name doremus-bot doremus/chatbot
 ```
 
-Uninstall from Docker
+Uninstall from Docker:
 ```
 docker stop doremus-bot
 docker rm doremus-bot ##remove from available containers
