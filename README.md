@@ -47,10 +47,10 @@ npm install
 ```
     bot.js
     spell-checker-middleware.js
-    
+
     config/
         .env
-    
+
     doremus/
         bot_functions.js
 
@@ -123,7 +123,7 @@ docker build -t jplu/node github.com/pasqLisena/docker-node
 
 docker build -t doremus/chatbot .
 
-docker run -d -p 5052:3000 --restart=unless-stopped -v /var/doremus/music-chatbot/.env:/.env --name doremus-bot doremus/chatbot
+docker run -d -p 5052:3000 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config --name doremus-bot doremus/chatbot
 ```
 
 Uninstall from Docker:

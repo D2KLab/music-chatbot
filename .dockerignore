@@ -1,4 +1,6 @@
 final-report/
+config/
+
 .gitignore
 README.md
 LICENSE
