@@ -768,8 +768,32 @@
 	\end{lstlisting}
 	
 	\subsection{Vocal approach: Google Home}
+	The bot supports also a vocal approach for the entire conversational flow. It can reply to the queries with a human voice, like the common vocal assistants. However, in this moment it has some limitations:
+	\begin{itemize}
+		\item It works only in the english language.
+		\item It has a limitation in the artists he knows: 10'000.
+		\item It's limited to the \texttt{works-by} and \texttt{find-performance} intents.
+	\end{itemize}
+
+	To make it work the \textit{Botkit} architecture has been bypassed: the client communicates directly with the NLP, which understands the query and answers thanks to a webhook (in its fulfillment phase).\\\\
+	The webhook has been written by us in NodeJS, to support the \texttt{works-by} and \texttt{find-performance} intents: the bot indeed, replies with a set of works or with a set of scheduled events, basing on the query that has been done.
 	
 	\chapter{Evaluation}
+	The entire path to develop this virtual assistant has been overall successful. The bot knows the artists, the instruments, the genres of the \textit{DOREMUS} knowledge base, and is capable of answering to a pretty various set of intents.\\\\
+	The intents are not just static queries, but the bot engages the user in a tit for tat conversation where the user can specify more filters to the queries it does: this has been done thanks to a smart contexts usage.\\
+	The bot, indeed, at this phase of its development is able to work with a very large set of queries, like the ones listed in the previous chapter; it's fast, the code is stable and overall it provides a pleasant experience also thanks to the visual results it can provide (like artist pictures and cards, in general).\\\\
+	It's also interesting to notice what can improved in the bot. First of all, the non-English languages: in this moment, the bot supports the french language, however \textit{Dialogflow} is not so smart in these languages as it is in English. It needs way more training sentences, which have to combine all possible orderings of entities in the sentences. For example, if the bot is trained on this sentence:
+	\begin{verse}
+		\textit{"Donne-moi deux oeuvres de Mozart pour clarinet"}
+	\end{verse}
+	it won't work (if not trained) on these sentences:
+	\begin{verse}
+		\textit{"Donne-moi deux oeuvres pour clarinet de Mozart"}\\
+		\textit{"Dis-moi deux oeuvres pour clarinet de Mozart"}
+	\end{verse}
+	while in English is a lot smarter and capable to understand also those sentences. It's clear that the ordered combination for all the entities that we can have in a sentence (artists, instruments, genres, numbers, verbs) is huge! So, the bot has to be hugely trained in non-English languages to work well: this can be done also with a script that generates the sentences in all possible order and combination and feeds the bot training pipeline.\\\\
+	For what regards entities, a tool that automatically downloads, cleans and updates the bot entities taking the updated version from the KB can be very useful. It could be put into the \textit{DOREMUS Bot} code to keep fresh all the knowledge that the bot as in the classical music world.\\\\
+	With certain queries the bot can be, of course, slow. This is due to the \textit{DOREMUS} knowledge base and is not under our control: computational-time estimation techniques could be done to say to the user that those queries will take some time to end in a concrete answer.
 	
 	\chapter{Conclusions}
 	
