@@ -1,5 +1,5 @@
 # DOREMUS Bot
-### A virtual assistant for answering music related questions.
+### A virtual assistant for answering classical music related questions based on the [DOREMUS](http://www.doremus.org/) Knowledge Graph
 
 - [Description](#description)
 - [Getting started](#getting-started)
@@ -14,18 +14,18 @@
 
 ## Description
 
-##### This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related queries.
+##### This repository contains the code of the "DOREMUS Bot", a bot capable of answering and providing results to a set of classical music related questions.
 
-The bot makes use of different tools:
+The bot makes use of different resources:
 - It's built using the [BotKit](https://github.com/howdyai/botkit) bot building tool.
 
-- It uses the [DOREMUS](https://github.com/DOREMUS-ANR) knowledge base as source of informations to answer the queries.
+- It uses the [DOREMUS](https://github.com/DOREMUS-ANR) knowledge graph as source of informations to answer the questions.
 
-- Uses [Dialogflow](https://github.com/dialogflow) as Natural Language Processing tool. The communication with the NLP is managed thanks to a modified version of the [botkit-middleware-dialogflow](https://github.com/jschnurr/botkit-middleware-dialogflow).
+- It uses [Dialogflow](https://github.com/dialogflow) as Natural Language Understanding engine. The communication with the NLU is managed thanks to a modified version of the [botkit-middleware-dialogflow](https://github.com/jschnurr/botkit-middleware-dialogflow).
 
-- Is capable of working with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) - you can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/).
+- It is connected with [Slack](https://slack.com) and/or [Facebook Messenger](https://www.messenger.com) and one can start messaging with the bot at the [Facebook page](https://facebook.com/doremusbot/).
 
-- In a lightweight version (without spell checking and language detection) is also able to work with a device running [Google Assistant](https://assistant.google.com) (e.g. Google Home).
+- In a lightweight version (without spell checking and language detection), it is also able to work with a device running [Google Assistant](https://assistant.google.com) (e.g. Google Home).
 
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/arch2.png)
