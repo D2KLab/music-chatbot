@@ -42,6 +42,11 @@ if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbA
     process.exit(1);
 }
 
+if (!process.env.PORT2) {
+    console.log('Error! Specify PORT2 token in environment to launch dialogflow webhook');
+    process.exit(1);
+}
+
 
 // SLACK
 var slackBotOptions = {
@@ -75,8 +80,9 @@ fbController.setupWebserver(
     }
 );
 
+
 // WEBHOOK SERVER 
-//require("./dialogflow/webhook_server")(5001);
+require("./dialogflow/index.js")(process.env.PORT2);
 
 // LOAD 'SpellChecker' MIDDLEWARE
 var spellCheckerMiddleware = require('./spell-checker-middleware.js')()
