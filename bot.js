@@ -19,14 +19,13 @@ Supported platforms:
 
 // LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
 require('dotenv').config({
-  path: '/config/.env'
+  path: './config/.env'
 });
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
-
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.slackToken) {
