@@ -123,7 +123,7 @@ docker build -t jplu/node github.com/pasqLisena/docker-node
 
 docker build -t doremus/chatbot .
 
-docker run -d -p 5052:3000 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config --name doremus-bot doremus/chatbot
+docker run -d -p 5052:3000 -p 5053:3001 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config --name doremus-bot doremus/chatbot
 ```
 
 Uninstall from Docker:
