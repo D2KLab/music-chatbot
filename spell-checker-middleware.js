@@ -57,18 +57,26 @@ var performMisspellingCheck = function(message) {
 
             var corrections = speller.suggest(words[i])
             if (corrections.length > 0) {
+
                 // if it is and at least a correction exists append the first one
-                messageMisspelledFree += corrections[0] + ' ';
+                messageMisspelledFree += corrections[0];
+
                 // set the global var to true in order to show that a correction happened
                 // in the next response to the user
                 showNewSentence = true
             } else {
+
                 // otherwise append the original word
-                messageMisspelledFree += words[i] + ' ';
+                messageMisspelledFree += words[i];
             }
         } else {
+            
             // otherwise append the original word
-            messageMisspelledFree += words[i] + ' ';
+            messageMisspelledFree += words[i];
+        }
+
+        if (i != words.length - 1) {
+            messageMisspelledFree += ' ';
         }
     }
     return messageMisspelledFree;
@@ -112,7 +120,7 @@ module.exports = function() {
                 qs: parameters
             }, function(err, response, body) {
                 if (err) {
-                    console.log("Error during language detection");
+                    console.error("Error during language detection");
                     next(err);
                 }
 
@@ -133,7 +141,7 @@ module.exports = function() {
                 // SPELL CHECKING
                 // perform the misspelling with the (potentially) updated speller
                 var cleanMessage = performMisspellingCheck(message);
-                log.write(bot.type, message.text, cleanMessage, currentLang);
+                log.write(bot.type, message.user, message.team, message.text, cleanMessage, currentLang);
 
                 message.text = cleanMessage;
 
@@ -145,7 +153,7 @@ module.exports = function() {
 
             // perform the misspelling with the same speller as before
             var cleanMessage = performMisspellingCheck(message)
-            log.write(bot.type, message.text, cleanMessage, currentLang);
+            log.write(bot.type, message.user, message.team, message.text, cleanMessage, currentLang);
 
             message.text = cleanMessage;
 

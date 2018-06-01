@@ -23,6 +23,7 @@
     "nspell": "^2.0.0",
     "querystring": "^0.2.0",
     "request": "^2.87.0",
+    "underscore": "^1.9.1",
     "wordfilter": "^0.2.6"
   },
   "devDependencies": {},

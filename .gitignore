@@ -1,4 +1,5 @@
 .env
 final-report/report.log
 node_modules/
+logs/
 .DS_Store
