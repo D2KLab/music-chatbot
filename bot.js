@@ -26,6 +26,7 @@ require('dotenv').config({
 var Botkit = require('botkit');
 var request = require('request');
 var http = require('http');
+var logger = require('./logger.js');
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.slackToken) {
@@ -106,6 +107,9 @@ fbController.middleware.receive.use(spellCheckerMiddleware.receive);
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
 
+// START THE LOGGER
+log = logger();
+
 // BOT: START THE SERVICE
 slackBot.startRTM();
 
@@ -116,7 +120,9 @@ exports.fbController = fbController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.spellCheckerMiddleware = spellCheckerMiddleware;
-
+exports.log = function() {
+    return log;
+}
 
 // IMPORT HEARS
 var slackHears = require('./slack/slack_io.js');

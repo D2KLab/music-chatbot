@@ -4,6 +4,7 @@ var botVars = require("../bot.js");
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 var botFunctions = require("../doremus/bot_functions.js");
 
+var log = botVars.log();
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.fbController.hears('works-by', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
@@ -57,9 +58,16 @@ module.exports.worksBy = botVars.fbController.hears('works-by', 'message_receive
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments,
             parameters.strictly, startyear, endyear, parameters.genre, "facebook", bot, message);
+        log.write(bot.type, message.user, message.team, "works-by",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     } else {
 
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "works-by",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang, message.confidence);
     }
 
 });
@@ -68,6 +76,10 @@ module.exports.worksBy = botVars.fbController.hears('works-by', 'message_receive
 module.exports.worksByYes = botVars.fbController.hears('works-by - yes', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "works-by - yes",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        message.lang, message.confidence);
 });
 
 // WORKS-BY - NO
@@ -106,7 +118,9 @@ module.exports.worksByNo = botVars.fbController.hears('works-by - no', 'message_
 
     // DO THE QUERY (WITH ALL THE INFOS)
     botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "facebook", bot, message);
-
+    log.write(bot.type, message.user, message.team, "works-by - no",
+        "<result_card>", '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 
@@ -114,6 +128,10 @@ module.exports.worksByNo = botVars.fbController.hears('works-by - no', 'message_
 module.exports.worksBySomething = botVars.fbController.hears(['works-by-artist', 'works-by-genre', 'works-by-instrument', 'works-by-years'], 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "works-by-something",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        message.lang, message.confidence);
 });
 
 
@@ -147,6 +165,9 @@ module.exports.findArtist = botVars.fbController.hears('find-artist', 'message_r
 
     // SEND THE BIO TO THE USER
     botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "facebook", bot, message);
+    log.write(bot.type, message.user, message.team, "find-artist",
+        "<result_card>", '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 
@@ -158,12 +179,19 @@ module.exports.discoverArtist = botVars.fbController.hears('discover-artist', 'm
 
         // SEND THE BIO TO THE USER
         botFunctions.answerBio(message.entities["doremus-artist"], "facebook", bot, message);
+        log.write(bot.type, message.user, message.team, "discover-artist",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
     else {
 
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "discover-artist",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang, message.confidence);
     }
 
 });
@@ -194,11 +222,18 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQueryPerformance(num, city, startdate, enddate, "facebook", bot, message);
+        log.write(bot.type, message.user, message.team, "find-performance",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (missing date)
     else {
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "find-performance",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang, message.confidence);
     }
 });
 
@@ -207,6 +242,10 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 module.exports.hello = botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "hello",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 

@@ -1,6 +1,6 @@
 {
   "name": "doremus-bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A virtual assistant for answering music related questions",
   "main": "bot.js",
   "scripts": {

@@ -15,7 +15,6 @@ var spellFR = nspell(frAFF, frDIC)
 
 var speller = spellEN;
 var currentLang = "en";
-var showNewSentence = false;
 
 
 // FIXED GREETINGS
@@ -44,9 +43,6 @@ var performMisspellingCheck = function(message) {
     // empty string where to append corrected words
     var messageMisspelledFree = "";
     var words = message.text.split(" ");
-    
-    // initially assume there is no correction neeeded
-    showNewSentence = false
 
     for (var i = 0; i < words.length; i++) {
 
@@ -58,10 +54,6 @@ var performMisspellingCheck = function(message) {
 
                 // if it is and at least a correction exists append the first one
                 messageMisspelledFree += corrections[0];
-
-                // set the global var to true in order to show that a correction happened
-                // in the next response to the user
-                showNewSentence = true
             } else {
 
                 // otherwise append the original word
@@ -160,10 +152,6 @@ module.exports = function() {
             next();
         }
         return;
-    }
-
-    middleware.showNewSentence = function() {
-        return showNewSentence;
     }
 
     middleware.currectLang = function() {

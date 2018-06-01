@@ -25,5 +25,6 @@
 \contentsline {section}{\numberline {4.5}Supported platforms}{29}{section.4.5}
 \contentsline {subsection}{\numberline {4.5.1}Textual approach: Slack and Facebook}{29}{subsection.4.5.1}
 \contentsline {subsection}{\numberline {4.5.2}Vocal approach: Google Home}{31}{subsection.4.5.2}
-\contentsline {chapter}{\numberline {5}Evaluation}{32}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions}{34}{chapter.6}
+\contentsline {section}{\numberline {4.6}Logging}{31}{section.4.6}
+\contentsline {chapter}{\numberline {5}Evaluation}{33}{chapter.5}
+\contentsline {chapter}{\numberline {6}Conclusions}{35}{chapter.6}

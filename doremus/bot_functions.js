@@ -63,7 +63,6 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         ?k skos:prefLabel ?key \
       } . '
 
-    console.log(genre);
     if (genre !== "") {
         newQuery += 'VALUES(?gen) { \
                    (<http://data.doremus.org/vocabulary/iaml/genre/' + genre + '>) \
@@ -152,7 +151,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
     request(finalQuery, (err, res, body) => {
 
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
 
         // JSON PARSING
@@ -232,7 +231,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
     request(finalQuery, (err, res, body) => {
 
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
 
         // JSON PARSING
@@ -328,7 +327,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
     request(finalQuery, (err, res, body) => {
 
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
 
         // JSON PARSING
@@ -400,7 +399,7 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
     const request = require('request');
     request(finalQuery, (err, res, body) => {
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
 
         // JSON PARSING
@@ -461,7 +460,7 @@ module.exports.answerBioSmallAsText = function answerBioSmallAsText(artist, bot,
     const request = require('request');
     request(finalQuery, (err, res, body) => {
         if (err) {
-            return console.log(err);
+            return console.error(err);
         }
 
         // JSON PARSING

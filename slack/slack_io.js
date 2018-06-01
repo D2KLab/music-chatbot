@@ -1,16 +1,15 @@
 /* SLACK HEARS */
 
 var botVars = require("../bot.js");
-var logger = require('../logger.js');
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 var botFunctions = require("../doremus/bot_functions.js");
 
-var log = logger();
+var log = botVars.log();
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (spellCheckerMiddleware.showNewSentence()) {
+    if (message.text !== message.old) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -69,14 +68,14 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
             parameters.strictly, startyear, endyear, parameters.genre, "slack", bot, message);
         log.write(bot.type, message.user, message.team, "works-by",
             "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang);
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     } else {
 
         bot.reply(message, message['fulfillment']['speech']);
         log.write(bot.type, message.user, message.team, "works-by",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
-            message.lang);
+            message.lang, message.confidence);
     }
 
 });
@@ -88,7 +87,7 @@ module.exports.worksByYes = botVars.slackController.hears(['works-by - yes'], 'd
     log.write(bot.type, message.user, message.team, "works-by - yes",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
-        message.lang);
+        message.lang, message.confidence);
 });
 
 // WORKS-BY - NO
@@ -129,7 +128,7 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
     botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "slack", bot, message);
     log.write(bot.type, message.user, message.team, "works-by - no",
         "<result_card>", '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang);
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 
@@ -140,14 +139,14 @@ module.exports.worksBySomething = botVars.slackController.hears(['works-by-artis
     log.write(bot.type, message.user, message.team, "works-by-something",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
-        message.lang);
+        message.lang, message.confidence);
 });
 
 
 // DISCOVER ARTIST
 module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (spellCheckerMiddleware.showNewSentence()) {
+    if (message.text !== message.old) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -185,14 +184,14 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
     botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "slack", bot, message);
     log.write(bot.type, message.user, message.team, "find-artist",
         "<result_card>", '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang);
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 
 // DISCOVER ARTIST
 module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (spellCheckerMiddleware.showNewSentence()) {
+    if (message.text !== message.old) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -208,7 +207,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
         botFunctions.answerBio(message.entities["doremus-artist"], "slack", bot, message);
         log.write(bot.type, message.user, message.team, "discover-artist",
             "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang);
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -218,7 +217,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
         log.write(bot.type, message.user, message.team, "discover-artist",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
-            message.lang);
+            message.lang, message.confidence);
     }
 
 });
@@ -227,7 +226,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 // FIND-PERFORMANCE
 module.exports.findPerformance = botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    if (spellCheckerMiddleware.showNewSentence()) {
+    if (message.text !== message.old) {
         bot.reply(message, {
             "attachments": [{
                 text: "I understood: " + message["text"],
@@ -260,7 +259,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
         botFunctions.doQueryPerformance(num, city, startdate, enddate, "slack", bot, message);
         log.write(bot.type, message.user, message.team, "find-performance",
             "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang);
+            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (missing date)
@@ -270,7 +269,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
         log.write(bot.type, message.user, message.team, "find-performance",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
-            message.lang);
+            message.lang, message.confidence);
     }
 });
 
@@ -282,7 +281,7 @@ module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message,
     log.write(bot.type, message.user, message.team, "hello",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang);
+        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
 
 
