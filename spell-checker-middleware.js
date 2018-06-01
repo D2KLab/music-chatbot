@@ -4,7 +4,6 @@ var nspell = require('nspell')
 const fs = require('fs');
 var request = require('request');
 var http = require('http');
-var logger = require('./logger.js');
 
 var enDIC = fs.readFileSync("./node_modules/dictionary-en-us/index.dic", 'utf-8')
 var enAFF = fs.readFileSync("./node_modules/dictionary-en-us/index.aff", 'utf-8')
@@ -17,7 +16,6 @@ var spellFR = nspell(frAFF, frDIC)
 var speller = spellEN;
 var currentLang = "en";
 var showNewSentence = false;
-var log = logger();
 
 
 // FIXED GREETINGS
@@ -136,13 +134,13 @@ module.exports = function() {
                     speller = spellEN;
                     currentLang = "en";
                 }
-                //otherwise don't change anything
+                // otherwise don't change anything
                 
                 // SPELL CHECKING
                 // perform the misspelling with the (potentially) updated speller
                 var cleanMessage = performMisspellingCheck(message);
-                log.write(bot.type, message.user, message.team, message.text, cleanMessage, currentLang);
 
+                message.old = message.text;
                 message.text = cleanMessage;
 
                 // fill the language field in order to send it to dialogflow api
@@ -152,9 +150,9 @@ module.exports = function() {
         } else {
 
             // perform the misspelling with the same speller as before
-            var cleanMessage = performMisspellingCheck(message)
-            log.write(bot.type, message.user, message.team, message.text, cleanMessage, currentLang);
+            var cleanMessage = performMisspellingCheck(message);
 
+            message.old = message.text;
             message.text = cleanMessage;
 
             // fill the language field in order to send it to dialogflow api

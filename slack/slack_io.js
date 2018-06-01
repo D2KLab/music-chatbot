@@ -1,8 +1,11 @@
 /* SLACK HEARS */
 
 var botVars = require("../bot.js");
+var logger = require('../logger.js');
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 var botFunctions = require("../doremus/bot_functions.js");
+
+var log = logger();
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
@@ -64,9 +67,16 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments,
             parameters.strictly, startyear, endyear, parameters.genre, "slack", bot, message);
+        log.write(bot.type, message.user, message.team, "works-by",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang);
     } else {
 
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "works-by",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang);
     }
 
 });
@@ -75,6 +85,10 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
 module.exports.worksByYes = botVars.slackController.hears(['works-by - yes'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "works-by - yes",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        message.lang);
 });
 
 // WORKS-BY - NO
@@ -113,7 +127,9 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
 
     // DO THE QUERY (WITH ALL THE INFOS)
     botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "slack", bot, message);
-
+    log.write(bot.type, message.user, message.team, "works-by - no",
+        "<result_card>", '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang);
 });
 
 
@@ -121,6 +137,10 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
 module.exports.worksBySomething = botVars.slackController.hears(['works-by-artist', 'works-by-instrument', 'works-by-genre', 'works-by-years'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "works-by-something",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        message.lang);
 });
 
 
@@ -163,6 +183,9 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
 
     // SEND THE BIO TO THE USER
     botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "slack", bot, message);
+    log.write(bot.type, message.user, message.team, "find-artist",
+        "<result_card>", '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang);
 });
 
 
@@ -183,12 +206,19 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 
         // SEND THE BIO TO THE USER
         botFunctions.answerBio(message.entities["doremus-artist"], "slack", bot, message);
+        log.write(bot.type, message.user, message.team, "discover-artist",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang);
     }
 
     // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
     else {
 
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "discover-artist",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang);
     }
 
 });
@@ -228,12 +258,19 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQueryPerformance(num, city, startdate, enddate, "slack", bot, message);
+        log.write(bot.type, message.user, message.team, "find-performance",
+            "<result_card>", '"' + message.text.replace(',','') + '"',
+            '"' + message.old.replace(',','') + '"', message.lang);
     }
 
     // ACTION INCOMPLETE (missing date)
     else {
 
         bot.reply(message, message['fulfillment']['speech']);
+        log.write(bot.type, message.user, message.team, "find-performance",
+            '"' + message['fulfillment']['speech'].replace(',','') + '"',
+            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            message.lang);
     }
 });
 
@@ -242,6 +279,10 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.team, "hello",
+        '"' + message['fulfillment']['speech'].replace(',','') + '"',
+        '"' + message.text.replace(',','') + '"',
+        '"' + message.old.replace(',','') + '"', message.lang);
 });
 
 
