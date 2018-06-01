@@ -4,13 +4,13 @@
           \ \  __<   \ \ \/\ \  \/_/\ \/ \ \  _"-.  \ \ \  \/_/\ \/
            \ \_____\  \ \_____\    \ \_\  \ \_\ \_\  \ \_\    \ \_\
             \/_____/   \/_____/     \/_/   \/_/\/_/   \/_/     \/_/
-            
+
 This is the DOREMUS Bot! Built with Botkit, using the Dialogflow middleware.
 
 Authors:
   - Luca LOMBARDO   <lombardo@eurecom.fr>
   - Claudio SCALZO  <scalzo@eurecom.fr>
-  
+
 Supported platforms:
   - Slack
   - Facebook Messenger
@@ -18,7 +18,9 @@ Supported platforms:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
-require('dotenv').config({path: './config/.env'});
+require('dotenv').config({
+  path: '/config/.env'
+});
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
@@ -28,60 +30,58 @@ var http = require('http');
 
 // CHECKS FOR THE SLACK AND DIALOGFLOW TOKENS
 if (!process.env.slackToken) {
-    console.log('Error! Specify Slack token in environment');
-    process.exit(1);
+  console.error('Specify Slack token in environment');
+  process.exit(1);
 }
 
 if (!process.env.dialogflow) {
-    console.log('Error! Specify Dialogflow token in environment');
-    process.exit(1);
+  console.error('Specify Dialogflow token in environment');
+  process.exit(1);
 }
 
 if (!process.env.fbAccessToken || !process.env.fbVerifyToken || !process.env.fbAppSecret) {
-    console.log('Error! Specify Facebook tokens in environment');
-    process.exit(1);
+  console.error('Specify Facebook tokens in environment');
+  process.exit(1);
 }
 
 if (!process.env.PORT2) {
-    console.log('Error! Specify PORT2 token in environment to launch dialogflow webhook');
-    process.exit(1);
+  console.error('Specify PORT2 token in environment to launch dialogflow webhook');
+  process.exit(1);
 }
 
 
 // SLACK
 var slackBotOptions = {
-    clientId: process.env.clientId,
-    clientSecret: process.env.clientSecret,
-    debug: false,
-    scopes: ['bot'],
+  clientId: process.env.clientId,
+  clientSecret: process.env.clientSecret,
+  debug: false,
+  scopes: ['bot'],
 };
 var slackController = Botkit.slackbot(slackBotOptions);
 var slackBot = slackController.spawn({
-    token: process.env.slackToken,
+  token: process.env.slackToken,
 });
 
 
 // FB MESSENGER
 var fbBotOptions = {
-    debug: true,
-    log: true,
-    access_token: process.env.fbAccessToken,
-    verify_token: process.env.fbVerifyToken,
-    app_secret: process.env.fbAppSecret,
-    validate_requests: true
+  debug: true,
+  log: true,
+  access_token: process.env.fbAccessToken,
+  verify_token: process.env.fbVerifyToken,
+  app_secret: process.env.fbAppSecret,
+  validate_requests: true
 };
 var fbController = Botkit.facebookbot(fbBotOptions);
 var fbBot = fbController.spawn({});
 
 fbController.setupWebserver(
-    process.env.PORT || 5000,
-    (err, webserver) => {
-        fbController.createWebhookEndpoints(webserver, fbBot);
-    }
+  process.env.PORT || 5000,
+  (err, webserver) => fbController.createWebhookEndpoints(webserver, fbBot)
 );
 
 
-// WEBHOOK SERVER 
+// WEBHOOK SERVER
 require("./dialogflow/index.js")(process.env.PORT2);
 
 // LOAD 'SpellChecker' MIDDLEWARE
@@ -89,7 +89,7 @@ var spellCheckerMiddleware = require('./spell-checker-middleware.js')()
 
 // LOAD 'Dialogflow' MIDDLEWARE
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
-    token: process.env.dialogflow,
+  token: process.env.dialogflow,
 });
 
 
