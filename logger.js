@@ -47,7 +47,7 @@ module.exports = function() {
         } else {
 
             // dir not-empty: take last modified file
-            logFile.name = underscore.max(files, function(file) {
+            logFile.name = underscore.max(logFiles, function(file) {
                 var logFilePath = path.join(logDir, file);
                 return fs.statSync(logFilePath).mtime;
             });

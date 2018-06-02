@@ -277,6 +277,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 // HELLO INTENT
 module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
+    console.log("*** " + message.nlpResponse.sessionId)
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.team, "hello",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
