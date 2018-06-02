@@ -5,7 +5,7 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
     var bioAttachment = {
         "attachments": [{
             "pretext": "This is what I found:",
-            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+            "fallback": "New message from DOREMUS Bot!",
             "title": fullname,
             "image_url": "https://rsz.io/" + imageURLHTTPDropped + "?mode=crop&width=150&height=150",
             "fields": [{
@@ -40,7 +40,7 @@ module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birt
 
     var artistAttachment = {
         "attachments": [{
-            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+            "fallback": "New message from DOREMUS Bot!",
             "title": fullname,
             "fields": [{
                 "title": "Born in",
@@ -74,7 +74,7 @@ module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, co
     var workAttachment = {
         "attachments": [{
             "title": title,
-            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+            "fallback": "New message from DOREMUS Bot!",
             "fields": [{
                 "title": "Composer",
                 "value": artist,
@@ -108,7 +108,7 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
         "attachments": [{
             "title": title,
             "text": subtitle,
-            "fallback": "ReferenceError - UI is not defined: https://honeybadger.io/path/to/event/",
+            "fallback": "New message from DOREMUS Bot!",
             "fields": [{
                 "title": "Where",
                 "value": placeName,
