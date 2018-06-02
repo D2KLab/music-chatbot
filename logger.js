@@ -29,7 +29,7 @@ module.exports = function() {
         logFile.num = 0;
         logFile.name = ('0' + logFile.num).slice(-2) + ".csv";
         fs.writeFileSync(path.join(logDir, logFile.name),
-                         "timestamp,platform,user,team,intent,rawMessage,cleanMessage,lang,response" + eol);
+                         "timestamp,platform,user,team,intent,confidence,lang,rawMessage,cleanMessage,response" + eol);
     } else {
 
         // take the existing files
