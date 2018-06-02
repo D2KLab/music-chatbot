@@ -34,8 +34,10 @@ module.exports = function() {
 
         // take the existing files
         var files = fs.readdirSync(logDir);
+        // take only the log files with name format [0-9][0-9] and extension .csv
+        var logFiles = files.filter( fileName => fileName.match("\d+\.csv"))
 
-        if (files.length == 0) {
+        if (logFiles.length == 0) {
 
             // dir empty: init first file
             logFile.num = 0;
