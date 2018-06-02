@@ -781,19 +781,17 @@
 	\section{Logging}
 	The bot, during its activity, keeps track of a set of useful informations inside some log files. Each log file is located into the \texttt{/logs} directory and after reaching a given threshold (set at the moment with 1MB), a new file is created: multiple log files can be easier to treat with respect to one huge log file.\\\\
 	The logging files have the following structure:
-	\texttt{timestamp,platform,user,team,intent,confidence,lang,rawMessage,cleanMessage,response}
-	where:
 	\begin{itemize}
-		\item \textbf{timestamp} is the current date-time.
-		\item \textbf{platform} is the platform from which the message comes from (\textit{Slack, Facebook}).
-		\item \textbf{user} is the ID of the user sending the message.
-		\item \textbf{team} is the team of the user sending the message.
-		\item \textbf{intent} is the intent which has been detected by the NLP.
-		\item \textbf{confidence} is the confidence level of the NLP in choosing that intent.
-		\item \textbf{lang} is the detected language of the message.
-		\item \textbf{rawMessage} is the message sent by the user, before spell-checking.
-		\item \textbf{cleanMessage} is the message sent by the user, after spell-checking.
-		\item \textbf{response} is the answer given by the bot (textual or \texttt{<result\_card>}).
+		\item \texttt{timestamp} - the current date-time.
+		\item \texttt{platform} - the platform from which the message comes from (\textit{Slack, Facebook}).
+		\item \texttt{user} - the ID of the user sending the message.
+		\item \texttt{team} - the team of the user sending the message.
+		\item \texttt{intent} - the intent which has been detected by the NLP.
+		\item \texttt{confidence} - the confidence level of the NLP in choosing that intent.
+		\item \texttt{lang} - the detected language of the message.
+		\item \texttt{rawMessage} - the message sent by the user, before spell-checking.
+		\item \texttt{cleanMessage} - the message sent by the user, after spell-checking.
+		\item \texttt{response} - the answer given by the bot (textual or \texttt{<result\_card>}).
 	\end{itemize}
 	
 	\chapter{Evaluation}
