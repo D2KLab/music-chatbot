@@ -55,11 +55,11 @@
 	Having said that, the reason behind the development of our virtual assistant should be clear: simplify the user's life when he wants to access some informations about classical music.
 	
 	\section{Scope of the project}
-	Our project puts down its root into \textit{DOREMUS}\cite{doremus}, a classical music knowledge base, mainly composed by an ontology of 64 classes and 250 properties, and a set of 17 vocabularies. The informations contained inside \textit{DOREMUS} can be accessed thanks to a SPARQL endpoint, that lets users write queries to retrieve the set of data they want to achieve.\\\\
+	Our project puts down its root into \textit{DOREMUS}\cite{doremus}, a classical music knowledge graph, mainly composed by an ontology of 64 classes and 250 properties, and a set of 17 vocabularies. The informations contained inside \textit{DOREMUS} can be accessed thanks to a SPARQL endpoint, that lets users write queries to retrieve the set of data they want to achieve.\\\\
 	Our project starts from this difficulty: how many people know SPARQL? And inside the set of people who know it, how many problems can rise using the SPARQL language? Using the right properties, checking the exact domain and ranges for each property and other annoying problems just to obtain simple results. Our bot faces this issue, making simple to obtain the most common informations the users want.
 	
 	\section{Aim and expected results}
-	The real aim of the virtual assistant so, is to make simpler the use of the \textit{DOREMUS} knowledge base and the retrieval of its data. But which will be our, concrete, final results? First of all, the shape of the virtual assistant is originally a chat bot. The queries are textually written and the responses are visually seen on the display of each device running a client with the bot installed. This, of course, is not the only shape the bot can have. It can be a vocal assistant, and the query can be done by voice. In each of the cases, the bot will extract the informations from the \textit{DOREMUS} knowledge base using SPARQL queries, answering to the user's requests and without letting them know a single detail about the SPARQL query that is using or other technical details. It will also help the user to make a more detailed and precise query (guiding him with some questions), and will correct the users sentences when he does some typos or when he's wrong in writing some precise words (like artist names, instruments or musical genres).
+	The real aim of the virtual assistant so, is to make simpler the use of the \textit{DOREMUS} knowledge graph and the retrieval of its data. But which will be our, concrete, final results? First of all, the shape of the virtual assistant is originally a chat bot. The queries are textually written and the responses are visually seen on the display of each device running a client with the bot installed. This, of course, is not the only shape the bot can have. It can be a vocal assistant, and the query can be done by voice. In each of the cases, the bot will extract the informations from the \textit{DOREMUS} knowledge graph using SPARQL queries, answering to the user's requests and without letting them know a single detail about the SPARQL query that is using or other technical details. It will also help the user to make a more detailed and precise query (guiding him with some questions), and will correct the users sentences when he does some typos or when he's wrong in writing some precise words (like artist names, instruments or musical genres).
 
 \chapter{Natural Language Understanding}
 	\section{What is NLU?}
@@ -258,7 +258,7 @@
 	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand in a glance. A set of examples will be provided in the last chapter.\\\\
 	The second part of the architecture is represented by the NLP. In this case, as told in the previous chapter, we used \textit{Dialogflow}, to exploit its advanced slot-filling techniques and its NLU power.\\\\
 	However, we didn't use \textit{Dialogflow} on its own, exploiting the direct integration with \textit{Slack}, but we used something that we placed in the middle of the two: \textit{Botkit}. \textit{Botkit} is a bot-making toolkit that aims to ease the building process of a bot, potentially exploiting different NLPs and/or different clients. In our case, \textit{Botkit} has been deployed on a web server, and thanks to the \textit{NodeJS} code we were able to come up with a series of features (like the spell checker) that would have been impossible to reach with a simple (direct) integration between \textit{Slack} and \textit{Dialogflow}. We'll talk more about that in the following paragraphs. The communication with the \textit{Dialogflow} NLP is done thanks to a modified version of the \texttt{botkit-middleware-dialogflow}\cite{bmd}: there will be a paragraph dedicated to this middleware in the following pages.\\\\
-	The last part of the architecture is of course represented by the data source: \textit{DOREMUS}. We talked about that in the previous chapters, but from the architecture is important to notice how the knowledge base is queried: each query is dynamic, in the sense that according to the intent, the number of filters and the desired results wanted by the user, the query will have a different shape and a different content. The code in the web server is able to add different pieces of queries according to what \textit{Dialogflow} is able to understand and to provide as output values of the API.\\\\
+	The last part of the architecture is of course represented by the data source: \textit{DOREMUS}. We talked about that in the previous chapters, but from the architecture is important to notice how the knowledge graph is queried: each query is dynamic, in the sense that according to the intent, the number of filters and the desired results wanted by the user, the query will have a different shape and a different content. The code in the web server is able to add different pieces of queries according to what \textit{Dialogflow} is able to understand and to provide as output values of the API.\\\\
 	The bot code is organized in this way:
 	\begin{lstlisting}
 	
@@ -290,7 +290,7 @@
 		
 		\item \texttt{.env} is the secret file (to place into the \texttt{config} directory) containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
-		\item \texttt{doremus/} contains the files related to the access to the informations of the \textit{DOREMUS} knowledge base: in this case, contains a single file (\texttt{bot\_functions.js}) that contains all the queries that the bot can do to \textit{DOREMUS}.
+		\item \texttt{doremus/} contains the files related to the access to the informations of the \textit{DOREMUS} knowledge graph: in this case, contains a single file (\texttt{bot\_functions.js}) that contains all the queries that the bot can do to \textit{DOREMUS}.
 		
 		\item \texttt{slack/} is a directory containing the files related to \textit{Slack}:
 			\begin{itemize}
@@ -308,10 +308,10 @@
 	\end{itemize}
 	
 	\section{Entities}
-	The sentences that the bot is required to recognize are of course full of informations related to the \textit{DOREMUS} knowledge base. This means that the NLP has to be able to understand some "entities" (informations, words, piece of sentences) that are not in the standard language, but are related to the \textit{DOREMUS} or, in general, musical world. Our bot is equipped with three different entities:
+	The sentences that the bot is required to recognize are of course full of informations related to the \textit{DOREMUS} knowledge graph. This means that the NLP has to be able to understand some "entities" (informations, words, piece of sentences) that are not in the standard language, but are related to the \textit{DOREMUS} or, in general, musical world. Our bot is equipped with three different entities:
 	\begin{itemize}
 		\item \texttt{doremus-artist}\\
-		Contains all the artists in the \textit{DOREMUS} knowledge base. It's organized in a \textit{key-value} pair where the \textit{key} is the unique id of the artist inside the knowledge base, and the \textit{value} is the set of full names and surnames of the artist, in all the available language of the knowledge base.
+		Contains all the artists in the \textit{DOREMUS} knowledge graph. It's organized in a \textit{key-value} pair where the \textit{key} is the unique id of the artist inside the knowledge base, and the \textit{value} is the set of full names and surnames of the artist, in all the available language of the knowledge base.
 		The query with which the artist were retrieved is the following:
 		\begin{lstlisting}
 
@@ -332,7 +332,7 @@
 		The artists are ordered by descending count of works, in order to have the most famous artists at the top of the entity dictionary, and let \textit{Dialogflow} find the most famous artists in case just a surname is given. The result of the query has been taken as a \texttt{.csv} file and then processed a little bit (delete the count, join the names and surnames columns, duplicate the composer id, eliminate the pipes and some special characters) in order to fit with the \textit{Dialogflow}'s constraints.
 		
 		\item \texttt{doremus-instrument}\\
-		Contains all the instruments of the \texttt{iaml/mop/} dictionary of the \textit{DOREMUS} knowledge base. Also in this case the \textit{key-value} pair dictionary has as keys the id of the instrument, and as values all the synonyms (names in different languages). The query thanks to which we retrieved this entity is:
+		Contains all the instruments of the \texttt{iaml/mop/} dictionary of the \textit{DOREMUS} knowledge graph. Also in this case the \textit{key-value} pair dictionary has as keys the id of the instrument, and as values all the synonyms (names in different languages). The query thanks to which we retrieved this entity is:
 		\begin{lstlisting}
 		
 		SELECT DISTINCT ?instrument
@@ -348,7 +348,7 @@
 		\end{lstlisting}
 		
 		\item \texttt{doremus-genre}\\
-		Contains all the genres of the \texttt{iaml/genre/} dictionary of the \textit{DOREMUS} knowledge base. The query thanks to which we retrieved this entity is:
+		Contains all the genres of the \texttt{iaml/genre/} dictionary of the \textit{DOREMUS} knowledge graph. The query thanks to which we retrieved this entity is:
 		\begin{lstlisting}
 		
 		SELECT DISTINCT ?gen
@@ -365,7 +365,7 @@
 	\end{itemize}
 
 	\section{Intents}
-	The intents are grouped in a simple and clear way, according to what the user wants to retrieve from the \textit{DOREMUS} knowledge base:
+	The intents are grouped in a simple and clear way, according to what the user wants to retrieve from the \textit{DOREMUS} knowledge graph:
 	\begin{itemize}
 		\item \texttt{works-by}\\
 		Retrieves a set of works according to different filters (artists who composed the works, instruments used, music genre and/or year of composition).
@@ -733,7 +733,7 @@
 		bot.reply(message, message['fulfillment']['speech']);
 	});
 	\end{lstlisting}
-	The \texttt{hello} variable (put in the module.exports object to be available from the code in other files) is instantiated as an \texttt{hears} (in this case of the \texttt{slackController} object, but it could have been \texttt{fbController}). The code, in the case of the \texttt{hello} intent is really simple, because it just needs to reply with the same answer provided by the \textit{Dialogflow} NLP. For the other intents, the code is obviously more complicated because it needs to get the informations from the \textit{DOREMUS} knowledge base, as explained in the previous chapters.\\\\
+	The \texttt{hello} variable (put in the module.exports object to be available from the code in other files) is instantiated as an \texttt{hears} (in this case of the \texttt{slackController} object, but it could have been \texttt{fbController}). The code, in the case of the \texttt{hello} intent is really simple, because it just needs to reply with the same answer provided by the \textit{Dialogflow} NLP. For the other intents, the code is obviously more complicated because it needs to get the informations from the \textit{DOREMUS} knowledge graph, as explained in the previous chapters.\\\\
 	
 	All the textual results that the bot provides are made "prettier" thanks to cards. Both in the \textit{Facebook} and in the \textit{Slack} chat, the results are indeed organized in "key-value" pairs following the JSON syntax. In this way, for example, \textit{Mozart} is presented as the value of the key \textit{Composer}, or \textit{05/12/1791} is the value of the \textit{Death date} key. An example of the code of a card creation is the following:
 	\begin{lstlisting}[language=C]
@@ -795,9 +795,14 @@
 	\end{itemize}
 	
 	\chapter{Evaluation}
-	The entire path to develop this virtual assistant has been overall successful. The bot knows the artists, the instruments, the genres of the \textit{DOREMUS} knowledge base, and is capable of answering to a pretty various set of intents.\\\\
-	The intents are not just static queries, but the bot engages the user in a tit for tat conversation where the user can specify more filters to the queries it does: this has been done thanks to a smart contexts usage.\\
-	The bot, indeed, at this phase of its development is able to work with a very large set of queries, like the ones listed in the previous chapter; it's fast, the code is stable and overall it provides a pleasant experience also thanks to the visual results it can provide (like artist pictures and cards, in general).\\\\
+	
+	\section{What works}
+	The entire path to develop this virtual assistant has been overall successful. The bot knows the artists, the instruments, the genres of the \textit{DOREMUS} knowledge graph, and is capable of answering to a pretty various set of intents.\\\\
+	The intents are not just static queries, but the bot engages the user in a tit for tat conversation where the user can specify more filters to the queries it does: this has been done thanks to a smart contexts usage.\\\\
+	The bot, indeed, at this phase of its development is able to work with a very large set of queries of medium/high complexity, like the ones listed in the previous chapter; it's fast, the code is stable and overall it provides a pleasant experience also thanks to the visual results it can provide (like artist pictures and cards, in general).\\\\
+	It is able (thanks to our custom spell-checker middleware) to correct the major part of common misspellings, which doesn't change too much from the original word.
+	
+	\section{What can be improved}
 	It's also interesting to notice what can improved in the bot. First of all, the non-English languages: in this moment, the bot supports the french language, however \textit{Dialogflow} is not so smart in these languages as it is in English. It needs way more training sentences, which have to combine all possible orderings of entities in the sentences. For example, if the bot is trained on this sentence:
 	\begin{verse}
 		\textit{"Donne-moi deux oeuvres de Mozart pour clarinet"}
@@ -807,9 +812,13 @@
 		\textit{"Donne-moi deux oeuvres pour clarinet de Mozart"}\\
 		\textit{"Dis-moi deux oeuvres pour clarinet de Mozart"}
 	\end{verse}
-	while in English is a lot smarter and capable to understand also those sentences. It's clear that the ordered combination for all the entities that we can have in a sentence (artists, instruments, genres, numbers, verbs) is huge! So, the bot has to be hugely trained in non-English languages to work well: this can be done also with a script that generates the sentences in all possible order and combination and feeds the bot training pipeline.\\\\
-	For what regards entities, a tool that automatically downloads, cleans and updates the bot entities taking the updated version from the KB can be very useful. It could be put into the \textit{DOREMUS Bot} code to keep fresh all the knowledge that the bot as in the classical music world.\\\\
-	With certain queries the bot can be, of course, slow. This is due to the \textit{DOREMUS} knowledge base and is not under our control: computational-time estimation techniques could be done to say to the user that those queries will take some time to end in a concrete answer.
+	while in English is a lot smarter and capable to understand also those sentences. It's clear that the ordered combination for all the entities that we can have in a sentence (artists, instruments, genres, numbers, verbs) is huge! So, the bot has to be heavily trained in non-English languages to work well: this can be done also with a script that generates the sentences in all possible order and combination and feeds the bot training pipeline.\\
+	Moreover, the \textit{Dialogflow} \texttt{date-period} entity is not fully working in non-english languages, because it's not able to detect expressions like year periods or months. We decided to shut down this filter in the french (and in general, in any of the non-english languages) intents.
+	The spell-checking mechanism is not context oriented: this means that the word can be replaced with another one even if the final result is not a totally meaningful sentence. More complex approaches (like RNNs) which take care, after being trained, of the entire context can be used in the future.\\\\
+	The \textit{Facebook Messenger} visualization is not so handy for the representation of a big list of informations: this is mainly a platform issue and not a bot one, but it can be ugly when results with a lot of informations have to be showed.\\\\
+	There can be some cases (not easy to reproduce, but possible) where the bot can answer in an unexpected way: this is due to the presence of some contexts that are still active after a given flow of sentences. The solution is of course to clear the context, but of course is not a definitive solution and after some phases of the conversation some strange answers could be received when talking to the bot.\\\\
+	For what regards entities, a tool that automatically downloads, cleans and updates the bot entities (like FADE\cite{fade}) taking the updated version from the KB can be very useful. It could be put into the \textit{DOREMUS Bot} code to keep fresh all the knowledge that the bot as in the classical music world.\\\\
+	With certain queries the bot can be, of course, slow. This is due to the \textit{DOREMUS} knowledge graph and is not under our control: computational-time estimation techniques could be done to say to the user that those queries will take some time to end in a concrete answer.
 	
 	\chapter{Conclusions}
 	
@@ -829,5 +838,6 @@
 		\bibitem{recast} SAP Recast.ai: A collaborative bot platform. | \textit{\href{https://recast.ai/}{https://recast.ai/}}
 		\bibitem{apiai} Chatbots made easy with Dialogflow. An overview on the architecture. | \textit{\href{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}}
 		\bibitem{bmd} The GitHub repository of the Botkit middleware for Dialogflow. | \textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow}{https://github.com/jschnurr/botkit-middleware-dialogflow}}
+		\bibitem{fade} FADE: Filling Automatically Dialog Entities | \textit{\href{https://github.com/marcotrinelli/FADE}{https://github.com/marcotrinelli/FADE}}
 	\end{thebibliography}
 \end{document}          

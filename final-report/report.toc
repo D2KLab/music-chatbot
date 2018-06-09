@@ -27,4 +27,6 @@
 \contentsline {subsection}{\numberline {4.5.2}Vocal approach: Google Home}{31}{subsection.4.5.2}
 \contentsline {section}{\numberline {4.6}Logging}{31}{section.4.6}
 \contentsline {chapter}{\numberline {5}Evaluation}{33}{chapter.5}
+\contentsline {section}{\numberline {5.1}What works}{33}{section.5.1}
+\contentsline {section}{\numberline {5.2}What can be improved}{33}{section.5.2}
 \contentsline {chapter}{\numberline {6}Conclusions}{35}{chapter.6}
