@@ -335,7 +335,7 @@
 		Contains all the instruments of the \texttt{iaml/mop/} dictionary of the \textit{DOREMUS} knowledge graph. Also in this case the \textit{key-value} pair dictionary has as keys the id of the instrument, and as values all the synonyms (names in different languages). The query thanks to which we retrieved this entity is:
 		\begin{lstlisting}
 		
-		SELECT DISTINCT ?instrument
+		SELECT DISTINCT ?instr
 		  (GROUP_CONCAT (DISTINCT ?instrument; separator="|") AS ?instruments)
 		WHERE {
 		  ?instr skos:prefLabel ?instrument .
