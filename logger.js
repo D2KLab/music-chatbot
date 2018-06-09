@@ -6,7 +6,7 @@ const path = require('path');
 const underscore = require('underscore');
 const logFile = {};
 const logDir = path.join(__dirname, 'logs');
-const threshold = 1000000;
+const threshold = 250;
 
 // FUNCTION TO CHECK IF DIRECTORY EXISTS
 function directoryExists(path) {
@@ -15,6 +15,10 @@ function directoryExists(path) {
     } catch (err) {
         return false;
     }
+}
+
+function getHeader() {
+    return "timestamp,platform,user,channel,intent,confidence,lang,rawMessage,cleanMessage,response" + eol;
 }
 
 // MODULE
@@ -27,23 +31,22 @@ module.exports = function() {
         // init dir and file
         fs.mkdirSync(logDir);
         logFile.num = 0;
-        logFile.name = ('0' + logFile.num).slice(-2) + ".csv";
-        fs.writeFileSync(path.join(logDir, logFile.name),
-                         "timestamp,platform,user,team,intent,confidence,lang,rawMessage,cleanMessage,response" + eol);
+        logFile.name = "doremus_log_000.csv";
+        fs.writeFileSync(path.join(logDir, logFile.name), getHeader());
     } else {
 
         // take the existing files
         var files = fs.readdirSync(logDir);
         // take only the log files with name format [0-9][0-9] and extension .csv
-        var logFiles = files.filter( fileName => fileName.match("\d+\.csv"))
+        var logFiles = files.filter( fileName => fileName.match("doremus_log"))
 
         if (logFiles.length == 0) {
 
             // dir empty: init first file
             logFile.num = 0;
-            logFile.name = ('0' + logFile.num).slice(-2) + ".csv";
-            fs.writeFileSync(path.join(logDir, logFile.name),
-                             "timestamp,platform,user,team,intent,confidence,lang,rawMessage,cleanMessage,response" + eol);
+            //logFile.name = ('0' + logFile.num).slice(-2) + ".csv";
+            logFile.name = "doremus_log_000.csv"; 
+            fs.writeFileSync(path.join(logDir, logFile.name), getHeader());
         } else {
 
             // dir not-empty: take last modified file
@@ -51,7 +54,7 @@ module.exports = function() {
                 var logFilePath = path.join(logDir, file);
                 return fs.statSync(logFilePath).mtime;
             });
-            logFile.num = parseInt(logFile.name.slice(-2));
+            logFile.num = parseInt(logFile.name.slice(-7, -4));
         }
     }
 
@@ -72,7 +75,8 @@ module.exports = function() {
                 // threshold reached: update name/num to create a new file next time
                 if (fs.statSync(logFilePath).size > threshold) {
                     logFile.num += 1;
-                    logFile.name = ('0' + logFile.num).slice(-2) + ".csv";
+                    logFile.name = "doremus_log_" + logFile.num.toString().padStart(3, "0") + ".csv";
+                    fs.writeFileSync(path.join(logDir, logFile.name), getHeader());
                 }
             }
         });

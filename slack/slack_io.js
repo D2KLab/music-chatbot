@@ -66,13 +66,13 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments,
             parameters.strictly, startyear, endyear, parameters.genre, "slack", bot, message);
-        log.write(bot.type, message.user, message.team, "works-by",
+        log.write(bot.type, message.user, message.channel, "works-by",
             "<result_card>", '"' + message.text.replace(',','') + '"',
             '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     } else {
 
         bot.reply(message, message['fulfillment']['speech']);
-        log.write(bot.type, message.user, message.team, "works-by",
+        log.write(bot.type, message.user, message.channel, "works-by",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
             message.lang, message.confidence);
@@ -84,7 +84,7 @@ module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_mes
 module.exports.worksByYes = botVars.slackController.hears(['works-by - yes'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
-    log.write(bot.type, message.user, message.team, "works-by - yes",
+    log.write(bot.type, message.user, message.channel, "works-by - yes",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
         message.lang, message.confidence);
@@ -126,7 +126,7 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
 
     // DO THE QUERY (WITH ALL THE INFOS)
     botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "slack", bot, message);
-    log.write(bot.type, message.user, message.team, "works-by - no",
+    log.write(bot.type, message.user, message.channel, "works-by - no",
         "<result_card>", '"' + message.text.replace(',','') + '"',
         '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
@@ -136,7 +136,7 @@ module.exports.worksByNo = botVars.slackController.hears(['works-by - no'], 'dir
 module.exports.worksBySomething = botVars.slackController.hears(['works-by-artist', 'works-by-instrument', 'works-by-genre', 'works-by-years'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     bot.reply(message, message['fulfillment']['speech']);
-    log.write(bot.type, message.user, message.team, "works-by-something",
+    log.write(bot.type, message.user, message.channel, "works-by-something",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
         message.lang, message.confidence);
@@ -182,7 +182,7 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
 
     // SEND THE BIO TO THE USER
     botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "slack", bot, message);
-    log.write(bot.type, message.user, message.team, "find-artist",
+    log.write(bot.type, message.user, message.channel, "find-artist",
         "<result_card>", '"' + message.text.replace(',','') + '"',
         '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
 });
@@ -205,7 +205,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 
         // SEND THE BIO TO THE USER
         botFunctions.answerBio(message.entities["doremus-artist"], "slack", bot, message);
-        log.write(bot.type, message.user, message.team, "discover-artist",
+        log.write(bot.type, message.user, message.channel, "discover-artist",
             "<result_card>", '"' + message.text.replace(',','') + '"',
             '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
@@ -214,7 +214,7 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
     else {
 
         bot.reply(message, message['fulfillment']['speech']);
-        log.write(bot.type, message.user, message.team, "discover-artist",
+        log.write(bot.type, message.user, message.channel, "discover-artist",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
             message.lang, message.confidence);
@@ -257,7 +257,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQueryPerformance(num, city, startdate, enddate, "slack", bot, message);
-        log.write(bot.type, message.user, message.team, "find-performance",
+        log.write(bot.type, message.user, message.channel, "find-performance",
             "<result_card>", '"' + message.text.replace(',','') + '"',
             '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
     }
@@ -266,7 +266,7 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
     else {
 
         bot.reply(message, message['fulfillment']['speech']);
-        log.write(bot.type, message.user, message.team, "find-performance",
+        log.write(bot.type, message.user, message.channel, "find-performance",
             '"' + message['fulfillment']['speech'].replace(',','') + '"',
             '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
             message.lang, message.confidence);
@@ -277,9 +277,8 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 // HELLO INTENT
 module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    console.log("*** " + message.nlpResponse.sessionId)
     bot.reply(message, message['fulfillment']['speech']);
-    log.write(bot.type, message.user, message.team, "hello",
+    log.write(bot.type, message.user, message.channel, "hello",
         '"' + message['fulfillment']['speech'].replace(',','') + '"',
         '"' + message.text.replace(',','') + '"',
         '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
