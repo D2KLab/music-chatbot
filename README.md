@@ -45,24 +45,24 @@ npm install
 
 ### Code organization
 ```
-    bot.js
-    spell-checker-middleware.js
+bot.js
+spell-checker-middleware.js
 
-    config/
-        .env
+config/
+    .env
 
-    doremus/
-        bot_functions.js
+doremus/
+    bot_functions.js
 
-    slack/
-        slack_io.js
-        slack_cards.js
+slack/
+    slack_io.js
+    slack_cards.js
 
-    facebook/
-        facebook_io.js
-        facebook_cards.js
+facebook/
+    facebook_io.js
+    facebook_cards.js
 
-    dialogflow/
+dialogflow/
 ```
 
 - [bot.js](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
@@ -123,9 +123,7 @@ Alternatively, you can deploy it with Docker:
 
 ```
 docker build -t jplu/node github.com/pasqLisena/docker-node
-
 docker build -t doremus/chatbot .
-
 docker run -d -p 5052:3000 -p 5053:3001 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config --name doremus-bot doremus/chatbot
 ```
 
@@ -176,6 +174,19 @@ applying the usual filters. Let's make an example:
 - [Result with bio, picture, birth/death date/place]
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
+
+### Logs
+The bot will also generate logs in the `logs/` directory. The format of the csv files is the following:
+- timestamp - *the current date-time.*
+- platform - *the platform from which the message comes from (\textit{Slack, Facebook}).*
+- user - *the ID of the user sending the message.*
+- team - *the team of the user sending the message.*
+- intent - *the intent which has been detected by the NLP.*
+- confidence - *the confidence level of the NLP in choosing that intent.*
+- lang - *the detected language of the message.*
+- rawMessage - *the message sent by the user, before spell-checking.*
+- cleanMessage - *the message sent by the user, after spell-checking.*
+- response - *the answer given by the bot (textual or <<result_card>>).*
 
 ## Credits
 
