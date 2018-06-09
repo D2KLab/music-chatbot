@@ -127,11 +127,11 @@ docker build -t doremus/chatbot .
 docker run -d -p 5052:3000 -p 5053:3001 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config --name doremus-bot doremus/chatbot
 ```
 
-Uninstall from Docker:
+Uninstall from Docker (stop, remove from available containers, remove from images):
 ```
 docker stop doremus-bot
-docker rm doremus-bot ##remove from available containers
-docker rmi doremus/chatbot ##remove from images
+docker rm doremus-bot
+docker rmi doremus/chatbot
 ```
 
 Enjoy!
@@ -175,7 +175,7 @@ applying the usual filters. Let's make an example:
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
 
-### Logs
+## Log files
 The bot will also generate logs in the `logs/` directory. The format of the csv files is the following:
 - timestamp - *the current date-time.*
 - platform - *the platform from which the message comes from (\textit{Slack, Facebook}).*
@@ -186,7 +186,7 @@ The bot will also generate logs in the `logs/` directory. The format of the csv 
 - lang - *the detected language of the message.*
 - rawMessage - *the message sent by the user, before spell-checking.*
 - cleanMessage - *the message sent by the user, after spell-checking.*
-- response - *the answer given by the bot (textual or <<result_card>>).*
+- response - *the answer given by the bot (textual or <result_card>).*
 
 ## Credits
 
