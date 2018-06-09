@@ -6,7 +6,7 @@ const path = require('path');
 const underscore = require('underscore');
 const logFile = {};
 const logDir = path.join(__dirname, 'logs');
-const threshold = 150000000;
+const threshold = 100*1024*1024;
 
 // FUNCTION TO CHECK IF DIRECTORY EXISTS
 function directoryExists(path) {
