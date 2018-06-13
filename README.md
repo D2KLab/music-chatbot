@@ -4,11 +4,12 @@
 - [Description](#description)
 - [Getting started](#getting-started)
     - [What you need](#what-you-need)
-    - [Installing](#entities)
+    - [Installing](#installing)
     - [Code organization](#code-organization)
     - [Configuring](#configuring)
     - [Deploying](#deploying)
 - [Bot Features](#bot-features)
+- [Log Files](#log-files)
 - [Credits](#credits)
 - [License](#license)
 
@@ -175,7 +176,7 @@ applying the usual filters. Let's make an example:
 - *"Now give me 5 of his works, written for clarinet"*
 - [Result with the 5 works of that artist]
 
-## Log files
+## Log Files
 The bot will also generate logs in the `logs/` directory. The format of the csv files is the following:
 - timestamp - *the current date-time.*
 - platform - *the platform from which the message comes from (\textit{Slack, Facebook}).*
