@@ -48,6 +48,7 @@ npm install
 ```
 bot.js
 spell-checker-middleware.js
+logger.js
 
 config/
     .env
@@ -69,6 +70,8 @@ dialogflow/
 - [bot.js](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 
 - [spell-checker-middleware.js](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
+
+- [logger.js](./logger.js) is the module which logs various informations inside the log files (created in the `log_folder` specified in the `.env` file). For more informations read the [log files section](#log-files).
 
 - .env is the secret file (to be put in the 'config' directory) containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
 
