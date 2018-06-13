@@ -90,6 +90,7 @@ var spellCheckerMiddleware = require('./spell-checker-middleware.js')()
 // LOAD 'Dialogflow' MIDDLEWARE
 var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
     token: process.env.dialogflow,
+	sessionIdProps: ['channel'],
 });
 
 

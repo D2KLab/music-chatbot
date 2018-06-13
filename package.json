@@ -1,6 +1,6 @@
 {
   "name": "doremus-bot",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A virtual assistant for answering music related questions",
   "main": "bot.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "botkit": "^0.6.12",
-    "botkit-middleware-dialogflow": "git+https://github.com/lomluca/botkit-middleware-dialogflow.git",
+    "botkit-middleware-dialogflow": "^1.4.1",
     "botkit-storage-mongo": "^1.0.6",
     "botkit-studio-metrics": "^0.0.2",
     "cookie-parser": "^1.4.3",
