@@ -100,7 +100,7 @@ PORT=3000
 PORT2=5000
 
 # log directory
-lof_folder='./logs'
+log_folder='./logs'
 
 # slack
 slackToken=<slack token>
