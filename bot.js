@@ -60,6 +60,12 @@ var slackBotOptions = {
 var slackController = Botkit.slackbot(slackBotOptions);
 var slackBot = slackController.spawn({
     token: process.env.slackToken,
+    retry: 10,
+});
+
+// CLOSE THE BOT IF IT FAILS TO RECONNECT
+slackController.on('rtm_reconnect_failed', function(bot) {
+    throw new Error('RTM failed to reconnect. Closing the bot...');
 });
 
 
@@ -70,7 +76,7 @@ var fbBotOptions = {
     access_token: process.env.fbAccessToken,
     verify_token: process.env.fbVerifyToken,
     app_secret: process.env.fbAppSecret,
-    validate_requests: true
+    validate_requests: true,
 };
 var fbController = Botkit.facebookbot(fbBotOptions);
 var fbBot = fbController.spawn({});

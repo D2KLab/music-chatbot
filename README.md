@@ -92,8 +92,12 @@ Prepare a .env for your node app. You can easily copy-paste the following:
 # Environment Config
 # (reference these in your code with process.env.SECRET)
 
+# ports
 PORT=3000
 PORT2=5000
+
+# log directory
+lof_folder='./logs'
 
 # slack
 slackToken=<slack token>
@@ -177,7 +181,7 @@ applying the usual filters. Let's make an example:
 - [Result with the 5 works of that artist]
 
 ## Log Files
-The bot will also generate logs in the `logs/` directory. The format of the csv files is the following:
+The bot will also generate logs in the directory specified in the `log_folder` variable of the `.env` file. The format of the csv files is the following:
 - timestamp - *the current date-time.*
 - platform - *the platform from which the message comes from (\textit{Slack, Facebook}).*
 - user - *the ID of the user sending the message.*
