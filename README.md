@@ -67,30 +67,30 @@ facebook/
 dialogflow/
 ```
 
-- [bot.js](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
+- [`bot.js`](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 
-- [spell-checker-middleware.js](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
+- [`spell-checker-middleware.js`](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 
-- [logger.js](./logger.js) is the module which logs various informations inside the log files (created in the `log_folder` specified in the `.env` file). For more informations read the [log files section](#log-files).
+- [`logger.js`](./logger.js) is the module which logs various informations inside the log files (created in the `log_folder` specified in the `.env` file). For more informations read the [log files section](#log-files).
 
-- .env is the secret file (to be put in the 'config' directory) containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
+- `.env` is the secret file (to be put in the 'config' directory) containing all the tokens for Slack, Facebook and BotKit Studio. You have to set it following the [configuration section](#configuring).
 
-- [doremus/](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
+- [`doremus/`](./doremus/) contains the files related to the access to the informations of the DOREMUS knowledge base: in this case, contains a single file ([bot_functions.js](./doremus/bot_functions.js)) that contains all the queries that the bot can do to DOREMUS.
 
-- [slack/](./slack/) is a directory containing the files related to Slack:
+- [`slack/`](./slack/) is a directory containing the files related to Slack:
 
-    - [slack_io.js](./slack/slack_io.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
-    - [slack_cards.js](./slack/slack_cards.js) contains the code to build the Slack cards to make the answers prettier.
+    - [`slack_io.js`](./slack/slack_io.js) contains the methods to receive the sentences sent through Slack and processed by the NLU.
+    - [`slack_cards.js`](./slack/slack_cards.js) contains the code to build the Slack cards to make the answers prettier.
 
-- [facebook/](./facebook/) is a directory containing the files related to Facebook:
+- [`facebook/`](./facebook/) is a directory containing the files related to Facebook:
 
-    - [facebook_io.js](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
-    - [facebook_cards.js](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
+    - [`facebook_io.js`](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
+    - [`facebook_cards.js`](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
 
-- [dialogflow/](./dialogflow/) is a directory containing the webhook useful for the Dialogflow fulfillment phase. This flow is totally detached from our original architecture (which uses Botkit), and it's useful only for the lightweight version of the bot which can be used with Google Home.
+- [`dialogflow/`](./dialogflow/) is a directory containing the webhook useful for the Dialogflow fulfillment phase. This flow is totally detached from our original architecture (which uses Botkit), and it's useful only for the lightweight version of the bot which can be used with Google Home.
 
 ### Configuring
-Prepare a .env for your node app. You can easily copy-paste the following:
+Prepare a `.env` for your node app. You can easily copy-paste the following:
 ```
 # Environment Config
 # (reference these in your code with process.env.SECRET)
