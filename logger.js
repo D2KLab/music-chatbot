@@ -74,9 +74,13 @@ module.exports = function() {
 
                 // threshold reached: update name/num to create a new file next time
                 if (fs.statSync(logFilePath).size > threshold) {
-                    logFile.num += 1;
-                    logFile.name = "doremus_log_" + logFile.num.toString().padStart(3, "0") + ".csv";
-                    fs.writeFileSync(path.join(logDir, logFile.name), getHeader());
+                    if (logFile.num === 999) {
+                        console.warn('Exceeded maximum number of log files! Appending to the last one...');
+                    } else {
+                        logFile.num += 1;
+                        logFile.name = "doremus_log_" + logFile.num.toString().padStart(3, "0") + ".csv";
+                        fs.writeFileSync(path.join(logDir, logFile.name), getHeader());
+                    }
                 }
             }
         });
