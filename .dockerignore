@@ -2,5 +2,6 @@ final-report/
 config/
 
 .gitignore
+.gitattributes
 README.md
 LICENSE
