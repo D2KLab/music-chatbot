@@ -120,7 +120,7 @@ module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number
     request(finalQuery, (err, res, body) => {
 
         if (err) {
-            return console.error(err);
+            return console.log(err);
         }
 
         // JSON PARSING
@@ -197,7 +197,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(response, number
     request(finalQuery, (err, res, body) => {
 
         if (err) {
-            return console.error(err);
+            return console.log(err);
         }
 
         // JSON PARSING

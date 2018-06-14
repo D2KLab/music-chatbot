@@ -2,41 +2,37 @@
 
 // REQUIREMENTS
 const bodyParser = require('body-parser');
-const express = require('express');
+const server = require('express')();
 const request = require('request');
+const Card = require('dialogflow-fulfillment').Card;
 var io = require("./io.js");
 
+// INIT
+server.use(bodyParser.urlencoded({
+    extended: true
+}));
+server.use(bodyParser.json());
 
-module.exports = function(port) {
+// SERVER POST ACTIONS
+server.post('/answers', (request, response) => {
 
-    var server = express();
+    // Debug
+    console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
+    console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
+    console.log('Intent name' + request.body.result.metadata.intentName);
 
-    // INIT
-    server.use(bodyParser.urlencoded({
-        extended: true
-    }));
-    server.use(bodyParser.json());
+    // Run the proper function handler based on the matched Dialogflow intent name
+    var intent = request.body.result.metadata.intentName;
+    if (intent === "works-by") {
+        io.showWorks(request, response, true);
+    } else if (intent === "works-by - no") {
+        io.showWorks(request, response, false);
+    } else if (intent === "find-performance") {
+        io.showPerformances(request, response);
+    }
+});
 
-    // SERVER POST ACTIONS
-    server.post('/answers', (request, response) => {
-
-        console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
-        console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-
-        // Run the proper function handler based on the matched Dialogflow intent name
-        var intent = request.body.result.metadata.intentName;
-        if (intent === "works-by") {
-            io.showWorks(request, response, true);
-        } else if (intent === "works-by - no") {
-            io.showWorks(request, response, false);
-        } else if (intent === "find-performance") {
-            io.showPerformances(request, response);
-        }
-    });
-
-    // LISTEN
-    server.listen(port, () => {
-        console.log("info: ** Dialogflow webhook server running on port " + port);
-    });
-
-}
+// LISTEN
+server.listen((process.env.PORT || 8000), () => {
+    console.log("Server is up and running...");
+});
