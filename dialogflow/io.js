@@ -1,6 +1,8 @@
 /* WEBHOOK IO */
 
 var functions = require("./functions.js");
+var botVars = require("../bot.js");
+var log = botVars.log;
 
 // SHOW WORKS ACTION
 module.exports.showWorks = function showWorks(request, response, askForAdditionalFilters) {
@@ -21,13 +23,12 @@ module.exports.showWorks = function showWorks(request, response, askForAdditiona
             }
         }
     } else {
-        var contexts = request.body.result.contexts
-        console.log("*** Retrieving an old context...");
-        //var context = contexts.filter( context => context["name"] == "works-by-followup");
+
+        var contexts = request.body.result.contexts;
+        
         for (var i = 0; i < contexts.length; i++) {
             if (contexts[i].name === "works-by-followup") {
-                console.log("I found the context");
-                console.log(contexts[i]);
+                
                 parameters = contexts[i].parameters;
                 break;
             }
@@ -35,9 +36,18 @@ module.exports.showWorks = function showWorks(request, response, askForAdditiona
     }
 
     if (filterCounter <= 2 && askForAdditionalFilters == true) {
+
+        const speech = "Uhm... you told me few filters. Do you want to add something?";
+        const message = request.body.result.resolvedQuery;
+        const lang = request.body.lang.slice(0,2);
+        const confidence = request.body.result.score;
+
+        log.write("google_assistant", "-", "-", "works-by",
+            '"' + speech + '"', '"' + message + '"',
+            '"' + message + '"', lang, confidence);
         return response.json({
-            speech: "Uhm... you told me few filters. Do you want to add something?",
-            displayText: "Uhm... you told me few filters. Do you want to add something?"
+            speech: speech,
+            displayText: speech,
         })
     } else {
 
@@ -63,7 +73,7 @@ module.exports.showWorks = function showWorks(request, response, askForAdditiona
         }
 
         // DO THE QUERY (WITH ALL THE INFOS)
-        functions.doWorksByQuery(response, parameters["doremus-artist"],
+        functions.doWorksByQuery(request, response, parameters["doremus-artist"],
             parameters.number, parameters["doremus-instrument"],
             parameters["doremus-strictly"],
             startyear,
@@ -97,15 +107,23 @@ module.exports.showPerformances = function showPerformances(request, response) {
         var enddate = date.split("/")[1];
 
         // DO THE QUERY (WITH ALL THE INFOS)
-        functions.doQueryPerformance(response, num, city, startdate, enddate);
+        functions.doQueryPerformance(request, response, num, city, startdate, enddate);
     }
 
     // ACTION INCOMPLETE (missing date)
     else {
 
+        const speech = "Sure! In which period?";
+        const message = request.body.result.resolvedQuery;
+        const lang = request.body.lang.slice(0,2);
+        const confidence = request.body.result.score;
+
+        log.write("google_assistant", "-", "-", "find-performance",
+            '"' + speech + '"', '"' + message + '"',
+            '"' + message + '"', lang, confidence);
         return response.json({
-            speech: "Sure! In which period?",
-            displayText: "Sure! In which period?"
+            speech: speech,
+            displayText: speech,
         })
     }
 }

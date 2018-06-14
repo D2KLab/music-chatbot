@@ -1,7 +1,9 @@
 /* WEBHOOK DOREMUS FUNCTIONS */
 
+const request = require('request');
+
 // DO QUERY WORKS-BY
-module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number, instrument, strictly, yearstart, yearend, genre) {
+module.exports.doWorksByQuery = function doWorksByQuery(req, response, artist, number, instrument, strictly, yearstart, yearend, genre) {
 
     // DEFAULT NUMBER VALUE (IN CASE IS NOT GIVEN)
     var num = 5;
@@ -116,7 +118,6 @@ module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number
     var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix;
 
     // -> Do the HTTP request
-    const request = require('request');
     request(finalQuery, (err, res, body) => {
 
         if (err) {
@@ -129,9 +130,17 @@ module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
+            const speech = "Sorry... I didn't find anything!";
+            const message = req.body.result.resolvedQuery;
+            const lang = req.body.lang.slice(0,2);
+            const confidence = req.body.result.score;
+
+            log.write("google_assistant", "-", "-", "works-by",
+                '"' + speech + '"', '"' + message + '"',
+                '"' + message + '"', lang, confidence);
             return response.json({
-                speech: "Sorry... I didn't find anything!",
-                displayText: "Sorry... I didn't find anything!"
+                speech: speech,
+                displayText: speech,
             })
 
         } else {
@@ -148,6 +157,13 @@ module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number
 
                 speech += title + ". "
             });
+            const message = req.body.result.resolvedQuery;
+            const lang = req.body.lang.slice(0,2);
+            const confidence = req.body.result.score;
+
+            log.write("google_assistant", "-", "-", "works-by",
+                '"' + speech + '"', '"' + message + '"',
+                '"' + message + '"', lang, confidence);
 
             response.set('Content-Type', 'application/json');
             return response.json({
@@ -160,7 +176,7 @@ module.exports.doWorksByQuery = function doWorksByQuery(response, artist, number
 
 
 // DO QUERY FIND-PERFORMANCE
-module.exports.doQueryPerformance = function doQueryPerformance(response, number, city, startdate, enddate) {
+module.exports.doQueryPerformance = function doQueryPerformance(req, response, number, city, startdate, enddate) {
 
     // JSON QUERY  
     var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?subtitle) AS ?subtitle, \
@@ -193,7 +209,6 @@ module.exports.doQueryPerformance = function doQueryPerformance(response, number
     var finalQuery = queryPrefix + encodeURI(newQuery) + querySuffix
 
     // -> Do the HTTP request
-    const request = require('request');
     request(finalQuery, (err, res, body) => {
 
         if (err) {
@@ -206,9 +221,17 @@ module.exports.doQueryPerformance = function doQueryPerformance(response, number
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
+            const speech = "Sorry... I didn't find anything!";
+            const message = req.body.result.resolvedQuery;
+            const lang = req.body.lang.slice(0,2);
+            const confidence = req.body.result.score;
+
+            log.write("google_assistant", "-", "-", "find-performance",
+                '"' + speech + '"', '"' + message + '"',
+                '"' + message + '"', lang, confidence);
             return response.json({
-                speech: "Sorry... I didn't find anything!",
-                displayText: "Sorry... I didn't find anything!"
+                speech: speech,
+                displayText: speech,
             })
         } else {
 
@@ -224,6 +247,13 @@ module.exports.doQueryPerformance = function doQueryPerformance(response, number
 
                 speech += title + ", at " + placeName + ". ";
             });
+            const message = req.body.result.resolvedQuery;
+            const lang = req.body.lang.slice(0,2);
+            const confidence = req.body.result.score;
+
+            log.write("google_assistant", "-", "-", "find-performance",
+                '"' + speech + '"', '"' + message + '"',
+                '"' + message + '"', lang, confidence);
 
             response.set('Content-Type', 'application/json');
             return response.json({

@@ -4,7 +4,7 @@ var botVars = require("../bot.js");
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware
 var botFunctions = require("../doremus/bot_functions.js");
 
-var log = botVars.log();
+var log = botVars.log;
 
 // WORKS-BY INTENT
 module.exports.worksBy = botVars.fbController.hears('works-by', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
@@ -59,14 +59,14 @@ module.exports.worksBy = botVars.fbController.hears('works-by', 'message_receive
         botFunctions.doQuery(parameters.artist, parameters.number, parameters.instruments,
             parameters.strictly, startyear, endyear, parameters.genre, "facebook", bot, message);
         log.write(bot.type, message.user, message.channel, "works-by",
-            "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+            "<result_card>", '"' + message.text + '"',
+            '"' + message.old + '"', message.lang, message.confidence);
     } else {
 
         bot.reply(message, message['fulfillment']['speech']);
         log.write(bot.type, message.user, message.channel, "works-by",
-            '"' + message['fulfillment']['speech'].replace(',','') + '"',
-            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            '"' + message['fulfillment']['speech'] + '"',
+            '"' + message.text + '"', '"' + message.old + '"',
             message.lang, message.confidence);
     }
 
@@ -77,8 +77,8 @@ module.exports.worksByYes = botVars.fbController.hears('works-by - yes', 'messag
 
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.channel, "works-by - yes",
-        '"' + message['fulfillment']['speech'].replace(',','') + '"',
-        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"', '"' + message.old + '"',
         message.lang, message.confidence);
 });
 
@@ -119,8 +119,8 @@ module.exports.worksByNo = botVars.fbController.hears('works-by - no', 'message_
     // DO THE QUERY (WITH ALL THE INFOS)
     botFunctions.doQuery(artist, number, instruments, strictly, startyear, endyear, genre, "facebook", bot, message);
     log.write(bot.type, message.user, message.channel, "works-by - no",
-        "<result_card>", '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+        "<result_card>", '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
 });
 
 
@@ -129,8 +129,8 @@ module.exports.worksBySomething = botVars.fbController.hears(['works-by-artist',
 
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.channel, "works-by-something",
-        '"' + message['fulfillment']['speech'].replace(',','') + '"',
-        '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"', '"' + message.old + '"',
         message.lang, message.confidence);
 });
 
@@ -166,8 +166,8 @@ module.exports.findArtist = botVars.fbController.hears('find-artist', 'message_r
     // SEND THE BIO TO THE USER
     botFunctions.doQueryFindArtist(num, startdate, enddate, city, instrument, genre, "facebook", bot, message);
     log.write(bot.type, message.user, message.channel, "find-artist",
-        "<result_card>", '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+        "<result_card>", '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
 });
 
 
@@ -180,8 +180,8 @@ module.exports.discoverArtist = botVars.fbController.hears('discover-artist', 'm
         // SEND THE BIO TO THE USER
         botFunctions.answerBio(message.entities["doremus-artist"], "facebook", bot, message);
         log.write(bot.type, message.user, message.channel, "discover-artist",
-            "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+            "<result_card>", '"' + message.text + '"',
+            '"' + message.old + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (the artist names hasn't been provided or it was misspelled)
@@ -189,8 +189,8 @@ module.exports.discoverArtist = botVars.fbController.hears('discover-artist', 'm
 
         bot.reply(message, message['fulfillment']['speech']);
         log.write(bot.type, message.user, message.channel, "discover-artist",
-            '"' + message['fulfillment']['speech'].replace(',','') + '"',
-            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            '"' + message['fulfillment']['speech'] + '"',
+            '"' + message.text + '"', '"' + message.old + '"',
             message.lang, message.confidence);
     }
 
@@ -223,16 +223,16 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
         // DO THE QUERY (WITH ALL THE INFOS)
         botFunctions.doQueryPerformance(num, city, startdate, enddate, "facebook", bot, message);
         log.write(bot.type, message.user, message.channel, "find-performance",
-            "<result_card>", '"' + message.text.replace(',','') + '"',
-            '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+            "<result_card>", '"' + message.text + '"',
+            '"' + message.old + '"', message.lang, message.confidence);
     }
 
     // ACTION INCOMPLETE (missing date)
     else {
         bot.reply(message, message['fulfillment']['speech']);
         log.write(bot.type, message.user, message.channel, "find-performance",
-            '"' + message['fulfillment']['speech'].replace(',','') + '"',
-            '"' + message.text.replace(',','') + '"', '"' + message.old.replace(',','') + '"',
+            '"' + message['fulfillment']['speech'] + '"',
+            '"' + message.text + '"', '"' + message.old + '"',
             message.lang, message.confidence);
     }
 });
@@ -243,9 +243,9 @@ module.exports.hello = botVars.fbController.hears('hello', 'message_received', b
 
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.channel, "hello",
-        '"' + message['fulfillment']['speech'].replace(',','') + '"',
-        '"' + message.text.replace(',','') + '"',
-        '"' + message.old.replace(',','') + '"', message.lang, message.confidence);
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
 });
 
 

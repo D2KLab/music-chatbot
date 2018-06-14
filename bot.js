@@ -86,10 +86,6 @@ fbController.setupWebserver(
     (err, webserver) => fbController.createWebhookEndpoints(webserver, fbBot)
 );
 
-
-// WEBHOOK SERVER
-require("./dialogflow/index.js")(process.env.PORT2);
-
 // LOAD 'SpellChecker' MIDDLEWARE
 var spellCheckerMiddleware = require('./spell-checker-middleware.js')()
 
@@ -127,10 +123,11 @@ exports.fbController = fbController;
 exports.slackBot = slackBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.spellCheckerMiddleware = spellCheckerMiddleware;
-exports.log = function() {
-    return log;
-}
+exports.log = log;
 
 // IMPORT HEARS
 var slackHears = require('./slack/slack_io.js');
 var fbHears = require('./facebook/facebook_io.js');
+
+// WEBHOOK SERVER
+require("./dialogflow/index.js")(process.env.PORT2);
