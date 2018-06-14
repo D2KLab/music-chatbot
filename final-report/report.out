@@ -5,7 +5,7 @@
 \BOOKMARK [0][-]{chapter.2}{Natural Language Understanding}{}% 5
 \BOOKMARK [1][-]{section.2.1}{What is NLU?}{chapter.2}% 6
 \BOOKMARK [1][-]{section.2.2}{NLP, NLU and NLG}{chapter.2}% 7
-\BOOKMARK [1][-]{section.2.3}{How machine learning can help NLU?}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.3}{How can machine learning help NLU?}{chapter.2}% 8
 \BOOKMARK [2][-]{subsection.2.3.1}{Attention-Based RNN model for joint intent detection and slot-filling}{section.2.3}% 9
 \BOOKMARK [2][-]{subsection.2.3.2}{A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning}{section.2.3}% 10
 \BOOKMARK [1][-]{section.2.4}{State of art: famous and most used tools}{chapter.2}% 11
@@ -26,7 +26,10 @@
 \BOOKMARK [2][-]{subsection.4.5.1}{Textual approach: Slack and Facebook}{section.4.5}% 26
 \BOOKMARK [2][-]{subsection.4.5.2}{Vocal approach: Google Home}{section.4.5}% 27
 \BOOKMARK [1][-]{section.4.6}{Logging}{chapter.4}% 28
-\BOOKMARK [0][-]{chapter.5}{Evaluation}{}% 29
-\BOOKMARK [1][-]{section.5.1}{What works}{chapter.5}% 30
-\BOOKMARK [1][-]{section.5.2}{What can be improved}{chapter.5}% 31
-\BOOKMARK [0][-]{chapter.6}{Conclusions}{}% 32
+\BOOKMARK [0][-]{chapter.5}{Pull requests}{}% 29
+\BOOKMARK [1][-]{section.5.1}{Middleware multilanguage support}{chapter.5}% 30
+\BOOKMARK [1][-]{section.5.2}{Session granularity support}{chapter.5}% 31
+\BOOKMARK [0][-]{chapter.6}{Evaluation}{}% 32
+\BOOKMARK [1][-]{section.6.1}{What works}{chapter.6}% 33
+\BOOKMARK [1][-]{section.6.2}{What can be improved}{chapter.6}% 34
+\BOOKMARK [0][-]{chapter.7}{Conclusions}{}% 35

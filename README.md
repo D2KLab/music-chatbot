@@ -70,7 +70,7 @@ dialogflow/
     io.js
 ```
 
-- [`bot.js`](./bot.js) is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
+- [`bot.js`](./bot.js) is the entry point of the node application. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 
 - [`spell-checker-middleware.js`](./spell-checker-middleware.js) is the custom module to perform the spell-checking before sending the received sentences to the NLP.
 
@@ -199,10 +199,12 @@ The bot will also generate logs in the directory specified in the `log_folder` v
 - cleanMessage - *the message sent by the user, after spell-checking.*
 - response - *the answer given by the bot (textual or <result_card>).*
 
+Each log file contains informations for each month (e.g. `doremus_log_2018-05.csv`, `doremus_log_2018-06.csv`, etc.).
+
 ## Credits
 
 - Claudio Scalzo <<claudio.scalzo@outlook.com>> (https://www.linkedin.com/in/claudioscalzo)
-- Luca Lombardo  <<lomluca12@gmail.com>>        (https://www.linkedin.com/in/lomluca)
+- Luca Lombardo <<lomluca12@gmail.com>> (https://www.linkedin.com/in/lomluca)
 
 ## License
 

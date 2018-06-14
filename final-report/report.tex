@@ -59,13 +59,15 @@
 	Our project starts from this difficulty: how many people know SPARQL? And inside the set of people who know it, how many problems can rise using the SPARQL language? Using the right properties, checking the exact domain and ranges for each property and other annoying problems just to obtain simple results. Our bot faces this issue, making simple to obtain the most common informations the users want.
 	
 	\section{Aim and expected results}
-	The real aim of the virtual assistant so, is to make simpler the use of the \textit{DOREMUS} knowledge graph and the retrieval of its data. But which will be our, concrete, final results? First of all, the shape of the virtual assistant is originally a chat bot. The queries are textually written and the responses are visually seen on the display of each device running a client with the bot installed. This, of course, is not the only shape the bot can have. It can be a vocal assistant, and the query can be done by voice. In each of the cases, the bot will extract the informations from the \textit{DOREMUS} knowledge graph using SPARQL queries, answering to the user's requests and without letting them know a single detail about the SPARQL query that is using or other technical details. It will also help the user to make a more detailed and precise query (guiding him with some questions), and will correct the users sentences when he does some typos or when he's wrong in writing some precise words (like artist names, instruments or musical genres).
+	The real aim of the virtual assistant is to make simpler the use of the \textit{DOREMUS} knowledge graph and the retrieval of its data. But which will be our concrete final results?\\\\
+	First of all, the shape of the virtual assistant is originally a chat bot. The queries are textually written and the responses are visually seen on the display of each device running a client with the bot installed. This, of course, is not the only shape the bot can have. It can be a vocal assistant, and the query can be done by voice. In each of the cases, the bot will extract the informations from the \textit{DOREMUS} knowledge graph using SPARQL queries, answering to the user's requests without letting him know the technical details hidden under the information retrieval.\\\\
+	It will also help the user to make a more detailed and precise query (guiding him with some questions), and will correct the users sentences when he does some typos or when he's wrong in writing some precise words (like artist names, instruments or musical genres).
 
 \chapter{Natural Language Understanding}
 	\section{What is NLU?}
 	Natural language understanding \textit{(NLU)} is an artificial intelligence technique that deals with the automatic treatment of informations provided in a given natural language. It puts its roots into the first works by Daniel Bobrow\cite{bobrow} in 1964 and the \textit{ELIZA}\cite{eliza} project in 1965, by Joseph Weizenbaum. The interest in \textit{NLU} has become in the years bigger and bigger, and after some interesting works like the one of William Woods\cite{woods}, who introduced the \textit{ATN (Augmented Transition Network)} in the natural language processing field, the research focused (in the 70s and 80s) in using machine learning techniques to fulfill natural language processing tasks.
 	\section{NLP, NLU and NLG}
-	\textit{Natural Language Processing (NLP)}, \textit{Natural Language Understanding (NLU)} and \textit{Natural Languange Generation (NLG)} are similar terms that doesn't share the same meaning. 
+	\textit{Natural Language Processing (NLP)}, \textit{Natural Language Understanding (NLU)} and \textit{Natural Languange Generation (NLG)} are similar terms that don't share the same meaning. 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[scale=0.2]{nlschema}
@@ -79,9 +81,9 @@
 	\item \textit{NLG} can be seen as the dual phase of \textit{NLU}: turning structured data into natural language, to give the user the answer he wants.
 	\end{itemize}
 	
-	\section{How machine learning can help NLU?}
+	\section{How can machine learning help NLU?}
 	\subsection{Attention-Based RNN model for joint intent detection and slot-filling}
-	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. For what regards the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}.\\\\
+	One interesting work that can help in understanding the strong relationship between natural language understanding and machine learning, can be the one by Bing Liu and Ian Lane\cite{rnn}. Intent detection and slot-filling are indeed crucial parts of NLU: intent detection can be seen as a classification problem were, given a set of words (the sentence), the algorithm is capable to classify that sentence and give it a label which will correspond to one of the intents that the machine is able to recognize. Slot-filling can be just seen as a sequence labeling task. Regarding the intent detection phase, the classification problem can be faced by popular machine learning algorithms like \textit{Neural Networks (NNs)} or \textit{Support Vector Machines (SVMs)}; instead, for the slot-filling sequence labeling task, useful tools can be \textit{Markov models (MEMMs)} and \textit{Conditional Random Fields (CRFs)}.\\\\
 	Is fundamental in this case, to understand the concept of alignment:
 	\begin{itemize}
 		\item Alignment is present when the output of the encoder is the same input given to the decoder. Is the case of slot-filling, where the entire set of entities is aligned (when processed with the encoder, can be directly given to the decoder).
@@ -152,6 +154,23 @@
 
 	\section{State of art: famous and most used tools}
 	\begin{itemize}
+		\item \textbf{Dialogflow}\cite{dialogflow}\\
+		Google owned, is a rich solution in terms of machine learning.
+		
+		Pros:
+		\begin{itemize}
+			\item It's free and it has an easy documentation to start with.
+			\item Entities or parameters can be marked as required (fundamental for the slot-filling process).
+			\item Lots of languages supported.
+		\end{itemize}
+		
+		Cons:
+		\begin{itemize}
+			\item No evaluation metrics.
+			\item Not so smart with non-English languages.
+			\item No spell-checking service offered.
+		\end{itemize}
+		
 		\item \textbf{Wit.ai}\cite{witai}\\
 		Facebook owned, is one of the most complete solutions for natural language processing. It supports 50 languages, it’s free.
 		
@@ -165,7 +184,7 @@
 		
 		Cons:
 		\begin{itemize}
-			\item No "required field" option (slot-filling)
+			\item No "required field" option (slot-filling).
 		\end{itemize}	
 
 		\item \textbf{Snips}\cite{snips}\\
@@ -177,28 +196,19 @@
 			\item Heavily exploits machine learning (especially CRF).
 			\item Privacy by design.
 			\item Precise performance metrics .
-			\item Open source (\textit{\href{https://github.com/snipsco}{https://github.com/snipsco}}).
+			\item Open source\cite{snips}.
 			\item Integrated Automatic Speech Recognition.
 		\end{itemize}
 		
 		Cons:
 		\begin{itemize}
 			\item Doesn't support a big set of languages.
+			\item The training is not so straightforward.
+			\item No excellent documentation.
 		\end{itemize}
 	
-		\item \textbf{IBM Watson}\cite{watson}\\
-		\textit{"The first choice as a bot-building platform for 61\% of businesses".}\\
-		It supports Node, Java, Python, iOS and Unity SDK. Free and Premium plans. It’s heavy but powerful.
-		
-		\item \textbf{Amazon Lex}\cite{lex}\\
-		It powers \textit{Alexa}. SDKs for popular platforms.\\
-		You pay only for what you use. No demo, no open-source.
-		
-		\item \textbf{Microsoft LUIS}\cite{luis}\\
-		Supports and heavily uses machine learning. Composite entities (e.g. \textit{"2-adults first class flight ticket"}). Rich metrics of performances evaluation of the assistant.
-		
-		\item \textbf{Recast.ai}\cite{recast}\\
-		SAP-owned. \textit{"Free"} and \textit{"Company"} accounts. Funny interactive demo on the website which shows SDK code for a lot of platforms.
+		\item \textbf{Others}:\\
+		IBM Watson\cite{watson}, Amazon Lex\cite{lex}, Microsoft LUIS\cite{luis}, Recast.ai\cite{recast}.
 	\end{itemize}
 
 \chapter{Dialogflow}
@@ -244,7 +254,7 @@
 		\textit{Perfect! Do you want to add something else?} - \textbf{Bot}\\
 		...\\
 	\end{verse}
-	This result is obtained thanks to the "required" entity: in the \textit{Dialogflow} UI (and of course, in the JSON file of the intent) it's possibile to specify some fields that are required for the query to work well. The bot will provide the final answer of the query if and only if all the required slot have been filled! This means that the conversation can go over and over until these informations are provided.\\\\
+	This result is obtained thanks to the "required" entity: in the \textit{Dialogflow} UI (and of course, in the JSON file of the intent) it's possibile to specify some fields that are required in order to consider the intent as completed. The bot will provide the final answer of the user's request if and only if all the required slot have been filled! This means that the conversation can go over and over until these informations are provided.\\\\
 	The power of \textit{Dialogflow} so, is heavily based on slot-filling. It is able to keep the informations through all the flow of the conversation 
 
 \chapter{The bot}
@@ -255,15 +265,16 @@
 		\includegraphics[scale=0.2]{arch2}
 		\caption{The high-level architecture of DOREMUS Bot.}
 	\end{figure}
-	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand in a glance. A set of examples will be provided in the last chapter.\\\\
+	First of all we can find the client, that in the case of our development, testing and validation process, has been \textit{Slack}. Of course, it can be any of the clients which support the installation of the bot on it (\textit{Telegram}, \textit{Facebook Messenger}, etc.). The use of Slack let us to exploit the beautiful \textit{Slack Cards}, to make the answers of our bot (works, artists, performances) prettier and easier to understand at a glance. A set of examples will be provided in the last chapter.\\\\
 	The second part of the architecture is represented by the NLP. In this case, as told in the previous chapter, we used \textit{Dialogflow}, to exploit its advanced slot-filling techniques and its NLU power.\\\\
 	However, we didn't use \textit{Dialogflow} on its own, exploiting the direct integration with \textit{Slack}, but we used something that we placed in the middle of the two: \textit{Botkit}. \textit{Botkit} is a bot-making toolkit that aims to ease the building process of a bot, potentially exploiting different NLPs and/or different clients. In our case, \textit{Botkit} has been deployed on a web server, and thanks to the \textit{NodeJS} code we were able to come up with a series of features (like the spell checker) that would have been impossible to reach with a simple (direct) integration between \textit{Slack} and \textit{Dialogflow}. We'll talk more about that in the following paragraphs. The communication with the \textit{Dialogflow} NLP is done thanks to a modified version of the \texttt{botkit-middleware-dialogflow}\cite{bmd}: there will be a paragraph dedicated to this middleware in the following pages.\\\\
-	The last part of the architecture is of course represented by the data source: \textit{DOREMUS}. We talked about that in the previous chapters, but from the architecture is important to notice how the knowledge graph is queried: each query is dynamic, in the sense that according to the intent, the number of filters and the desired results wanted by the user, the query will have a different shape and a different content. The code in the web server is able to add different pieces of queries according to what \textit{Dialogflow} is able to understand and to provide as output values of the API.\\\\
+	The last part of the architecture is of course represented by the data source: \textit{DOREMUS}. We talked about that in the previous chapters, but from the architecture is important to notice how the knowledge graph is queried: each query is dynamic, in the sense that according to the intent, the number of filters and the desired results wanted by the user, the query will have a different shape and a different content. The bot code is able to add different pieces of queries according to what \textit{Dialogflow} is able to understand and to provide as output values of the API.\\\\
 	The bot code is organized in this way:
 	\begin{lstlisting}
 	
 	bot.js
 	spell-checker-middleware.js
+	logger.js
 	
 	config/
 		.env
@@ -280,13 +291,17 @@
 		facebook_cards.js
 		
 	dialogflow/
-		webhook_server.js
+		index.js
+		functions.js
+		io.js
 	\end{lstlisting}
 	where:
 	\begin{itemize}
-		\item \texttt{bot.js} is the core file of the bot. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
+		\item \texttt{bot.js} is the entry point of the node application. It contains the code to declare the fundamental libraries, to start the RTM, and to load the hears methods.
 		
 		\item \texttt{spell-checker-middleware.js} is the custom module to perform the spell-checking before sending the received sentences to the NLP.
+		
+		\item \texttt{logger.js} is the module which logs various informations inside the log files (created in the \texttt{log\_folder} specified in the \texttt{.env} file).
 		
 		\item \texttt{.env} is the secret file (to place into the \texttt{config} directory) containing all the tokens for \textit{Slack}, \textit{Facebook} and \textit{Botkit Studio}.
 		
@@ -718,12 +733,10 @@
 	}
 	\end{lstlisting}
 	
-	One minor aspect is behind the variable \texttt{showNewSentence}. We want to give the user a feedback when a correction occurred. When it is set to true, the first next answer will include a warning for the user, indicating the actual sentence that has been processed.
-	
 	\section{Supported platforms}
 	
 	\subsection{Textual approach: Slack and Facebook}
-	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{Botkit} environment. The mechanism through which the sentences are heard is simple to understand: the hears methods are instantiated, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{Botkit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to instantiate the methods that needs to be triggered when an intent is detected.\\\\
+	The two supported platforms to communicate with the bot in a textual way are \textit{Slack} and \textit{Facebook Messenger}. Both platforms have been integrated in the \textit{Botkit} environment. The mechanism through which the sentences are heard is simple to understand: the hears callback are implemented, one for each intent: this methods represent the actions that the bot has to do when an intent is triggered. Usually, without a bot-building environment like \textit{Botkit}, these actions would have been done directly by the "fulfillment" phase in \textit{Dialogflow}. In our case, instead, \textit{Dialogflow} is just an NLP! So, for each platform we use (in this case \textit{Slack} and \textit{Facebook}) we need to implement the methods that needs to be triggered when an intent is detected.\\\\
 	The prototype of a generic hears functions (in our code) is the following:
 	\begin{lstlisting}[language=C]
 	
@@ -779,10 +792,10 @@
 	The webhook has been written by us in NodeJS, to support the \texttt{works-by} and \texttt{find-performance} intents: the bot indeed, replies with a set of works or with a set of scheduled events, basing on the query that has been done.
 	
 	\section{Logging}
-	The bot, during its activity, keeps track of a set of useful informations inside some log files. Each log file is located into the \texttt{/logs} directory and after reaching a given threshold (set at the moment with 1MB), a new file is created: multiple log files can be easier to treat with respect to one huge log file.\\\\
+	The bot, during its activity, keeps track of a set of useful informations inside some log files. Each log file is located into the \texttt{/logs} directory and contains the informations for a single month (e.g. \textit{2018-05}, \textit{2018-06}, etc.): multiple log files can be easier to treat with respect to one huge log file.\\\\
 	The logging files have the following structure:
 	\begin{itemize}
-		\item \texttt{timestamp} - the current date-time.
+		\item \texttt{timestamp} - the current date-time in the format \texttt{YYYY/MM/DD hh:mm:ss}.
 		\item \texttt{platform} - the platform from which the message comes from (\textit{Slack, Facebook}).
 		\item \texttt{user} - the ID of the user sending the message.
 		\item \texttt{team} - the team of the user sending the message.
@@ -793,6 +806,51 @@
 		\item \texttt{cleanMessage} - the message sent by the user, after spell-checking.
 		\item \texttt{response} - the answer given by the bot (textual or \texttt{<result\_card>}).
 	\end{itemize}
+
+	\chapter{Pull requests}
+	During the development of the bot we've encountered the need of doing some improvements to the \texttt{botkit-middleware-dialogflow} code, which we use to make the connection between \textit{Botkit} and the \textit{Dialogflow} NLP.
+	
+	\section{Middleware multilanguage support}
+	The first one\cite{pr1} regards the possibility to set the language in each request to \textit{Dialogflow}: in this way, if the NLP is trained in different languages, it will answer in the correct way to the user. The code is really simple:
+	
+	\begin{lstlisting}[language=C]
+	
+	if (message.lang) {
+		app.lang = message.lang;
+	}
+	else {
+		app.lang = 'en';
+	}
+	\end{lstlisting}
+	
+	\section{Session granularity support}
+	The second pull request is more interesting: we found out that in the original implementation of the middleware the \texttt{sessionId} of each request sent to \textit{Dialogflow} was a unique identifier set during the middleware construction. In this way, the context was represented by the entire \textit{Botkit} instance, shared across all the users! Let's make an example:
+	
+	\begin{verse}
+		\textit{"Give me 2 works by Mozart"} \textbf{- User A}
+	\end{verse}
+	\begin{verse}
+		\textit{"Ok! You told me few filters. Do you want to add something?"} \textbf{- Bot}
+	\end{verse}
+	\begin{verse}
+		\textit{"Yes"} \textbf{- User B}
+	\end{verse}
+	\begin{verse}
+		\textit{"Ok, tell me what!"} \textbf{- Bot}
+	\end{verse}
+	In this case, indeed, the \texttt{sessionId} was the same so the context was kept active by \textit{Dialogflow} when the \textit{User B} wrote "yes".
+	This is of course an issue. We solved it (discussing with the original author in a pull request\cite{pr2}) passing an option in the middleware constructor: this option is an array containing the fields of the \texttt{message} object to be hashed and used as \texttt{sessionId}. For example, the array can have the following values:
+	\begin{itemize}
+		\item \textbf{["user"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the user ID, and the context will be unique for each user chatting with the bot, also in different conversations. In simpler words, if an user will start talking with the bot in a conversation, he can continue to talk (keeping the contexts) in different chat.
+		
+		\item \textbf{["channel"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the channel ID, and the context will be unique for each channel. In other words, the contexts will be the same for each chat open with the bot: user A will have its session in his private chat, user B will have its session in his private chat, but in a group chat the session is shared for all the users of the group.
+		
+		\item \textbf{["user", "channel"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the user ID concatenated with the channel ID, so the session will be unique for each user in a given channel. In the private chat with the bot nothing changes with respect to the previous cases but, in a group chat, each user will have his session with the bot. In other words, each user can use it independently on the message sent by others, also in the same chat or channel.
+	\end{itemize}
+	In both cases, the author was enthusiast to accept our solutions, discuss with us to improve them and then merge the code in his repository.
 	
 	\chapter{Evaluation}
 	
@@ -833,14 +891,17 @@
 		\bibitem{nlpnlunlg} NLP, NLU, NLG and how Chatbots work. | \textit{\href{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}{https://chatbotslife.com/nlp-nlu-nlg-and-how-chatbots-work-dd7861dfc9df}}
 		\bibitem{rnn} Attention-Based Recurrent Neural Network Models for Joint Intent Detection and Slot Filling. 2016. Liu, Bing and Lane, Ian. | \textit{\href{https://arxiv.org/abs/1609.01454}{https://arxiv.org/abs/1609.01454}}
 		\bibitem{unified} A Unified Architecture for Natural Language Processing: Deep Neural Networks with Multitask Learning. 2008. Collobert, Ronan and Weston, Jason. | \textit{\href{https://ronan.collobert.com/pub/matos/2008\_nlp\_icml.pdf}{https://ronan.collobert.com/pub/matos/2008\_nlp\_icml.pdf}}
+		\bibitem{dialogflow} Dialogflow: Build natural and rich conversational experiences. | \textit{\href{https://dialogflow.com/}{https://dialogflow.com/}}
 		\bibitem{witai} Wit.ai: Turn what your users say into actions. | \textit{\href{https://wit.ai/}{https://wit.ai/}}
-		\bibitem{snips} Snips: Using Voice to Make Technology Disappear. | \textit{\href{https://snips.ai/}{https://snips.ai/}}
+		\bibitem{snips} Snips: Using Voice to Make Technology Disappear. | \textit{\href{https://snips.ai/}{https://snips.ai/}} | \textit{\href{https://github.com/snipsco}{https://github.com/snipsco}}
 		\bibitem{watson} IBM Watson: Does your business think? | \textit{\href{https://www.ibm.com/watson/}{https://www.ibm.com/watson/}}
 		\bibitem{lex} Amazon Lex: Build conversation bots. | \textit{\href{https://aws.amazon.com/lex/}{https://aws.amazon.com/lex/}}
 		\bibitem{luis} Microsoft LUIS: A machine learning-based service to build natural language into apps, bots, and IoT devices. | \textit{\href{https://www.luis.ai/}{https://www.luis.ai/}}
 		\bibitem{recast} SAP Recast.ai: A collaborative bot platform. | \textit{\href{https://recast.ai/}{https://recast.ai/}}
 		\bibitem{apiai} Chatbots made easy with Dialogflow. An overview on the architecture. | \textit{\href{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}{https://blog.huhtanen.eu/2017/10/15/chatbots-made-easy-dialog-flow.html}}
 		\bibitem{bmd} The GitHub repository of the Botkit middleware for Dialogflow. | \textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow}{https://github.com/jschnurr/botkit-middleware-dialogflow}}
+		\bibitem{pr1} First pull request: "Added capability to change language in Dialogflow" | \textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow/pull/10}{https://github.com/jschnurr/botkit-middleware-dialogflow/pull/10}}
+		\bibitem{pr2} Second pull request: "The sessionID is set to message.user, to have a separate session for each user" | \textit{\href{https://github.com/jschnurr/botkit-middleware-dialogflow/pull/11}{https://github.com/jschnurr/botkit-middleware-dialogflow/pull/11}}
 		\bibitem{fade} FADE: Filling Automatically Dialog Entities | \textit{\href{https://github.com/marcotrinelli/FADE}{https://github.com/marcotrinelli/FADE}}
 	\end{thebibliography}
 \end{document}          
