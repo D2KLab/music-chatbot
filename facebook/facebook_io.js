@@ -153,7 +153,7 @@ module.exports.findArtist = botVars.fbController.hears('find-artist', 'message_r
         enddate = date.split("/")[1];
     }
 
-    var num = 5;
+    var num = 1;
     if (number !== "") {
         num = parseInt(number);
     }

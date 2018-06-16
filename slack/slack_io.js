@@ -170,7 +170,7 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
         enddate = date.split("/")[1];
     }
 
-    var num = 5;
+    var num = 1;
     if (number !== "") {
         num = parseInt(number);
     }
