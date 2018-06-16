@@ -42,7 +42,7 @@ var performMisspellingCheck = function(message) {
 
     // empty string where to append corrected words
     var messageMisspelledFree = "";
-    var words = message.text.split(" ");
+    var words = message.split(" ");
 
     for (var i = 0; i < words.length; i++) {
 
@@ -130,9 +130,10 @@ module.exports = function() {
                 
                 // SPELL CHECKING
                 // perform the misspelling with the (potentially) updated speller
-                var cleanMessage = performMisspellingCheck(message);
+                var strippedMessage = message.text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'');
+                var cleanMessage = performMisspellingCheck(strippedMessage);
 
-                message.old = message.text;
+                message.old = strippedMessage;
                 message.text = cleanMessage;
 
                 // fill the language field in order to send it to dialogflow api
@@ -142,9 +143,10 @@ module.exports = function() {
         } else {
 
             // perform the misspelling with the same speller as before
-            var cleanMessage = performMisspellingCheck(message);
+            var strippedMessage = message.text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'');
+            var cleanMessage = performMisspellingCheck(strippedMessage);
 
-            message.old = message.text;
+            message.old = strippedMessage;
             message.text = cleanMessage;
 
             // fill the language field in order to send it to dialogflow api
