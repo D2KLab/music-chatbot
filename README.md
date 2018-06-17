@@ -189,7 +189,7 @@ applying the usual filters. Let's make an example:
 ## Log Files
 The bot will also generate logs in the directory specified in the `log_folder` variable of the `.env` file. The format of the csv files is the following:
 - timestamp - *the current date-time in the format YYYY/MM/DD hh:mm:ss.*
-- platform - *the platform from which the message comes from (\textit{Slack, Facebook}).*
+- platform - *the platform from which the message comes from (`"slack"`,`"fb"`,`"google_assistant"`).*
 - user - *the ID of the user sending the message.*
 - team - *the team of the user sending the message.*
 - intent - *the intent which has been detected by the NLP.*
