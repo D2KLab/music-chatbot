@@ -36,8 +36,8 @@ module.exports.showWorks = function showWorks(request, response, askForAdditiona
     }
 
     if (filterCounter <= 2 && askForAdditionalFilters == true) {
-
-        const speech = "Uhm... you told me few filters. Do you want to add something?";
+        
+        const speech = "Uhm... sure! Do you want to add some filters?";
         const message = request.body.result.resolvedQuery;
         const lang = request.body.lang.slice(0,2);
         const confidence = request.body.result.score;
