@@ -1,0 +1,26 @@
+\chapter{Evaluation}
+	
+	\section{What works}
+	The entire path to develop this virtual assistant has been overall successful. The bot knows the artists, the instruments, the genres of the \textit{DOREMUS} knowledge graph, and is capable of answering to a pretty various set of intents.\\\\
+	The intents are not just static queries, but the bot engages the user in a tit for tat conversation where the user can specify more filters to the queries it does: this has been done thanks to a smart contexts usage.\\\\
+	The bot, indeed, at this phase of its development is able to work with a very large set of queries of medium/high complexity, like the ones listed in the previous chapter; it's fast, the code is stable and overall it provides a pleasant experience also thanks to the visual results it can provide (like artist pictures and cards, in general).\\\\
+	It is able (thanks to our custom spell-checker middleware) to correct the major part of common misspellings, which doesn't change too much from the original word.
+	
+	\section{What can be improved}
+	It's also interesting to notice what can improved in the bot. First of all, the non-English languages: in this moment, the bot supports the french language, however \textit{Dialogflow} is not so smart in these languages as it is in English. It needs way more training sentences, which have to combine all possible orderings of entities in the sentences. For example, if the bot is trained on this sentence:
+	\begin{verse}
+		\textit{"Donne-moi deux oeuvres de Mozart pour clarinet"}
+	\end{verse}
+	it won't work (if not trained) on these sentences:
+	\begin{verse}
+		\textit{"Donne-moi deux oeuvres pour clarinet de Mozart"}\\
+		\textit{"Dis-moi deux oeuvres pour clarinet de Mozart"}
+	\end{verse}
+	while in English is a lot smarter and capable to understand also those sentences. It's clear that the ordered combination for all the entities that we can have in a sentence (artists, instruments, genres, numbers, verbs) is huge! So, the bot has to be heavily trained in non-English languages to work well: this can be done also with a script that generates the sentences in all possible order and combination and feeds the bot training pipeline.\\
+	Moreover, the \textit{Dialogflow} \texttt{date-period} entity is not fully working in non-english languages, because it's not able to detect expressions like year periods or months. We decided to shut down this filter in the french (and in general, in any of the non-english languages) intents.
+	The spell-checking mechanism is not context oriented: this means that the word can be replaced with another one even if the final result is not a totally meaningful sentence. More complex approaches (like RNNs) which take care, after being trained, of the entire context can be used in the future.\\\\
+	The \textit{Facebook Messenger} visualization is not so handy for the representation of a big list of informations: this is mainly a platform issue and not a bot one, but it can be ugly when results with a lot of informations have to be showed.\\\\
+	There can be some cases (not easy to reproduce, but possible) where the bot can answer in an unexpected way: this is due to the presence of some contexts that are still active after a given flow of sentences. The solution is of course to clear the context, but of course is not a definitive solution and after some phases of the conversation some strange answers could be received when talking to the bot.\\\\
+	For what regards entities, a tool that automatically downloads, cleans and updates the bot entities (like FADE\cite{fade}) taking the updated version from the KB can be very useful. It could be put into the \textit{DOREMUS Bot} code to keep fresh all the knowledge that the bot as in the classical music world.\\\\
+	With certain queries the bot can be, of course, slow. This is due to the \textit{DOREMUS} knowledge graph and is not under our control: computational-time estimation techniques could be done to say to the user that those queries will take some time to end in a concrete answer.
+	

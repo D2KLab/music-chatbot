@@ -1,0 +1,45 @@
+\chapter{Pull requests}
+	During the development of the bot we've encountered the need of doing some improvements to the \texttt{botkit-middleware-dialogflow} code, which we use to make the connection between \textit{Botkit} and the \textit{Dialogflow} NLP.
+	
+	\section{Middleware multilanguage support}
+	The first one\cite{pr1} regards the possibility to set the language in each request to \textit{Dialogflow}: in this way, if the NLP is trained in different languages, it will answer in the correct way to the user. The code is really simple:
+	
+	\begin{lstlisting}[language=C]
+	
+	if (message.lang) {
+		app.lang = message.lang;
+	}
+	else {
+		app.lang = 'en';
+	}
+	\end{lstlisting}
+	
+	\section{Session granularity support}
+	The second pull request is more interesting: we found out that in the original implementation of the middleware the \texttt{sessionId} of each request sent to \textit{Dialogflow} was a unique identifier set during the middleware construction. In this way, the context was represented by the entire \textit{Botkit} instance, shared across all the users! Let's make an example:
+	
+	\begin{verse}
+		\textit{"Give me 2 works by Mozart"} \textbf{- User A}
+	\end{verse}
+	\begin{verse}
+		\textit{"Ok! You told me few filters. Do you want to add something?"} \textbf{- Bot}
+	\end{verse}
+	\begin{verse}
+		\textit{"Yes"} \textbf{- User B}
+	\end{verse}
+	\begin{verse}
+		\textit{"Ok, tell me what!"} \textbf{- Bot}
+	\end{verse}
+	In this case, indeed, the \texttt{sessionId} was the same so the context was kept active by \textit{Dialogflow} when the \textit{User B} wrote "yes".
+	This is of course an issue. We solved it (discussing with the original author in a pull request\cite{pr2}) passing an option in the middleware constructor: this option is an array containing the fields of the \texttt{message} object to be hashed and used as \texttt{sessionId}. For example, the array can have the following values:
+	\begin{itemize}
+		\item \textbf{["user"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the user ID, and the context will be unique for each user chatting with the bot, also in different conversations. In simpler words, if an user will start talking with the bot in a conversation, he can continue to talk (keeping the contexts) in different chat.
+		
+		\item \textbf{["channel"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the channel ID, and the context will be unique for each channel. In other words, the contexts will be the same for each chat open with the bot: user A will have its session in his private chat, user B will have its session in his private chat, but in a group chat the session is shared for all the users of the group.
+		
+		\item \textbf{["user", "channel"]}\\
+		In this way the \texttt{sessionId} is the \texttt{MD5} hash of the user ID concatenated with the channel ID, so the session will be unique for each user in a given channel. In the private chat with the bot nothing changes with respect to the previous cases but, in a group chat, each user will have his session with the bot. In other words, each user can use it independently on the message sent by others, also in the same chat or channel.
+	\end{itemize}
+	In both cases, the author was enthusiast to accept our solutions, discuss with us to improve them and then merge the code in his repository.
+	
