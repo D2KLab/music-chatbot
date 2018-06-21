@@ -29,7 +29,6 @@
 			They are "containers" in which all the entities and parameters of the conversation are stored. They are fundamental to keep the informations through the conversational flow and make possible the "slot-filling".
 		\end{itemize}
 	One of the most powerful aspects of \textit{Dialogflow} is the support for slot-filling. It is a technique that lets users to specify details (necessary or not) in different phases of the conversation: this means that the bot can go ahead and keep asking more details to the user before answering the query. Let's make an example:
-	
 	\begin{verse}
 		\textit{Please give me 2 works} - \textbf{User}\\
 		\textit{You told me few filters. Do you want to add something?} - \textbf{Bot}\\
@@ -42,4 +41,10 @@
 		...\\
 	\end{verse}
 	This result is obtained thanks to the "required" entity: in the \textit{Dialogflow} UI (and of course, in the JSON file of the intent) it's possibile to specify some fields that are required in order to consider the intent as completed. The bot will provide the final answer of the user's request if and only if all the required slot have been filled! This means that the conversation can go over and over until these informations are provided.\\\\
-	The power of \textit{Dialogflow} so, is heavily based on slot-filling. It is able to keep the informations through all the flow of the conversation 
+	The power of \textit{Dialogflow} so, is heavily based on slot-filling, being able to keep the informations through all the flow of the conversation. The flow of our \texttt{works-by} intent has been structured as the following picture shows, and is heavily based on active context, instead of nested follow-up intents\cite{loops}:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.2]{flow}
+		\caption{Flow of the \texttt{works-by} intent, using the active contexts technique.\cite{loops}}.
+	\end{figure}
+	
