@@ -241,6 +241,9 @@ module.exports.findPerformance = botVars.fbController.hears('find-performance', 
 // HELLO INTENT
 module.exports.hello = botVars.fbController.hears('hello', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
+    // Clear the context
+    botFunctions.sendClearContext(message.nlpResponse.sessionId);
+
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.channel, "hello",
         '"' + message['fulfillment']['speech'] + '"',

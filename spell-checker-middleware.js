@@ -26,12 +26,11 @@ greetings["good evening"] = true;
 greetings["hey"] = true;
 greetings["bonjour"] = true;
 greetings["bonsoir"] = true;
-greetings["salut"] = true;
 
 
 // FUNCTION TO DETECT IF MESSAGE IS GREETING
 var isGreetings = function(message) {
-    var lowerCaseMessage = message.text.toLowerCase();
+    var lowerCaseMessage = message.text.toLowerCase().replace(/[.,\/#!?$%\^&\*;:{}=_`~()]/g,'');
     if (greetings[lowerCaseMessage]) return true;
     return false;
 }
@@ -110,7 +109,7 @@ module.exports = function() {
                 qs: parameters
             }, function(err, response, body) {
                 if (err) {
-                    console.error("Error during language detection");
+                    console.error("Error during language detection!");
                     next(err);
                 }
 
@@ -130,7 +129,7 @@ module.exports = function() {
                 
                 // SPELL CHECKING
                 // perform the misspelling with the (potentially) updated speller
-                var strippedMessage = message.text.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,'');
+                var strippedMessage = message.text.replace(/[.,\/#!?$%\^&\*;:{}=_`~()]/g,'');
                 var cleanMessage = performMisspellingCheck(strippedMessage);
 
                 message.old = strippedMessage;
@@ -156,7 +155,7 @@ module.exports = function() {
         return;
     }
 
-    middleware.currectLang = function() {
+    middleware.currentLang = function() {
         return currentLang;
     }
 

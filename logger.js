@@ -6,7 +6,6 @@ const path = require('path');
 const underscore = require('underscore');
 const logFile = {};
 const logDir = process.env.log_folder;
-const threshold = 100*1024*1024;
 
 // FUNCTION TO CHECK IF DIRECTORY EXISTS
 function directoryExists(path) {
@@ -41,7 +40,7 @@ module.exports = function() {
         fs.mkdirSync(logDir);
     }
 
-    logger.write = function(platform, user, team, intent, response, rawMessage, cleanMessage, lang, confidence) {
+    logger.write = function(platform, user, team, intent, response, cleanMessage, rawMessage, lang, confidence) {
 
         // sanitize
         response = response.replace(',','');

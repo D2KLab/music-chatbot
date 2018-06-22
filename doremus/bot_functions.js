@@ -4,7 +4,7 @@
 const slackCards = require("../slack/slack_cards.js");
 const fbCards = require("../facebook/facebook_cards.js");
 const botVars = require("../bot.js");
-var spellCheckerMiddleware = botVars.spellCheckerMiddleware
+var spellCheckerMiddleware = botVars.spellCheckerMiddleware;
 
 // FUNCTIONS
 
@@ -23,8 +23,7 @@ module.exports.sendClearContext = function sendClearContext(sessionID) {
 
     function callback(error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body);
-            console.log(response);
+            console.log("Context successfully deleted.");
         }
     }
     request(options, callback);
@@ -160,7 +159,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
-            var currentLang = spellCheckerMiddleware.currentLang;
+            var currentLang = spellCheckerMiddleware.currentLang();
             if (currentLang === "fr") {
                 bot.reply(message, "Desolé... Je n'ai trouvé rien!");
             } else {
@@ -240,7 +239,7 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
-            var currentLang = botVars.currentLang;
+            var currentLang = spellCheckerMiddleware.currentLang();
             if (currentLang === "fr") {
                 bot.reply(message, "Desolé... Je n'ai trouvé rien!");
             } else {
@@ -336,7 +335,7 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
         // RESPONSE
         if (json["results"]["bindings"].length === 0) {
 
-            var currentLang = botVars.currentLang;
+            var currentLang = spellCheckerMiddleware.currentLang();
             if (currentLang === "fr") {
                 bot.reply(message, "Desolé... Je n'ai trouvé rien!");
             } else {
@@ -416,7 +415,7 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
 
         var row = json["results"]["bindings"][0];
         if (row == undefined) {
-            bot.reply(message, "Sorry, there was an error! Retry later.");
+            bot.reply(message, "Sorry, I can't find the artist you're looking for!");
         } else {
             name = row["name"]["value"];
             bio = row["bio"]["value"];
@@ -471,7 +470,7 @@ module.exports.answerBioSmallAsText = function answerBioSmallAsText(artist, bot,
 
         var row = json["results"]["bindings"][0];
         if (row == undefined) {
-            bot.reply(message, "Sorry, there was an error! Retry later.");
+            bot.reply(message, "Sorry, I can't find the artist you're looking for!");
         } else bot.reply(message, row["bio"]["value"]);
     });
 }

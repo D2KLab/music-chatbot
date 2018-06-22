@@ -1,7 +1,7 @@
 /* SLACK HEARS */
 
 var botVars = require("../bot.js");
-var spellCheckerMiddleware = botVars.spellCheckerMiddleware
+var spellCheckerMiddleware = botVars.spellCheckerMiddleware;
 var botFunctions = require("../doremus/bot_functions.js");
 
 var log = botVars.log;
@@ -10,9 +10,12 @@ var log = botVars.log;
 module.exports.worksBy = botVars.slackController.hears(['works-by'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     if (message.text !== message.old) {
+        
+        var understoodText = (spellCheckerMiddleware.currentLang() === "en") ? "I understood: " : "J'ai compris: ";
+
         bot.reply(message, {
             "attachments": [{
-                text: "I understood: " + message["text"],
+                text: understoodText + message["text"],
                 color: "warning"
             }]
         });
@@ -147,9 +150,12 @@ module.exports.worksBySomething = botVars.slackController.hears(['works-by-artis
 module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     if (message.text !== message.old) {
+
+        var understoodText = (spellCheckerMiddleware.currentLang() === "en") ? "I understood: " : "J'ai compris: ";
+
         bot.reply(message, {
             "attachments": [{
-                text: "I understood: " + message["text"],
+                text: understoodText + message["text"],
                 color: "warning"
             }]
         });
@@ -192,9 +198,12 @@ module.exports.findArtist = botVars.slackController.hears(['find-artist'], 'dire
 module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     if (message.text !== message.old) {
+
+        var understoodText = (spellCheckerMiddleware.currentLang() === "en") ? "I understood: " : "J'ai compris: ";
+
         bot.reply(message, {
             "attachments": [{
-                text: "I understood: " + message["text"],
+                text: understoodText + message["text"],
                 color: "warning"
             }]
         });
@@ -227,9 +236,12 @@ module.exports.discoverArtist = botVars.slackController.hears(['discover-artist'
 module.exports.findPerformance = botVars.slackController.hears(['find-performance'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
     if (message.text !== message.old) {
+
+        var understoodText = (spellCheckerMiddleware.currentLang() === "en") ? "I understood: " : "J'ai compris: ";
+
         bot.reply(message, {
             "attachments": [{
-                text: "I understood: " + message["text"],
+                text: understoodText + message["text"],
                 color: "warning"
             }]
         });
@@ -276,6 +288,9 @@ module.exports.findPerformance = botVars.slackController.hears(['find-performanc
 
 // HELLO INTENT
 module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    // Clear the context
+    botFunctions.sendClearContext(message.nlpResponse.sessionId);
 
     bot.reply(message, message['fulfillment']['speech']);
     log.write(bot.type, message.user, message.channel, "hello",
