@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>MinoTour</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+        <script src="https://cdn.rawgit.com/showdownjs/showdown/1.7.4/dist/showdown.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.0/normalize.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.1/css/all.css" />
+        <link rel="stylesheet" href="css/styles.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body >
+      <div class="wrapper">
+
+        <div id="message_window">
+            <div class="disconnected">
+                Disconnected... reconnecting!
+            </div>
+            <div class="offline">
+                Offline! Reload to reconnect.
+            </div>
+            <section>
+                <div id="message_list">
+                    <div id="message_template">
+                        <div class="message {{message.type}}">
+                            <div class="profile-icon"></div>
+
+                            <div class="message-content">
+                                {{#if message.isTyping}}
+                                <div class="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                {{/if}}
+
+                                {{{message.html}}}
+
+                                {{#if message.open_link}}
+                                <a href="{{{message.open_link}}}" target="_blank" class="button_message">{{#if message.link_title}}{{message.link_title}}{{else}}{{message.open_link}}{{/if}}</a>
+                                {{/if}}
+
+                                {{#message.attachments}}
+                                <div class="message-attachment">
+                                    {{#files}}
+                                    <div class="file_attachment">
+                                    {{#if image}}
+                                        <img src="{{{image}}}" alt="{{{image}}}" onload="this.parentNode.style.display='block';" onerror="this.parentNode.style.display='none';" />
+                                    {{else}}
+                                        <a href="{{{url}}}" title="{{{url}}}">{{{url}}}</a>
+                                    {{/if}}
+                                    </div>
+                                    {{/files}}
+
+                                    <div class="attachment-body">
+                                        {{#if isTyping}}
+                                        <div class="typing-indicator">
+                                            <span></span>
+                                            <span></span>
+                                            <span></span>
+                                        </div>
+                                        {{/if}}
+
+                                        {{#if title}}
+                                        <h2>{{title}}</h2>
+                                        {{/if}}
+
+                                        {{{html}}}
+
+                                        <div class="message-fields">
+                                            {{#fields}}
+                                            <div class="message-field">
+                                                <p>
+                                                    <strong>{{title}}</strong><br>
+                                                    {{value}}
+                                                </p>
+                                            </div>
+                                            {{/fields}}
+                                        </div>
+
+                                        {{#if open_link}}
+                                        <a href="{{{open_link}}}" target="_blank" class="button_message">{{#if link_title}}{{link_title}}{{else}}{{open_link}}{{/if}}</a>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                {{/message.attachments}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div id="message_replies">
+            </div>
+            <footer>
+                <form onsubmit="Botkit.send(Botkit.input.value, event)">
+                    <input type="text" autocomplete="off" id="messenger_input" placeholder="Type a message" />
+                    <button type="submit" id="messenger_send"><i class="far fa-arrow-alt-circle-right"></i></button>
+                </form>
+            </footer>
+        </div>
+        </div>
+        <script src="client.js"></script>
+    </body>
+</html>

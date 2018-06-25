@@ -3,6 +3,7 @@
 // LOAD VARIABLES AND FUNCTIONS
 const slackCards = require("../slack/slack_cards.js");
 const fbCards = require("../facebook/facebook_cards.js");
+const webchatCards = require("../webchat/webchat_cards.js");
 const botVars = require("../bot.js");
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware;
 
@@ -184,6 +185,8 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
                     bot.reply(message, {
                         attachment: attachment
                     });
+                } else if (platform === "webchat") {
+                    bot.reply(message, webchatCards.getWorkCard(title, artist, year, genre, comment, key));
                 }
             });
         }
@@ -261,6 +264,8 @@ module.exports.doQueryPerformance = function doQueryPerformance(number, city, st
                     bot.reply(message, {
                         attachment: attachment
                     });
+                } else if (platform === "webchat") {
+                    bot.reply(message, webchatCards.getPerformanceCard(title, subtitle, placeName, actorsName, date));
                 }
             });
         }
@@ -353,12 +358,15 @@ module.exports.doQueryFindArtist = function doQueryFindArtist(num, startdate, en
                 var count = row["count"]["value"];
 
                 // CREATE ATTACHMENT
-                var attachment = slackCards.getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
 
                 if (platform === "slack") {
+                    var attachment = slackCards.getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
                     bot.reply(message, attachment);
                 } else if (platform === "facebook") {
                     bot.reply(message, "Facebook Card to be implemented");
+                } else if (platform === "webchat") {
+                    var attachment = webchatCards.getArtistCard(name, birthPlace, birthDate, deathPlace, deathDate, count)
+                    bot.reply(message, attachment);
                 }
             });
         }
@@ -435,6 +443,9 @@ module.exports.answerBio = function answerBio(artist, platform, bot, message) {
                 bot.reply(message, {
                     attachment: attachment,
                 });
+            } else if (platform === "webchat") {
+                var attachment = webchatCards.getBioCard(name, birthPlace, birthDate, deathPlace, deathDate, image, bio);
+                bot.reply(message, attachment);
             }
         }
     });

@@ -1,0 +1,616 @@
+/* shared botkit ui styles */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  background-color: #fff;
+  font-family: 'Lato', sans-serif;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.wrapper {
+  position: relative;
+  margin: 0 auto;
+
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.box {
+  border: 2px solid #ccc;
+  padding: 1rem calc(1rem - 2px);
+  margin-bottom: 1rem;
+
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  h1,
+  h2,
+  h3 {
+    margin-top: 0;
+  }
+}
+
+footer {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 2rem;
+
+  h1 {
+    font-size: 4rem;
+    margin: 0;
+  }
+}
+
+a {
+  transition: color 0.3s ease-in-out;
+  color: black;
+
+  &:hover {
+    color: #f1d204;
+  }
+}
+
+.copyurl {
+  width: 100%;
+  font-size: 1rem;
+}
+
+div.input label {
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.addon {
+  display: flex;
+  border: 1px solid #999;
+  border-radius: 6px;
+  padding: 5px;
+
+  input,
+  textarea {
+    flex-grow: 1;
+    border: 0;
+    background: transparent;
+  }
+
+  button {
+    cursor: pointer;
+    flex-grow: 0;
+    background: transparent;
+    border: 1px solid #999;
+    border-radius: 6px;
+    font-weight: bold;
+
+    &.textarea {
+      align-self: flex-start;
+      padding: 0.5rem;
+    }
+
+    &:hover {
+      background: #fff;
+      color: #f1d204;
+    }
+  }
+}
+
+div.hr {
+  border: 1px dashed #ccc;
+  width: 10%;
+  margin: 4rem auto;
+  height: 1px;
+}
+
+a.button {
+  border: 2px solid #f1d204;
+  font-weight: bold;
+  margin: 0;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 0.5rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  transition: box-shadow 0.1s linear;
+
+  &:hover {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.messaging-platform-link {
+  display: inline-block;
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  img {
+    height: 50px;
+  }
+}
+
+.messaging-platform-link-web img {
+  border-radius: 100px;
+}
+
+/* chat client */
+
+#header a {
+  text-decoration: none;
+}
+
+#message_window {
+  background: #fff;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lato', sans-serif;
+
+  .disconnected {
+    background: #ffc;
+    padding: 0.25rem;
+  }
+
+  &.connected .disconnected,
+  .offline {
+    display: none;
+  }
+
+  &.offline {
+    .disconnected {
+      display: none;
+    }
+
+    .offline {
+      background: #f00;
+      color: #fff;
+      padding: 0.25rem;
+      display: block;
+    }
+  }
+
+  .powered_by {
+    flex-shrink: 0;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+    padding: 0.25rem;
+    color: #666;
+
+    a {
+      text-decoration: none;
+      color: #666;
+    }
+
+    img {
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  section {
+    flex-grow: 1;
+    flex-direction: column-reverse;
+    display: flex;
+    overflow-y: auto;
+
+    > div > div {
+      margin: 1rem 0.25rem;
+      clear: both;
+
+      &::after {
+        display: block;
+        content: "";
+        clear: both;
+      }
+    }
+  }
+
+  footer {
+    border-top: 1px solid #ccc;
+    padding: 0.25rem;
+  }
+
+  form {
+    display: flex;
+    margin: 0;
+    padding: 0.25rem;
+  }
+
+  .button_message {
+    margin: 1rem 0;
+    border-radius: 4px;
+    border-color: #f1d204;
+    border-style: solid;
+    color: #f1d204;
+    border-width: 1px;
+    padding: 0.25rem 1rem;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+    display: block;
+  }
+
+  #message_list {
+    overflow-y: auto;
+  }
+
+  #message_template {
+    display: none;
+  }
+
+  .message-content {
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    max-width: 75%;
+    position: relative;
+    transition: all 0.5s;
+    z-index: 1;
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
+    padding: 15px 20px;
+    vertical-align: top;
+    white-space: normal;
+    word-break: break-word;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .message {
+    display: flex;
+    width: 100%;
+
+    p {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    &.outgoing {
+      justify-content: flex-end;
+    }
+
+    .profile-icon {
+      flex-shrink: 0;
+      animation: bounceIn 1s ease-in-out;
+      animation-delay: 0.25s;
+      border-radius: 100px;
+      box-shadow: rgba(0, 0, 0, 0.12) 0 1px 6px, rgba(0, 0, 0, 0.12) 0 1px 4px;
+      display: inline-block;
+      height: 50px;
+      position: relative;
+      vertical-align: top;
+      width: 50px;
+      z-index: 2;
+
+      i {
+        color: white;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        width: 50px;
+        font-size: 1.5em;
+
+        &::before {
+          display: inline-block;
+        }
+      }
+    }
+
+    &.outgoing .profile-icon {
+      display: none;
+    }
+
+    &.incoming .profile-icon {
+      margin-right: 1rem;
+      background-image: url("../android-chrome-512x512.png");
+      background-repeat: no-repeat;
+      background-color: transparent;
+      background-size: 60% auto, cover;
+      background-position: center;
+    }
+
+    &.outgoing .message-content {
+      background-color: #e6e5ea;
+    }
+
+    &.incoming .message-content {
+      border-bottom-left-radius: 12px;
+      border-top-left-radius: 18px;
+
+      &::before {
+        right: 100%;
+        top: 13px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: transparent;
+        border-right-color: #eee;
+        border-width: 13px;
+      }
+
+      &::after {
+        right: 100%;
+        top: 16px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        border-color: rgba(136, 183, 213, 0);
+        border-right-color: #fff;
+        border-width: 10px;
+      }
+    }
+  }
+
+  .message-attachment {
+    display: flex;
+    flex-wrap: wrap;
+
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e6e6e6;
+    }
+  }
+
+  .attachment-body {
+    flex: 1;
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1em;
+    }
+  }
+
+  .file_attachment {
+    color: #333;
+    border-radius: 5px;
+    flex: 1;
+    max-width: 30%;
+    margin-right: 0.5rem;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .message-fields {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    .message-field {
+      margin-right: 2rem;
+      margin-bottom: 0.75rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+#message_replies {
+  text-align: center;
+  overflow-x: auto;
+  flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+#message_window #message_replies {
+  ul {
+    list-style-type: none;
+    margin: 0 auto;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      margin: 0.5rem;
+      margin-left: 0;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    border: 1px solid #f1d204;
+    color: #f1d204;
+    border-radius: 16px;
+    padding: 0.25rem 1rem;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f1d204;
+      color: #fff;
+    }
+  }
+}
+
+/* typing indicator CSS based on code by Joseph Fusco -> https://codepen.io/fusco/pen/XbpaYv */
+
+.typing-indicator {
+  align-self: center;
+
+  span {
+    height: 5px;
+    width: 5px;
+    float: left;
+    margin: 0 1px;
+    background-color: #333;
+    display: block;
+    border-radius: 50%;
+    opacity: 0.4;
+
+    &:nth-of-type(1) {
+      animation: 1s blink infinite 0.3333s;
+    }
+
+    &:nth-of-type(2) {
+      animation: 1s blink infinite 0.6666s;
+    }
+
+    &:nth-of-type(3) {
+      animation: 1s blink infinite 0.9999s;
+    }
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 1;
+  }
+}
+
+/* special styles for homepage */
+
+#home {
+  position: relative;
+  max-width: 75%;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+#homepage_bot {
+  max-width: 100%;
+  flex: 1;
+  min-width: 300px;
+  width: 100%;
+
+  iframe {
+    border: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+#welcome {
+  margin-left: 2rem;
+  flex: 1;
+  min-width: 45%;
+
+  h1 {
+    font-family: Poppins, sans-serif;
+    white-space: pre-line;
+    line-height: 1em;
+  }
+}
+
+.span-dot {
+  color: #f1d204;
+}
+
+#footer {
+  padding-top: 2rem;
+}
+
+#embed_box {
+  width: 75%;
+  margin: 0 auto;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  40% {
+    -moz-transform: translateY(-30px);
+    -ms-transform: translateY(-30px);
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+
+  60% {
+    -moz-transform: translateY(-15px);
+    -ms-transform: translateY(-15px);
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+  }
+}
+
+.device-wrapper {
+  margin: 0 auto;
+}
+
+.device .screen {
+  pointer-events: auto;
+}
+
+#messenger_input {
+  border: none;
+  color: #b4b4b4;
+  font-size: 1em;
+  font-weight: 300;
+  outline: none;
+  width: 100%;
+}
+
+#messenger_send {
+  width: 50px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: #e6e6e6;
+  height: 50px;
+  line-height: 50px;
+  font-size: 2em;
+  transition: all 0.5s;
+}
+
+#footer .sponsors {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-evenly;
+  max-width: 75%;
+  margin: 0 auto;
+  align-items: flex-end;
+}

@@ -1,0 +1,46 @@
+<div id="embed_box" class="box">
+
+    <h1>Embed "DOREMUS Bot"</h1>
+    <p>
+        Copy the code below to embed this bot in a different website.
+    </p>
+
+<div class="addon">
+    <textarea id="copy_pasta_1" rows="6" class="copyurl">
+<div id="embedded_messenger">
+    <header id="message_header" onclick="Botkit.toggle()">Chat</header>
+    <iframe  id="botkit_client" src="//{{base_url}}/chat.html"></iframe>
+</div>
+<script src="//{{base_url}}/embed.js"></script>
+<script>
+var options = {
+    /*
+        id          a unique identifier of this user - REQUIRED
+        name        the username / display name of the user
+        first_name  first name
+        last_name   last name
+        full_name   full name
+        gender      'male' or 'female'
+        timezone    timezone description "Europe/Paris"
+    */
+};
+Botkit.boot(options);
+</script>
+<link rel="stylesheet" href="//{{base_url}}/css/embed.css" />
+    </textarea>
+    <button class="textarea" data-clipboard-target="#copy_pasta_1">Copy</button>
+</div>
+
+</div>
+
+<div id="embedded_messenger">
+    <header id="message_header" onclick="Botkit.toggle()">Chat</header>
+    <iframe id="botkit_client" src="//{{base_url}}/chat.html"></iframe>
+</div>
+<script src="//{{base_url}}/embed.js"></script>
+<link rel="stylesheet" href="//{{base_url}}/css/embed.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+<script>
+Botkit.boot();
+new ClipboardJS('.textarea');
+</script>
