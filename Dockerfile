@@ -16,6 +16,8 @@ RUN adduser -D -g sudo nodeuser -u 1000 \
     && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 EXPOSE 3000
+EXPOSE 3001
+EXPOSE 3003
 
 COPY run.sh /run.sh
 
