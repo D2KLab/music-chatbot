@@ -1,0 +1,10 @@
+SELECT DISTINCT ?gen
+  (GROUP_CONCAT (DISTINCT ?genre; separator="|") AS ?genres)
+WHERE {
+  ?gen skos:prefLabel ?genre .
+  ?gen skos:topConceptOf | skos:inScheme ?res .
+  VALUES (?res) {
+	(<http://data.doremus.org/vocabulary/iaml/genre/>)
+  }
+}
+GROUP BY ?gen

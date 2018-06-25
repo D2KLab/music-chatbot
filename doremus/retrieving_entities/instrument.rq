@@ -1,0 +1,10 @@
+SELECT DISTINCT ?instr
+  (GROUP_CONCAT (DISTINCT ?instrument; separator="|") AS ?instruments)
+WHERE {
+  ?instr skos:prefLabel ?instrument .
+  ?instr skos:topConceptOf | skos:inScheme ?res .
+  VALUES (?res) {
+	(<http://data.doremus.org/vocabulary/iaml/mop/>)
+  }
+}
+GROUP BY ?instr
