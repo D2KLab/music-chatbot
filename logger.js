@@ -5,7 +5,7 @@ const eol = require('os').EOL;
 const path = require('path');
 const underscore = require('underscore');
 const logFile = {};
-const logDir = process.env.log_folder;
+const logDir = process.env.log_folder || path.resolve(process.cwd(), 'logs');
 
 // FUNCTION TO CHECK IF DIRECTORY EXISTS
 function directoryExists(path) {
