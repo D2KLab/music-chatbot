@@ -7,6 +7,7 @@
     - [Installing](#installing)
     - [Code organization](#code-organization)
     - [Configuring](#configuring)
+    - [Development](#development)
     - [Deploying](#deploying)
 - [Bot Features](#bot-features)
 - [Log Files](#log-files)
@@ -138,6 +139,12 @@ You need:
 - [Slack token](https://api.slack.com/apps)
 - [Facebook tokens](https://developers.facebook.com/apps/)
 - Dialogflow token ([contact us](#credits) to get the token!)
+
+### Development
+To build the CSS files for the Web Chat platform, run:
+```
+npm run build:css
+```
 
 ### Deploying
 You can easily launch the bot with:
