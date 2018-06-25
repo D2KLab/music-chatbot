@@ -95,6 +95,31 @@ var dialogflowMiddleware = require('botkit-middleware-dialogflow')({
 });
 
 
+// WEBCHAT
+var webchatBotOptions = {
+    replyWithTyping: true,
+    debug: false,
+};
+var webchatConfig = {
+    baseUrl: process.env.webchatBaseUrl || '/',
+    port: process.env.webchatPort
+}
+var webchatController = Botkit.socketbot(webchatBotOptions);
+var webchatBot = webchatController.spawn({
+    token: process.env.webchatToken,
+    retry: 10,
+});
+// Set up an Express-powered webserver to expose oauth and webhook endpoints
+require('./webchat/components/express_webserver.js')(
+    webchatController,
+    webchatConfig,
+);
+// Open the web socket server
+webchatController.openSocketServer(webchatController.httpserver);
+// Start the Web bot controller
+webchatController.startTicking();
+
+
 // SLACK: 'SpellChecker' MIDDLEWARE INIT
 slackController.middleware.receive.use(spellCheckerMiddleware.receive);
 
@@ -109,6 +134,13 @@ fbController.middleware.receive.use(spellCheckerMiddleware.receive);
 fbController.middleware.receive.use(dialogflowMiddleware.receive);
 
 
+// WEBCHAT: 'SpellChecker' MIDDLEWARE INIT
+webchatController.middleware.receive.use(spellCheckerMiddleware.receive);
+
+// WEBCHAT: 'Dialogflow' MIDDLEWARE INIT
+webchatController.middleware.receive.use(dialogflowMiddleware.receive);
+
+
 // START THE LOGGER
 log = logger();
 
@@ -119,7 +151,9 @@ slackBot.startRTM();
 // EXPORTS
 exports.slackController = slackController;
 exports.fbController = fbController;
+exports.webchatController = webchatController;
 exports.slackBot = slackBot;
+exports.webchatBot = webchatBot;
 exports.dialogflowMiddleware = dialogflowMiddleware;
 exports.spellCheckerMiddleware = spellCheckerMiddleware;
 exports.log = log;
@@ -127,6 +161,7 @@ exports.log = log;
 // IMPORT HEARS
 var slackHears = require('./slack/slack_io.js');
 var fbHears = require('./facebook/facebook_io.js');
+var webchatHears = require('./webchat/webchat_io.js');
 
 // WEBHOOK SERVER
 require("./dialogflow/index.js")(process.env.PORT2);

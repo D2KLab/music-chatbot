@@ -1,0 +1,45 @@
+<div id="home">
+    <div id="homepage_bot">
+        <div class="device-wrapper">
+            <div class="device" data-device="iPhone7" data-orientation="portrait" data-color="gold">
+                <div class="screen">
+                    <iframe id="botkit_client" src="//{{base_url}}/chat.html"></iframe>
+                </div>
+                <div class="button" onclick="localStorage.clear(); location.reload();">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcome">
+        <div class="section-description">
+            <p>DOREMUS Bot is a virtual assistant for answering classical music related questions based on the <a href="http://www.doremus.org/">DOREMUS</a> Knowledge Graph</p>
+        </div>
+
+        <div class="messaging-platform-links">
+            <a href="//{{base_url}}/chat.html" target="_blank" class="messaging-platform-link messaging-platform-link-web" id="webchat-popup-link"><img src="img/web-icon.png" alt="" title="Chat on Web"></a>
+            <a href="https://m.me/doremusbot" target="_blank" class="messaging-platform-link"><img src="img/messenger-icon.png" alt="" title="Chat on Messenger"></a>
+            <!--<a href="https://t.me/" target="_blank" class="messaging-platform-link"><img src="img/telegram-icon.png" alt="" title="Chat on Telegram"></a>-->
+            <!--<a href="https://join.skype.com/bot/" target="_blank" class="messaging-platform-link"><img src="img/skype-icon.png" alt="" title="Chat on Skype"></a>-->
+        </div>
+
+        <p><a href="//{{base_url}}/embed">Embed me in a web site</a></p>
+    </div>
+</div>
+<script src="//{{base_url}}/embed.js"></script>
+<script>
+  Botkit.boot({});
+
+  window.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('webchat-popup-link').addEventListener('click', function(e) {
+        var w = Math.floor(window.top.outerWidth / 2);
+        var h = Math.floor(window.top.outerHeight / 2);
+        var x = Math.floor(window.top.outerWidth / 2 + window.top.screenX - ( w / 2));
+        var y = Math.floor(window.top.outerHeight / 2 + window.top.screenY - ( h / 2));
+        var popup = window.open('//{{base_url}}/chat.html', 'DOREMUS Bot - Web Chat', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+y+', left='+x);
+        if (window.focus) { popup.focus() };
+        e.preventDefault();
+        return false;
+    }, false);
+  });
+</script>

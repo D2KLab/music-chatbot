@@ -28,6 +28,8 @@ The bot makes use of different resources:
 
 - In a lightweight version (without spell checking and language detection), it is also able to work with a device running [Google Assistant](https://assistant.google.com) (e.g. Google Home).
 
+- It has a web interface for [online chat](https://chatbot.doremus.org) through a browser.
+
 The architecture is the following:
 ![DOREMUS Bot architecture](./final-report/images/arch2.png)
 
@@ -64,6 +66,10 @@ facebook/
     facebook_io.js
     facebook_cards.js
 
+webchat/
+    webchat_io.js
+    webchat_cards.js
+
 dialogflow/
     index.js
     functions.js
@@ -90,6 +96,11 @@ dialogflow/
     - [`facebook_io.js`](./facebook/facebook_io.js) contains the methods to receive the sentences sent through Facebook and processed by the NLU.
     - [`facebook_cards.js`](./facebook/facebook_cards.js) contains the code to build the Facebook cards to make the answers prettier.
 
+- [`webchat/`](./webchat/) is a directory containing the files related to the Web Chat:
+
+    - [`webchat_io.js`](./webchat/webchat_io.js) contains the methods to receive the sentences sent through the Web Chat and processed by the NLU.
+    - [`webchat_cards.js`](./webchat/webchat_cards.js) contains the code to build the Web Chat cards to make the answers prettier.
+
 - [`dialogflow/`](./dialogflow/) is a directory containing the webhook useful for the Dialogflow fulfillment phase. This flow is totally detached from our original architecture (which uses Botkit), and it's useful only for the lightweight version of the bot which can be used with Google Home.
 
 ### Configuring
@@ -115,6 +126,10 @@ fbAccessToken=<fb access token>
 fbVerifyToken=<fb verify token>
 fbAppSecret=<fb app secret token>
 
+# webchat
+webchatBaseUrl=/
+webchatPort=3003
+
 # dialogflow
 dialogflow=<dialogflow token>
 ```
@@ -135,7 +150,7 @@ Alternatively, you can deploy it with Docker:
 ```
 docker build -t jplu/node github.com/pasqLisena/docker-node
 docker build -t doremus/chatbot .
-docker run -d -p 5052:3000 -p 5053:3001 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config -v /var/docker/doremus/music-chatbot/logs:/logs --name doremus-bot doremus/chatbot
+docker run -d -p 5052:3000 -p 5053:3001 -p 5054:3003 --restart=unless-stopped -v /var/docker/doremus/music-chatbot/config:/config -v /var/docker/doremus/music-chatbot/logs:/logs --name doremus-bot doremus/chatbot
 ```
 
 Uninstall from Docker (stop, remove from available containers, remove from images):
@@ -189,7 +204,7 @@ applying the usual filters. Let's make an example:
 ## Log Files
 The bot will also generate logs in the directory specified in the `log_folder` variable of the `.env` file. The format of the csv files is the following:
 - timestamp - *the current date-time in the format YYYY/MM/DD hh:mm:ss.*
-- platform - *the platform from which the message comes from (`"slack"`,`"fb"`,`"google_assistant"`).*
+- platform - *the platform from which the message comes from (`"slack"`,`"fb"`,`"webchat"`,`"google_assistant"`).*
 - user - *the ID of the user sending the message.*
 - team - *the team of the user sending the message.*
 - intent - *the intent which has been detected by the NLP.*
