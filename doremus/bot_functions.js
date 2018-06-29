@@ -43,7 +43,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
     // JSON QUERY  
     // -> Init query
     var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?artist) AS ?artist, \
-                  SAMPLE(?year) AS ?year, SAMPLE(?genre) AS ?genre, \
+                  SAMPLE(?comp) AS ?year, SAMPLE(?genre) AS ?genre, \
                   SAMPLE(?comment) AS ?comment, SAMPLE(?key) AS ?key \
     WHERE { \
       ?expression a efrbroo:F22_Self-Contained_Expression ; \
@@ -57,8 +57,9 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
       ?composer foaf:name ?artist . \
       ?gen skos:prefLabel ?genre . \
       OPTIONAL { \
-        ?ts time:hasEnd / time:inXSDDate ?comp . \
-        BIND (year(?comp) AS ?year) . \
+        ?ts time:hasEnd / time:inXSDDate ?comp \
+      } \
+      OPTIONAL { \
         ?expression mus:U11_has_key ?k . \
         ?k skos:prefLabel ?key \
       } . '
@@ -173,7 +174,7 @@ module.exports.doQuery = function doQuery(artist, number, instrument, strictly, 
 
                 var artist = row["artist"]["value"];
                 var title = row["title"]["value"];
-                var year = row["key"] !== undefined ? row["year"]["value"] : '-';
+                var year = row["year"] !== undefined ? row["year"]["value"] : '-';
                 var genre = row["genre"]["value"];
                 var comment = row["comment"]["value"];
                 var key = row["key"] !== undefined ? row["key"]["value"] : '-';

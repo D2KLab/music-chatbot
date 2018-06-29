@@ -14,25 +14,26 @@ module.exports.doWorksByQuery = function doWorksByQuery(req, response, artist, n
     // JSON QUERY  
     // -> Init query
     var newQuery = 'SELECT SAMPLE(?title) AS ?title, SAMPLE(?artist) AS ?artist, \
-                  SAMPLE(?year) AS ?year, SAMPLE(?genre) AS ?genre, \
+                  SAMPLE(?comp) AS ?year, SAMPLE(?genre) AS ?genre, \
                   SAMPLE(?comment) AS ?comment, SAMPLE(?key) AS ?key \
-                   WHERE { \
-                     ?expression a efrbroo:F22_Self-Contained_Expression ; \
-                       rdfs:label ?title ; \
-                       rdfs:comment ?comment ; \
-                       mus:U13_has_casting ?casting ; \
-                       mus:U12_has_genre ?gen . \
-                     ?expCreation efrbroo:R17_created ?expression ; \
-                       ecrm:P4_has_time-span ?ts ; \
-                       ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
-                     ?composer foaf:name ?artist . \
-                     ?gen skos:prefLabel ?genre . \
-                     OPTIONAL { \
-                       ?ts time:hasEnd / time:inXSDDate ?comp . \
-                       BIND (year(?comp) AS ?year) . \
-                       ?expression mus:U11_has_key ?k . \
-                       ?k skos:prefLabel ?key \
-                     } . '
+    WHERE { \
+      ?expression a efrbroo:F22_Self-Contained_Expression ; \
+        rdfs:label ?title ; \
+        rdfs:comment ?comment ; \
+        mus:U13_has_casting ?casting ; \
+        mus:U12_has_genre ?gen . \
+      ?expCreation efrbroo:R17_created ?expression ; \
+        ecrm:P4_has_time-span ?ts ; \
+        ecrm:P9_consists_of / ecrm:P14_carried_out_by ?composer . \
+      ?composer foaf:name ?artist . \
+      ?gen skos:prefLabel ?genre . \
+      OPTIONAL { \
+        ?ts time:hasEnd / time:inXSDDate ?comp \
+      } \
+      OPTIONAL { \
+        ?expression mus:U11_has_key ?k . \
+        ?k skos:prefLabel ?key \
+      } . '
 
     if (genre !== "") {
         newQuery += 'VALUES(?gen) { \
@@ -150,7 +151,7 @@ module.exports.doWorksByQuery = function doWorksByQuery(req, response, artist, n
 
                 var artist = row["artist"]["value"];
                 var title = row["title"]["value"];
-                var year = row["key"] !== undefined ? row["year"]["value"] : '-';
+                var year = row["year"] !== undefined ? row["year"]["value"] : '-';
                 var genre = row["genre"]["value"];
                 var comment = row["comment"]["value"];
                 var key = row["key"] !== undefined ? row["key"]["value"] : '-';

@@ -10,16 +10,11 @@ This is the DOREMUS Bot! Built with Botkit, using the Dialogflow middleware.
 Authors:
   - Luca LOMBARDO   <lombardo@eurecom.fr>
   - Claudio SCALZO  <scalzo@eurecom.fr>
-
-Supported platforms:
-  - Slack
-  - Facebook Messenger
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // LOAD THE NECESSARY ENVIRONMENT VARIABLES IN THE .env FILE
 const dotenv = require('dotenv');
-['.env', '/config/.env'].forEach(path => dotenv.config({ path }));
+['.env', './config/.env', '/config/.env'].forEach(path => dotenv.config({ path }));
 
 // VARIABLES DECLARATION
 var Botkit = require('botkit');
