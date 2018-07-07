@@ -3,6 +3,7 @@
 var botVars = require("../bot.js");
 var spellCheckerMiddleware = botVars.spellCheckerMiddleware;
 var botFunctions = require("../doremus/bot_functions.js");
+const slackCards = require("./slack_cards.js");
 
 var log = botVars.log;
 
@@ -303,10 +304,9 @@ module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message,
 // HELP INTENT
 module.exports.help = botVars.slackController.hears(['help'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    bot.reply(message, message['fulfillment']['speech']);
+    bot.reply(message, slackCards.getHelpCard());
     log.write(bot.type, message.user, message.channel, "help",
-        '"' + message['fulfillment']['speech'] + '"',
-        '"' + message.text + '"', '"' + message.old + '"',
+        "<help-response>", '"' + message.text + '"', '"' + message.old + '"',
         message.lang, message.confidence);
 });
 
