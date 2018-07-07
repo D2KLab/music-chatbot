@@ -300,6 +300,31 @@ module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message,
 });
 
 
+// HELP INTENT
+module.exports.help = botVars.slackController.hears(['help'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "help",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"', '"' + message.old + '"',
+        message.lang, message.confidence);
+});
+
+
+// RESET INTENT
+module.exports.reset = botVars.slackController.hears(['reset'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    // Clear the context
+    botFunctions.sendClearContext(message.nlpResponse.sessionId);
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "reset",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"', '"' + message.old + '"',
+        message.lang, message.confidence);
+});
+
+
 // DEFAULT INTENT
 module.exports.default = botVars.slackController.hears(['Default Fallback Intent'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 

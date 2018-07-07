@@ -292,6 +292,31 @@ module.exports.hello = botVars.webchatController.hears(['hello'], 'message_recei
 });
 
 
+// HELP INTENT
+module.exports.help = botVars.webchatController.hears(['help'], 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "help",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
+});
+
+
+// RESET INTENT
+module.exports.reset = botVars.webchatController.hears(['reset'], 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    // Clear the context
+    botFunctions.sendClearContext(message.nlpResponse.sessionId);
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "reset",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
+});
+
+
 // DEFAULT INTENT
 module.exports.default = botVars.webchatController.hears(['Default Fallback Intent'], 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
     bot.reply(message, message['fulfillment']['speech']);

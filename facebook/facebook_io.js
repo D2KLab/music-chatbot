@@ -252,6 +252,31 @@ module.exports.hello = botVars.fbController.hears('hello', 'message_received', b
 });
 
 
+// HELP
+module.exports.help = botVars.fbController.hears('help', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "help",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
+});
+
+
+// RESET INTENT
+module.exports.reset = botVars.fbController.hears('reset', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
+
+    // Clear the context
+    botFunctions.sendClearContext(message.nlpResponse.sessionId);
+
+    bot.reply(message, message['fulfillment']['speech']);
+    log.write(bot.type, message.user, message.channel, "reset",
+        '"' + message['fulfillment']['speech'] + '"',
+        '"' + message.text + '"',
+        '"' + message.old + '"', message.lang, message.confidence);
+});
+
+
 // DEFAULT INTENT
 module.exports.default = botVars.fbController.hears('Default Fallback Intent', 'message_received', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
