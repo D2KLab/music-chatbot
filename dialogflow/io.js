@@ -2,6 +2,7 @@
 
 var functions = require("./functions.js");
 var botVars = require("../bot.js");
+var botFunctions = require("../doremus/bot_functions.js");
 var log = botVars.log;
 
 // SHOW WORKS ACTION
@@ -126,4 +127,24 @@ module.exports.showPerformances = function showPerformances(request, response) {
             displayText: speech,
         })
     }
+}
+
+
+// SHOW PERFORMANCES ACTION
+module.exports.resetIntent = function resetIntent(request, response) {
+
+    botFunctions.sendClearContext(request.body.sessionId);
+
+    const speech = "Bye! I hope to chat with you again really soon!";
+    const message = request.body.result.resolvedQuery;
+    const lang = request.body.lang.slice(0,2);
+    const confidence = request.body.result.score;
+
+    log.write("google_assistant", "-", "-", "reset",
+        '"' + speech + '"', '"' + message + '"',
+        '"' + message + '"', lang, confidence);
+    return response.json({
+        speech: speech,
+        displayText: speech,
+    })
 }

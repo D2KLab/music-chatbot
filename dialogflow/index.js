@@ -31,6 +31,8 @@ module.exports = function(port) {
             io.showWorks(request, response, false);
         } else if (intent === "find-performance") {
             io.showPerformances(request, response);
+        } else if (intent === "reset") {
+            io.resetIntent(request, response);
         }
     });
 
