@@ -133,12 +133,24 @@ module.exports.showPerformances = function showPerformances(request, response) {
 // SHOW PERFORMANCES ACTION
 module.exports.resetIntent = function resetIntent(request, response) {
 
-    botFunctions.sendClearContext(request.body.sessionId);
+    // Doesn't work from webhook
+    // botFunctions.sendClearContext(request.body.sessionId);
 
     const speech = "Bye! I hope to chat with you again really soon!";
     const message = request.body.result.resolvedQuery;
     const lang = request.body.lang.slice(0,2);
     const confidence = request.body.result.score;
+
+    var contexts = request.body.result.contexts;
+    var outputContext = [];
+        
+    for (var i = 0; i < contexts.length; i++) {
+        outputContext.push({
+            'name': contexts[i].name,
+            'lifespan': 0,
+            'parameters': {}
+        });
+    }
 
     log.write("google_assistant", "-", "-", "reset",
         '"' + speech + '"', '"' + message + '"',
@@ -146,5 +158,6 @@ module.exports.resetIntent = function resetIntent(request, response) {
     return response.json({
         speech: speech,
         displayText: speech,
+        contextOut: outputContext
     })
 }
