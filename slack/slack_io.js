@@ -304,7 +304,7 @@ module.exports.hello = botVars.slackController.hears(['hello'], 'direct_message,
 // HELP INTENT
 module.exports.help = botVars.slackController.hears(['help'], 'direct_message, direct_mention, mention', botVars.dialogflowMiddleware.hears, function(bot, message) {
 
-    bot.reply(message, slackCards.getHelpCard());
+    bot.reply(message, slackCards.getHelpCard(spellCheckerMiddleware.currentLang()));
     log.write(bot.type, message.user, message.channel, "help",
         "<help-response>", '"' + message.text + '"', '"' + message.old + '"',
         message.lang, message.confidence);

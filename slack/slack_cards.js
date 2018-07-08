@@ -1,7 +1,7 @@
 /* SLACK CARDS */
 
 module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate, deathPlace, deathDate, imageURL, bio) {
-    var imageURLHTTPDropped = imageURL.split("://")[1]
+    var imageURLHTTPDropped = imageURL.split("://")[1];
     var bioAttachment = {
         "attachments": [{
             "pretext": "This is what I found:",
@@ -31,9 +31,9 @@ module.exports.getBioCard = function getBioCard(fullname, birthPlace, birthDate,
             }],
             "color": "good"
         }]
-    }
+    };
     return bioAttachment;
-}
+};
 
 
 module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birthDate, deathPlace, deathDate, count) {
@@ -65,9 +65,9 @@ module.exports.getArtistCard = function getArtistCard(fullname, birthPlace, birt
             }],
             "color": "good"
         }]
-    }
+    };
     return artistAttachment;
-}
+};
 
 
 module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, comment, key) {
@@ -102,45 +102,87 @@ module.exports.getWorkCard = function getWorkCard(title, artist, year, genre, co
     return workAttachment;
 }
 
-module.exports.getHelpCard = function getHelpCard() {
-    var helpAttachment = {
-        "attachments": [{
-            "title": "Some things you can ask me:",
-            "fallback": "New message from DOREMUS Bot!",
-            "fields": [{
-                "title": "Give me 3 works composed by Bach",
-                "value": "You can find the WORKS with your preferred filters.",
-                "short": false
-            }, {
-                "title": "Give me 2 works for violin, clarinet and piano",
-                "value": "Not only by artist but also by multiple instruments!",
-                "short": false
-            }, {
-                "title": "Tell me 5 sonatas written between 1782 and 1821",
-                "value": "And even more: genre and composition year.",
-                "short": false
-            }, {
-                "title": "Find one artist, born between 1752 and 1772, who wrotes more works for clarinet",
-                "value": "You can find the ARTISTS with your preferred filters",
-                "short": false
-            }, {
-                "title": "What do you know about Beethoven?",
-                "value": "Once you know the name of an artist, you can get the bio.",
-                "short": false
-            }, {
-                "title": "Now give me 5 of his works, written for clarinet",
-                "value": "Hey, I remember when we are talking about an artist!",
-                "short": false
-            }, {
-                "title": "Tell me one event in Paris in the next month!",
-                "value": "I'm also good at discovering EVENTS in your favourite places",
-                "short": false
-            }],
-            "color": "#4283f4"
-        }]
+module.exports.getHelpCard = function getHelpCard(language) {
+
+    var helpAttachment;
+
+    if (language === 'en') {
+        helpAttachment = {
+            "attachments": [{
+                "title": "Some things you can ask me:",
+                "fallback": "New message from DOREMUS Bot!",
+                "fields": [{
+                    "title": "Give me 3 works composed by Bach",
+                    "value": "You can find the WORKS with your preferred filters.",
+                    "short": false
+                }, {
+                    "title": "Give me 2 works for violin, clarinet and piano",
+                    "value": "Not only by artist but also by multiple instruments!",
+                    "short": false
+                }, {
+                    "title": "Tell me 5 sonatas written between 1782 and 1821",
+                    "value": "And even more: genre and composition year.",
+                    "short": false
+                }, {
+                    "title": "Find one artist, born between 1752 and 1772, who wrotes more works for clarinet",
+                    "value": "You can find the ARTISTS with your preferred filters",
+                    "short": false
+                }, {
+                    "title": "What do you know about Beethoven?",
+                    "value": "Once you know the name of an artist, you can get the bio.",
+                    "short": false
+                }, {
+                    "title": "Now give me 5 of his works, written for clarinet",
+                    "value": "Hey, I remember when we are talking about an artist!",
+                    "short": false
+                }, {
+                    "title": "Tell me one event in Paris in the next month!",
+                    "value": "I'm also good at discovering EVENTS in your favourite places",
+                    "short": false
+                }],
+                "color": "#4283f4"
+            }]
+        }
+    } else if (language === 'fr') {
+        helpAttachment = {
+            "attachments": [{
+                "title": "Some things you can ask me:",
+                "fallback": "New message from DOREMUS Bot!",
+                "fields": [{
+                    "title": "Give me 3 works composed by Bach",
+                    "value": "You can find the WORKS with your preferred filters.",
+                    "short": false
+                }, {
+                    "title": "Give me 2 works for violin, clarinet and piano",
+                    "value": "Not only by artist but also by multiple instruments!",
+                    "short": false
+                }, {
+                    "title": "Tell me 5 sonatas written between 1782 and 1821",
+                    "value": "And even more: genre and composition year.",
+                    "short": false
+                }, {
+                    "title": "Find one artist, born between 1752 and 1772, who wrotes more works for clarinet",
+                    "value": "You can find the ARTISTS with your preferred filters",
+                    "short": false
+                }, {
+                    "title": "What do you know about Beethoven?",
+                    "value": "Once you know the name of an artist, you can get the bio.",
+                    "short": false
+                }, {
+                    "title": "Now give me 5 of his works, written for clarinet",
+                    "value": "Hey, I remember when we are talking about an artist!",
+                    "short": false
+                }, {
+                    "title": "Tell me one event in Paris in the next month!",
+                    "value": "I'm also good at discovering EVENTS in your favourite places",
+                    "short": false
+                }],
+                "color": "#4283f4"
+            }]
+        };
     }
     return helpAttachment;
-}
+};
 
 
 module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle, placeName, actorsName, date) {
@@ -164,6 +206,6 @@ module.exports.getPerformanceCard = function getPerformanceCard(title, subtitle,
             }],
             "color": "#f4b042"
         }]
-    }
+    };
     return performanceAttachment;
-}
+};
